@@ -8,7 +8,7 @@ description: Tracks whether an element is visible in the viewport using Intersec
 Tracks whether an element is visible in the viewport, useful for lazy loading, animations, and infinite scroll.
 
 ```tsx
-import { useIntersectionObserver } from 'kivora-react';
+import { useIntersectionObserver } from '@kivora/react';
 
 function LazyImage({ src }: { src: string }) {
   const { ref, isIntersecting } = useIntersectionObserver({ once: true });
@@ -64,7 +64,7 @@ function LazyImage({ src }: { src: string }) {
 ### Fade in animation on scroll
 
 ```tsx
-import { useIntersectionObserver } from 'kivora-react';
+import { useIntersectionObserver } from '@kivora/react';
 
 function FadeIn({ children }: { children: React.ReactNode }) {
   const { ref, isIntersecting } = useIntersectionObserver({
@@ -90,7 +90,7 @@ function FadeIn({ children }: { children: React.ReactNode }) {
 ### Infinite scroll
 
 ```tsx
-import { useIntersectionObserver } from 'kivora-react';
+import { useIntersectionObserver } from '@kivora/react';
 import { useEffect } from 'react';
 
 function InfiniteList({ items, loadMore }: { items: any[]; loadMore: () => void }) {
@@ -118,7 +118,7 @@ function InfiniteList({ items, loadMore }: { items: any[]; loadMore: () => void 
 ### Track visibility percentage
 
 ```tsx
-import { useIntersectionObserver } from 'kivora-react';
+import { useIntersectionObserver } from '@kivora/react';
 
 function VisibilityTracker() {
   const { ref, entry } = useIntersectionObserver({
@@ -140,7 +140,7 @@ function VisibilityTracker() {
 ### Lazy load with placeholder
 
 ```tsx
-import { useIntersectionObserver } from 'kivora-react';
+import { useIntersectionObserver } from '@kivora/react';
 
 function LazyComponent() {
   const { ref, isIntersecting } = useIntersectionObserver({

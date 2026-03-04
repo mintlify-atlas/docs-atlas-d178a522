@@ -8,7 +8,7 @@ description: Tracks the mouse cursor position relative to an element or the wind
 Tracks the mouse cursor position relative to a target element (or the window if no element is attached).
 
 ```tsx
-import { useMouse } from 'kivora-react';
+import { useMouse } from '@kivora/react';
 
 function MouseTracker() {
   const { ref, position } = useMouse<HTMLDivElement>();
@@ -50,7 +50,7 @@ This hook does not accept any parameters.
 ### Spotlight effect
 
 ```tsx
-import { useMouse } from 'kivora-react';
+import { useMouse } from '@kivora/react';
 
 function Spotlight() {
   const { ref, position } = useMouse<HTMLDivElement>();
@@ -89,7 +89,7 @@ function Spotlight() {
 ### Parallax effect
 
 ```tsx
-import { useMouse } from 'kivora-react';
+import { useMouse } from '@kivora/react';
 
 function ParallaxCard() {
   const { ref, position } = useMouse<HTMLDivElement>();
@@ -130,7 +130,7 @@ function ParallaxCard() {
 ### Custom cursor
 
 ```tsx
-import { useMouse } from 'kivora-react';
+import { useMouse } from '@kivora/react';
 
 function CustomCursor() {
   const { ref, position } = useMouse<HTMLDivElement>();
@@ -171,7 +171,7 @@ function CustomCursor() {
 ### Mouse coordinates display
 
 ```tsx
-import { useMouse } from 'kivora-react';
+import { useMouse } from '@kivora/react';
 
 function CoordinateDisplay() {
   const { ref, position } = useMouse<HTMLDivElement>();
@@ -200,7 +200,7 @@ function CoordinateDisplay() {
 ### Interactive drawing
 
 ```tsx
-import { useMouse } from 'kivora-react';
+import { useMouse } from '@kivora/react';
 import { useState } from 'react';
 
 function DrawingCanvas() {

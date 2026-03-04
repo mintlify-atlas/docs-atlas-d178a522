@@ -29,7 +29,7 @@ function useInterval(callback: () => void, delay: number | null): void
 
 ```tsx
 import { useState } from 'react';
-import { useInterval } from 'kivora-react';
+import { useInterval } from '@kivora/react';
 
 function Counter() {
   const [count, setCount] = useState(0);
@@ -54,7 +54,7 @@ function Counter() {
 
 ```tsx
 import { useState } from 'react';
-import { useInterval } from 'kivora-react';
+import { useInterval } from '@kivora/react';
 
 function Clock() {
   const [time, setTime] = useState(new Date());
@@ -75,7 +75,7 @@ function Clock() {
 
 ```tsx
 import { useState } from 'react';
-import { useInterval } from 'kivora-react';
+import { useInterval } from '@kivora/react';
 
 function LiveData() {
   const [data, setData] = useState(null);
@@ -106,7 +106,7 @@ function LiveData() {
 
 ```tsx
 import { useState } from 'react';
-import { useInterval } from 'kivora-react';
+import { useInterval } from '@kivora/react';
 
 function ProgressBar() {
   const [progress, setProgress] = useState(0);
@@ -137,7 +137,7 @@ function ProgressBar() {
 
 ```tsx
 import { useState, useEffect } from 'react';
-import { useInterval } from 'kivora-react';
+import { useInterval } from '@kivora/react';
 
 function DataPoller() {
   const [data, setData] = useState([]);

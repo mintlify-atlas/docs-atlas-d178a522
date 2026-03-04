@@ -8,7 +8,7 @@ description: Returns a ref and tracks the element's dimensions automatically
 Convenience wrapper around `useResizeObserver` that creates the ref for you and returns both the ref and the element's current dimensions.
 
 ```tsx
-import { useElementSize } from 'kivora-react';
+import { useElementSize } from '@kivora/react';
 
 function MeasuredBox() {
   const [ref, { width, height }] = useElementSize<HTMLDivElement>();
@@ -52,7 +52,7 @@ Returns a tuple `[ref, size]`:
 ### Simple dimension tracking
 
 ```tsx
-import { useElementSize } from 'kivora-react';
+import { useElementSize } from '@kivora/react';
 
 function DimensionTracker() {
   const [ref, { width, height }] = useElementSize<HTMLDivElement>();
@@ -79,7 +79,7 @@ function DimensionTracker() {
 ### Responsive image overlay
 
 ```tsx
-import { useElementSize } from 'kivora-react';
+import { useElementSize } from '@kivora/react';
 
 function ImageWithOverlay({ src }: { src: string }) {
   const [ref, { width, height }] = useElementSize<HTMLDivElement>();
@@ -115,7 +115,7 @@ function ImageWithOverlay({ src }: { src: string }) {
 ### Dynamic grid items
 
 ```tsx
-import { useElementSize } from 'kivora-react';
+import { useElementSize } from '@kivora/react';
 
 function GridItem({ children }: { children: React.ReactNode }) {
   const [ref, { width }] = useElementSize<HTMLDivElement>();
@@ -139,7 +139,7 @@ function GridItem({ children }: { children: React.ReactNode }) {
 ### Adaptive card layout
 
 ```tsx
-import { useElementSize } from 'kivora-react';
+import { useElementSize } from '@kivora/react';
 
 function AdaptiveCard({ title, image, description }: any) {
   const [ref, { width }] = useElementSize<HTMLDivElement>();
@@ -178,7 +178,7 @@ function AdaptiveCard({ title, image, description }: any) {
 ### Text truncation based on width
 
 ```tsx
-import { useElementSize } from 'kivora-react';
+import { useElementSize } from '@kivora/react';
 
 function TruncatedText({ text }: { text: string }) {
   const [ref, { width }] = useElementSize<HTMLDivElement>();

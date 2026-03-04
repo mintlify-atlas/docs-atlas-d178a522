@@ -8,7 +8,7 @@ description: Tracks the current window scroll position with automatic updates
 Tracks `window.scrollX` and `window.scrollY` with a passive listener, re-rendering when the scroll position changes.
 
 ```tsx
-import { useWindowScroll } from 'kivora-react';
+import { useWindowScroll } from '@kivora/react';
 
 function ScrollIndicator() {
   const { x, y } = useWindowScroll();
@@ -40,7 +40,7 @@ This hook does not accept any parameters.
 ### Sticky header on scroll
 
 ```tsx
-import { useWindowScroll } from 'kivora-react';
+import { useWindowScroll } from '@kivora/react';
 
 function Header() {
   const { y } = useWindowScroll();
@@ -62,7 +62,7 @@ function Header() {
 ### Scroll progress bar
 
 ```tsx
-import { useWindowScroll } from 'kivora-react';
+import { useWindowScroll } from '@kivora/react';
 
 function ScrollProgress() {
   const { y } = useWindowScroll();
@@ -88,7 +88,7 @@ function ScrollProgress() {
 ### Scroll to top button
 
 ```tsx
-import { useWindowScroll } from 'kivora-react';
+import { useWindowScroll } from '@kivora/react';
 
 function ScrollToTop() {
   const { y } = useWindowScroll();

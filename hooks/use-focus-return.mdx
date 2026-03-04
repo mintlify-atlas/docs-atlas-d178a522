@@ -8,13 +8,13 @@ Remembers which element had focus before a modal or overlay was opened and autom
 ## Import
 
 ```tsx
-import { useFocusReturn } from 'kivora-react';
+import { useFocusReturn } from '@kivora/react';
 ```
 
 ## Usage
 
 ```tsx
-import { useFocusReturn } from 'kivora-react';
+import { useFocusReturn } from '@kivora/react';
 
 function Modal({ isOpen, onClose }) {
   useFocusReturn(isOpen);
@@ -150,7 +150,7 @@ function Tooltip({ children, content }) {
 ### Combined with Focus Trap
 
 ```tsx
-import { useFocusReturn, useFocusTrap } from 'kivora-react';
+import { useFocusReturn, useFocusTrap } from '@kivora/react';
 
 function FullFeaturedModal({ isOpen, onClose }) {
   const modalRef = useRef<HTMLDivElement>(null);

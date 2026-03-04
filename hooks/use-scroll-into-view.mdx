@@ -9,7 +9,7 @@ Returns a memoized function that scrolls the referenced element into the viewpor
 
 ```tsx
 import { useRef } from 'react';
-import { useScrollIntoView } from 'kivora-react';
+import { useScrollIntoView } from '@kivora/react';
 
 function ScrollableSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -59,7 +59,7 @@ function ScrollableSection() {
 
 ```tsx
 import { useRef } from 'react';
-import { useScrollIntoView } from 'kivora-react';
+import { useScrollIntoView } from '@kivora/react';
 
 function PageWithSections() {
   const section1Ref = useRef<HTMLElement>(null);
@@ -96,7 +96,7 @@ function PageWithSections() {
 
 ```tsx
 import { useRef } from 'react';
-import { useScrollIntoView } from 'kivora-react';
+import { useScrollIntoView } from '@kivora/react';
 
 function CenteredScroll() {
   const targetRef = useRef<HTMLDivElement>(null);
@@ -122,7 +122,7 @@ function CenteredScroll() {
 
 ```tsx
 import { useRef } from 'react';
-import { useScrollIntoView } from 'kivora-react';
+import { useScrollIntoView } from '@kivora/react';
 
 function InstantJump() {
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -145,7 +145,7 @@ function InstantJump() {
 
 ```tsx
 import { useRef } from 'react';
-import { useScrollIntoView } from 'kivora-react';
+import { useScrollIntoView } from '@kivora/react';
 
 function Form() {
   const errorRef = useRef<HTMLDivElement>(null);
@@ -180,7 +180,7 @@ function Form() {
 
 ```tsx
 import { useRef, useEffect } from 'react';
-import { useScrollIntoView } from 'kivora-react';
+import { useScrollIntoView } from '@kivora/react';
 
 function List({ items, activeId }: { items: any[]; activeId: string }) {
   const activeRef = useRef<HTMLDivElement>(null);

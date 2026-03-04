@@ -61,7 +61,7 @@ interface UseTimeoutReturn {
 
 ```tsx
 import { useState } from 'react';
-import { useTimeout } from 'kivora-react';
+import { useTimeout } from '@kivora/react';
 
 function FlashMessage() {
   const [visible, setVisible] = useState(false);
@@ -87,7 +87,7 @@ function FlashMessage() {
 ### Auto-logout timer
 
 ```tsx
-import { useTimeout } from 'kivora-react';
+import { useTimeout } from '@kivora/react';
 
 function SessionManager() {
   const { reset, stop } = useTimeout(() => {
@@ -121,7 +121,7 @@ function SessionManager() {
 
 ```tsx
 import { useState } from 'react';
-import { useTimeout } from 'kivora-react';
+import { useTimeout } from '@kivora/react';
 
 function SearchWithDelay() {
   const [query, setQuery] = useState('');
@@ -154,7 +154,7 @@ function SearchWithDelay() {
 
 ```tsx
 import { useState } from 'react';
-import { useTimeout } from 'kivora-react';
+import { useTimeout } from '@kivora/react';
 
 function TooltipButton() {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -191,7 +191,7 @@ function TooltipButton() {
 
 ```tsx
 import { useState } from 'react';
-import { useTimeout } from 'kivora-react';
+import { useTimeout } from '@kivora/react';
 
 function Notification({ message, duration = 3000 }) {
   const [visible, setVisible] = useState(true);

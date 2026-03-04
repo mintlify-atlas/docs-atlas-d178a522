@@ -8,14 +8,14 @@ Traps keyboard focus inside a container element while enabled. When the user pre
 ## Import
 
 ```tsx
-import { useFocusTrap } from 'kivora-react';
+import { useFocusTrap } from '@kivora/react';
 ```
 
 ## Usage
 
 ```tsx
 import { useRef, useState } from 'react';
-import { useFocusTrap } from 'kivora-react';
+import { useFocusTrap } from '@kivora/react';
 
 function Modal({ isOpen, onClose }) {
   const modalRef = useRef<HTMLDivElement>(null);

@@ -73,7 +73,7 @@ interface UseFetchOptions {
 ### Basic data fetching
 
 ```tsx
-import { useFetch } from 'kivora-react';
+import { useFetch } from '@kivora/react';
 
 interface User {
   id: number;
@@ -102,7 +102,7 @@ function UserList() {
 ### With custom headers
 
 ```tsx
-import { useFetch } from 'kivora-react';
+import { useFetch } from '@kivora/react';
 
 function AuthenticatedData() {
   const { data, loading, error } = useFetch('/api/protected', {
@@ -122,7 +122,7 @@ function AuthenticatedData() {
 ### Manual fetch with immediate: false
 
 ```tsx
-import { useFetch } from 'kivora-react';
+import { useFetch } from '@kivora/react';
 
 function ManualFetch() {
   const { data, loading, refetch } = useFetch('/api/data', {
@@ -143,7 +143,7 @@ function ManualFetch() {
 ### Refetch on demand
 
 ```tsx
-import { useFetch } from 'kivora-react';
+import { useFetch } from '@kivora/react';
 
 function RefreshableData() {
   const { data, loading, error, refetch } = useFetch('/api/stats');
@@ -164,7 +164,7 @@ function RefreshableData() {
 ### Status-based rendering
 
 ```tsx
-import { useFetch } from 'kivora-react';
+import { useFetch } from '@kivora/react';
 
 function StatusDemo() {
   const { data, status, error, refetch } = useFetch('/api/data');
@@ -190,7 +190,7 @@ function StatusDemo() {
 ### POST request
 
 ```tsx
-import { useFetch } from 'kivora-react';
+import { useFetch } from '@kivora/react';
 
 function CreateUser() {
   const [formData, setFormData] = useState({ name: '', email: '' });
@@ -233,7 +233,7 @@ function CreateUser() {
 
 ```tsx
 import { useState } from 'react';
-import { useFetch } from 'kivora-react';
+import { useFetch } from '@kivora/react';
 
 function UserProfile() {
   const [userId, setUserId] = useState(1);

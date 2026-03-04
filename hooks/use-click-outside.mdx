@@ -9,7 +9,7 @@ Fires `handler` whenever the user clicks or touches outside the referenced eleme
 
 ```tsx
 import { useRef, useState } from 'react';
-import { useClickOutside } from 'kivora-react';
+import { useClickOutside } from '@kivora/react';
 
 function Dropdown() {
   const [open, setOpen] = useState(false);
@@ -46,7 +46,7 @@ function Dropdown() {
 
 ```tsx
 import { useRef, useState } from 'react';
-import { useClickOutside } from 'kivora-react';
+import { useClickOutside } from '@kivora/react';
 
 function Modal({ onClose }: { onClose: () => void }) {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -68,7 +68,7 @@ function Modal({ onClose }: { onClose: () => void }) {
 
 ```tsx
 import { useRef, useState } from 'react';
-import { useClickOutside } from 'kivora-react';
+import { useClickOutside } from '@kivora/react';
 
 function Popover() {
   const [isOpen, setIsOpen] = useState(false);

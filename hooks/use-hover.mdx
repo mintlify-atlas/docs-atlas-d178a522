@@ -8,7 +8,7 @@ description: Returns a boolean indicating whether the mouse is hovering over an 
 Returns `true` when the mouse is hovered over the element attached to the returned ref.
 
 ```tsx
-import { useHover } from 'kivora-react';
+import { useHover } from '@kivora/react';
 
 function HoverableButton() {
   const [ref, hovered] = useHover<HTMLButtonElement>();
@@ -51,7 +51,7 @@ Returns a tuple `[ref, hovered]`:
 ### Hover card
 
 ```tsx
-import { useHover } from 'kivora-react';
+import { useHover } from '@kivora/react';
 
 function HoverCard() {
   const [ref, hovered] = useHover<HTMLDivElement>();
@@ -79,7 +79,7 @@ function HoverCard() {
 ### Conditional content
 
 ```tsx
-import { useHover } from 'kivora-react';
+import { useHover } from '@kivora/react';
 
 function ImageWithOverlay({ src, title }: { src: string; title: string }) {
   const [ref, hovered] = useHover<HTMLDivElement>();
@@ -116,7 +116,7 @@ function ImageWithOverlay({ src, title }: { src: string; title: string }) {
 ### Tooltip
 
 ```tsx
-import { useHover } from 'kivora-react';
+import { useHover } from '@kivora/react';
 
 function TooltipButton({ tooltip }: { tooltip: string }) {
   const [ref, hovered] = useHover<HTMLButtonElement>();
@@ -153,7 +153,7 @@ function TooltipButton({ tooltip }: { tooltip: string }) {
 ### Interactive list item
 
 ```tsx
-import { useHover } from 'kivora-react';
+import { useHover } from '@kivora/react';
 
 function ListItem({ title, description }: { title: string; description: string }) {
   const [ref, hovered] = useHover<HTMLLIElement>();
@@ -179,7 +179,7 @@ function ListItem({ title, description }: { title: string; description: string }
 ### Color preview
 
 ```tsx
-import { useHover } from 'kivora-react';
+import { useHover } from '@kivora/react';
 
 function ColorSwatch({ color, name }: { color: string; name: string }) {
   const [ref, hovered] = useHover<HTMLDivElement>();
@@ -224,7 +224,7 @@ function ColorSwatch({ color, name }: { color: string; name: string }) {
 ### Action buttons on hover
 
 ```tsx
-import { useHover } from 'kivora-react';
+import { useHover } from '@kivora/react';
 
 function Card({ title, content }: { title: string; content: string }) {
   const [ref, hovered] = useHover<HTMLDivElement>();

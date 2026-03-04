@@ -66,7 +66,7 @@ function useDebouncedCallback<T extends (...args: unknown[]) => void>(
 
 ```tsx
 import { useState, useEffect } from 'react';
-import { useDebounce } from 'kivora-react';
+import { useDebounce } from '@kivora/react';
 
 function SearchComponent() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -92,7 +92,7 @@ function SearchComponent() {
 ### Debouncing a callback
 
 ```tsx
-import { useDebouncedCallback } from 'kivora-react';
+import { useDebouncedCallback } from '@kivora/react';
 
 function FormComponent() {
   const saveChanges = useDebouncedCallback((formData) => {
@@ -112,7 +112,7 @@ function FormComponent() {
 
 ```tsx
 import { useEffect } from 'react';
-import { useDebouncedCallback } from 'kivora-react';
+import { useDebouncedCallback } from '@kivora/react';
 
 function ResponsiveComponent() {
   const handleResize = useDebouncedCallback(() => {

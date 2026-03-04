@@ -66,7 +66,7 @@ function useThrottledCallback<T extends (...args: unknown[]) => void>(
 
 ```tsx
 import { useState } from 'react';
-import { useThrottledValue } from 'kivora-react';
+import { useThrottledValue } from '@kivora/react';
 
 function SearchComponent() {
   const [search, setSearch] = useState('');
@@ -91,7 +91,7 @@ function SearchComponent() {
 
 ```tsx
 import { useEffect, useState } from 'react';
-import { useThrottledCallback } from 'kivora-react';
+import { useThrottledCallback } from '@kivora/react';
 
 function ScrollTracker() {
   const [scrollPos, setScrollPos] = useState(0);
@@ -113,7 +113,7 @@ function ScrollTracker() {
 
 ```tsx
 import { useState } from 'react';
-import { useThrottledCallback } from 'kivora-react';
+import { useThrottledCallback } from '@kivora/react';
 
 function MouseTracker() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -136,7 +136,7 @@ function MouseTracker() {
 ### Auto-save with throttling
 
 ```tsx
-import { useThrottledCallback } from 'kivora-react';
+import { useThrottledCallback } from '@kivora/react';
 
 function Editor() {
   const [content, setContent] = useState('');

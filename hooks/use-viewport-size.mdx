@@ -8,7 +8,7 @@ description: Tracks the current browser window dimensions with automatic updates
 Returns the current window dimensions and updates them automatically when the window is resized.
 
 ```tsx
-import { useViewportSize } from 'kivora-react';
+import { useViewportSize } from '@kivora/react';
 
 function ViewportInfo() {
   const { width, height } = useViewportSize();
@@ -40,7 +40,7 @@ This hook does not accept any parameters.
 ### Responsive rendering
 
 ```tsx
-import { useViewportSize } from 'kivora-react';
+import { useViewportSize } from '@kivora/react';
 
 function ResponsiveLayout() {
   const { width } = useViewportSize();
@@ -60,7 +60,7 @@ function ResponsiveLayout() {
 ### Adaptive grid columns
 
 ```tsx
-import { useViewportSize } from 'kivora-react';
+import { useViewportSize } from '@kivora/react';
 
 function AdaptiveGrid({ items }: { items: any[] }) {
   const { width } = useViewportSize();
@@ -86,7 +86,7 @@ function AdaptiveGrid({ items }: { items: any[] }) {
 ### Mobile detection
 
 ```tsx
-import { useViewportSize } from 'kivora-react';
+import { useViewportSize } from '@kivora/react';
 
 function MobileDetector() {
   const { width } = useViewportSize();
@@ -106,7 +106,7 @@ function MobileDetector() {
 ### Dynamic canvas sizing
 
 ```tsx
-import { useViewportSize } from 'kivora-react';
+import { useViewportSize } from '@kivora/react';
 import { useEffect, useRef } from 'react';
 
 function FullscreenCanvas() {
@@ -132,7 +132,7 @@ function FullscreenCanvas() {
 ### Aspect ratio calculations
 
 ```tsx
-import { useViewportSize } from 'kivora-react';
+import { useViewportSize } from '@kivora/react';
 
 function AspectRatioInfo() {
   const { width, height } = useViewportSize();
