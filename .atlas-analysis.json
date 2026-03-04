@@ -1,0 +1,379 @@
+{
+  "projectType": "frontend",
+  "projectName": "Kivora React",
+  "projectDescription": "A fully-typed React component library with 50+ components, 18+ hooks, and full dark-mode support via CSS design tokens.",
+  "theme": "palm",
+  "primaryColor": "#3B82F6",
+  "lightColor": "#60A5FA",
+  "darkColor": "#2563EB",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "installation",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/theming",
+              "guides/dark-mode",
+              "guides/typescript",
+              "guides/contributing"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Components",
+        "groups": [
+          {
+            "group": "Buttons",
+            "pages": [
+              "components/button",
+              "components/action-icon",
+              "components/close-button"
+            ]
+          },
+          {
+            "group": "Inputs",
+            "pages": [
+              "components/input",
+              "components/textarea",
+              "components/checkbox",
+              "components/radio-group",
+              "components/switch",
+              "components/select",
+              "components/multi-select",
+              "components/number-input",
+              "components/pin-input",
+              "components/slider",
+              "components/range-slider",
+              "components/tags-input"
+            ]
+          },
+          {
+            "group": "Layout",
+            "pages": [
+              "components/container",
+              "components/flex",
+              "components/grid",
+              "components/simple-grid",
+              "components/stack",
+              "components/group",
+              "components/center",
+              "components/space",
+              "components/aspect-ratio"
+            ]
+          },
+          {
+            "group": "Typography",
+            "pages": [
+              "components/text",
+              "components/title",
+              "components/anchor",
+              "components/code",
+              "components/highlight",
+              "components/blockquote",
+              "components/list",
+              "components/mark"
+            ]
+          },
+          {
+            "group": "Feedback",
+            "pages": [
+              "components/alert",
+              "components/notification",
+              "components/spinner",
+              "components/skeleton",
+              "components/progress",
+              "components/ring-progress"
+            ]
+          },
+          {
+            "group": "Navigation",
+            "pages": [
+              "components/tabs",
+              "components/breadcrumbs",
+              "components/nav-link",
+              "components/pagination",
+              "components/stepper"
+            ]
+          },
+          {
+            "group": "Overlays",
+            "pages": [
+              "components/modal",
+              "components/drawer",
+              "components/dialog",
+              "components/popover",
+              "components/tooltip",
+              "components/menu",
+              "components/toast"
+            ]
+          },
+          {
+            "group": "Data Display",
+            "pages": [
+              "components/badge",
+              "components/avatar",
+              "components/avatar-group",
+              "components/card",
+              "components/accordion",
+              "components/table",
+              "components/tag",
+              "components/chip",
+              "components/kbd",
+              "components/color-swatch",
+              "components/theme-icon"
+            ]
+          },
+          {
+            "group": "Misc",
+            "pages": [
+              "components/divider",
+              "components/icon",
+              "components/box",
+              "components/paper",
+              "components/portal",
+              "components/transition"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Hooks",
+        "groups": [
+          {
+            "group": "State Management",
+            "pages": [
+              "hooks/use-counter",
+              "hooks/use-toggle",
+              "hooks/use-list-state",
+              "hooks/use-set-state",
+              "hooks/use-map",
+              "hooks/use-set",
+              "hooks/use-queue",
+              "hooks/use-previous",
+              "hooks/use-input-state",
+              "hooks/use-pagination"
+            ]
+          },
+          {
+            "group": "Async & Timing",
+            "pages": [
+              "hooks/use-debounce",
+              "hooks/use-throttle",
+              "hooks/use-interval",
+              "hooks/use-timeout",
+              "hooks/use-fetch"
+            ]
+          },
+          {
+            "group": "DOM & Events",
+            "pages": [
+              "hooks/use-click-outside",
+              "hooks/use-window-scroll",
+              "hooks/use-media-query",
+              "hooks/use-intersection-observer",
+              "hooks/use-event-listener",
+              "hooks/use-viewport-size",
+              "hooks/use-resize-observer",
+              "hooks/use-element-size",
+              "hooks/use-scroll-into-view",
+              "hooks/use-mouse",
+              "hooks/use-hover"
+            ]
+          },
+          {
+            "group": "Browser APIs",
+            "pages": [
+              "hooks/use-clipboard",
+              "hooks/use-color-scheme",
+              "hooks/use-scroll-lock",
+              "hooks/use-network",
+              "hooks/use-os",
+              "hooks/use-reduced-motion",
+              "hooks/use-document-title",
+              "hooks/use-document-visibility",
+              "hooks/use-idle",
+              "hooks/use-page-leave",
+              "hooks/use-headroom"
+            ]
+          },
+          {
+            "group": "Focus Management",
+            "pages": [
+              "hooks/use-focus-trap",
+              "hooks/use-hotkeys",
+              "hooks/use-focus-return",
+              "hooks/use-focus-within"
+            ]
+          },
+          {
+            "group": "Persistence",
+            "pages": [
+              "hooks/use-local-storage",
+              "hooks/use-session-storage"
+            ]
+          },
+          {
+            "group": "UI Utilities",
+            "pages": [
+              "hooks/use-disclosure",
+              "hooks/use-controlled",
+              "hooks/use-toast"
+            ]
+          },
+          {
+            "group": "Utils",
+            "pages": [
+              "hooks/use-mounted",
+              "hooks/use-force-update",
+              "hooks/use-did-update",
+              "hooks/use-merged-ref",
+              "hooks/use-isomorphic-effect"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "50+ fully-typed React components organized by category",
+    "18+ custom hooks for state, async, DOM, browser APIs, and more",
+    "Built-in dark mode support via CSS design tokens",
+    "Full TypeScript support with comprehensive type definitions",
+    "Tree-shakeable exports for optimal bundle size",
+    "Built on @kivora/core design system"
+  ],
+  "publicApiSurface": [
+    "Button",
+    "ActionIcon",
+    "CloseButton",
+    "Input",
+    "Textarea",
+    "Checkbox",
+    "RadioGroup",
+    "Switch",
+    "Select",
+    "MultiSelect",
+    "NumberInput",
+    "PinInput",
+    "Slider",
+    "RangeSlider",
+    "TagsInput",
+    "Container",
+    "Flex",
+    "Grid",
+    "SimpleGrid",
+    "Stack",
+    "Group",
+    "Center",
+    "Space",
+    "AspectRatio",
+    "Text",
+    "Title",
+    "Anchor",
+    "Code",
+    "Highlight",
+    "Blockquote",
+    "List",
+    "Mark",
+    "Alert",
+    "Notification",
+    "Spinner",
+    "Skeleton",
+    "Progress",
+    "RingProgress",
+    "Tabs",
+    "Breadcrumbs",
+    "NavLink",
+    "Pagination",
+    "Stepper",
+    "Modal",
+    "Drawer",
+    "Dialog",
+    "Popover",
+    "Tooltip",
+    "Menu",
+    "Toaster",
+    "toast",
+    "Badge",
+    "Avatar",
+    "AvatarGroup",
+    "Card",
+    "Accordion",
+    "Table",
+    "Tag",
+    "Chip",
+    "Kbd",
+    "ColorSwatch",
+    "ThemeIcon",
+    "Divider",
+    "Icon",
+    "Box",
+    "Paper",
+    "Portal",
+    "Transition",
+    "useCounter",
+    "useToggle",
+    "useListState",
+    "useSetState",
+    "useMap",
+    "useSet",
+    "useQueue",
+    "usePrevious",
+    "useInputState",
+    "usePagination",
+    "useDebounce",
+    "useDebouncedCallback",
+    "useThrottledCallback",
+    "useThrottledValue",
+    "useInterval",
+    "useTimeout",
+    "useFetch",
+    "useClickOutside",
+    "useWindowScroll",
+    "useMediaQuery",
+    "useIntersectionObserver",
+    "useEventListener",
+    "useViewportSize",
+    "useResizeObserver",
+    "useElementSize",
+    "useScrollIntoView",
+    "useMouse",
+    "useHover",
+    "useClipboard",
+    "useColorScheme",
+    "useScrollLock",
+    "useNetwork",
+    "useOs",
+    "useReducedMotion",
+    "useDocumentTitle",
+    "useDocumentVisibility",
+    "useIdle",
+    "usePageLeave",
+    "useHeadroom",
+    "useFocusTrap",
+    "useHotkeys",
+    "useFocusReturn",
+    "useFocusWithin",
+    "useLocalStorage",
+    "useSessionStorage",
+    "useDisclosure",
+    "useControlled",
+    "useToast",
+    "useMounted",
+    "useForceUpdate",
+    "useDidUpdate",
+    "useMergedRef",
+    "useIsomorphicEffect"
+  ]
+}
