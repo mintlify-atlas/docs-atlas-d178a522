@@ -1,0 +1,181 @@
+---
+title: useResizeObserver
+description: Observes an element's dimensions using ResizeObserver API with automatic updates
+---
+
+## Usage
+
+Observes an element's `contentRect` dimensions using the `ResizeObserver` API and updates when the element is resized.
+
+```tsx
+import { useRef } from 'react';
+import { useResizeObserver } from 'kivora-react';
+
+function ResizableBox() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { width, height } = useResizeObserver(ref);
+
+  return (
+    <div ref={ref} style={{ resize: 'both', overflow: 'auto', border: '1px solid' }}>
+      Size: {width} x {height}
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="ref" type="RefObject<T | null>" required>
+  React ref object pointing to the element to observe
+</ParamField>
+
+## Returns
+
+<ResponseField name="width" type="number">
+  Current element width in pixels from `contentRect`
+</ResponseField>
+
+<ResponseField name="height" type="number">
+  Current element height in pixels from `contentRect`
+</ResponseField>
+
+## Examples
+
+### Responsive text scaling
+
+```tsx
+import { useRef } from 'react';
+import { useResizeObserver } from 'kivora-react';
+
+function ScalingText() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { width } = useResizeObserver(ref);
+
+  const fontSize = Math.max(12, Math.min(width / 10, 48));
+
+  return (
+    <div ref={ref} style={{ width: '100%', padding: '20px' }}>
+      <h1 style={{ fontSize: `${fontSize}px` }}>
+        Responsive Text
+      </h1>
+    </div>
+  );
+}
+```
+
+### Container queries alternative
+
+```tsx
+import { useRef } from 'react';
+import { useResizeObserver } from 'kivora-react';
+
+function ContainerQuery() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { width } = useResizeObserver(ref);
+
+  const layout = width < 400 ? 'stacked' : 'side-by-side';
+
+  return (
+    <div ref={ref} style={{ width: '100%' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: layout === 'stacked' ? 'column' : 'row',
+          gap: '1rem',
+        }}
+      >
+        <div>Content A</div>
+        <div>Content B</div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Chart that adapts to container
+
+```tsx
+import { useRef, useEffect } from 'react';
+import { useResizeObserver } from 'kivora-react';
+
+function ResponsiveChart() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { width, height } = useResizeObserver(containerRef);
+
+  useEffect(() => {
+    // Re-render chart when dimensions change
+    console.log('Chart dimensions:', width, height);
+    // renderChart(width, height);
+  }, [width, height]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{ width: '100%', height: '400px', background: '#f0f0f0' }}
+    >
+      Chart: {width}x{height}
+    </div>
+  );
+}
+```
+
+### Aspect ratio box
+
+```tsx
+import { useRef } from 'react';
+import { useResizeObserver } from 'kivora-react';
+
+function AspectRatioBox() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { width, height } = useResizeObserver(ref);
+
+  const aspectRatio = height > 0 ? (width / height).toFixed(2) : '0';
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        width: '100%',
+        height: '300px',
+        background: '#3b82f6',
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <div>
+        <div>Width: {width}px</div>
+        <div>Height: {height}px</div>
+        <div>Aspect Ratio: {aspectRatio}</div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Conditional rendering based on size
+
+```tsx
+import { useRef } from 'react';
+import { useResizeObserver } from 'kivora-react';
+
+function AdaptiveCard() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { width } = useResizeObserver(ref);
+
+  const showDetails = width > 300;
+
+  return (
+    <div ref={ref} style={{ width: '100%', padding: '1rem', border: '1px solid #ddd' }}>
+      <h3>Card Title</h3>
+      {showDetails && (
+        <div>
+          <p>Additional details shown when card is wide enough</p>
+          <button>Action</button>
+        </div>
+      )}
+    </div>
+  );
+}
+```

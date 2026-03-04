@@ -1,0 +1,119 @@
+---
+title: useOs
+description: Detect user's operating system
+---
+
+Detects the user's operating system from `navigator.userAgent`.
+
+## Usage
+
+```tsx
+import { useOs } from 'kivora-react';
+
+function KeyboardShortcut() {
+  const os = useOs();
+  const modifier = os === 'macos' ? '⌘' : 'Ctrl';
+
+  return <kbd>{modifier} + K</kbd>;
+}
+```
+
+## Returns
+
+<ResponseField name="os" type="OS">
+  The detected operating system: `'macos'` | `'ios'` | `'windows'` | `'android'` | `'linux'` | `'undetermined'`.
+</ResponseField>
+
+## Examples
+
+### Platform-specific shortcuts
+
+```tsx
+const os = useOs();
+const shortcutKey = os === 'macos' ? '⌘' : 'Ctrl';
+
+return (
+  <div>
+    <p>Save: {shortcutKey} + S</p>
+    <p>Copy: {shortcutKey} + C</p>
+    <p>Paste: {shortcutKey} + V</p>
+  </div>
+);
+```
+
+### Conditional features
+
+```tsx
+const os = useOs();
+const isMobile = os === 'ios' || os === 'android';
+
+return (
+  <>
+    {isMobile ? (
+      <MobileNavigation />
+    ) : (
+      <DesktopNavigation />
+    )}
+  </>
+);
+```
+
+### OS-specific styling
+
+```tsx
+const os = useOs();
+
+return (
+  <div 
+    className={`app ${os}`}
+    data-platform={os}
+  >
+    {/* Different styles for each OS */}
+  </div>
+);
+```
+
+### Download button
+
+```tsx
+const os = useOs();
+
+const getDownloadLink = () => {
+  switch (os) {
+    case 'macos':
+      return '/downloads/app-macos.dmg';
+    case 'windows':
+      return '/downloads/app-windows.exe';
+    case 'linux':
+      return '/downloads/app-linux.AppImage';
+    default:
+      return '/downloads';
+  }
+};
+
+return (
+  <a href={getDownloadLink()} download>
+    Download for {os}
+  </a>
+);
+```
+
+## Notes
+
+- Detection is based on `navigator.userAgent` parsing
+- Returns `'undetermined'` when the OS cannot be identified or in non-browser environments
+- User agent strings can be spoofed, so don't rely on this for security purposes
+
+## Type Definitions
+
+```ts
+type OS = 
+  | 'undetermined'
+  | 'macos'
+  | 'ios'
+  | 'windows'
+  | 'android'
+  | 'linux';
+
+function useOs(): OS;
+```

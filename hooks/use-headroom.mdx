@@ -1,0 +1,194 @@
+---
+title: useHeadroom
+description: Auto-hide navbar on scroll down
+---
+
+Implements "headroom" behaviour — hides a fixed navbar on scroll down, shows it on scroll up (like headroom.js).
+
+## Usage
+
+```tsx
+import { useHeadroom } from 'kivora-react';
+
+function Navbar() {
+  const { pinned } = useHeadroom({ fixedAt: 80 });
+
+  return (
+    <header 
+      className={`fixed top-0 transition-transform ${
+        pinned ? 'translate-y-0' : '-translate-y-full'
+      }`}
+    >
+      {/* Navbar content */}
+    </header>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="options.fixedAt" type="number" default="50">
+  Scroll distance in pixels before hiding begins.
+</ParamField>
+
+<ParamField path="options.tolerance" type="number" default="5">
+  Minimum scroll delta in pixels to trigger hide/show.
+</ParamField>
+
+## Returns
+
+<ResponseField name="pinned" type="boolean">
+  `true` while the navbar should be pinned (visible).
+</ResponseField>
+
+<ResponseField name="scrollY" type="number">
+  Current scroll position in pixels.
+</ResponseField>
+
+## Examples
+
+### Basic headroom navbar
+
+```tsx
+function Header() {
+  const { pinned } = useHeadroom();
+
+  return (
+    <header 
+      className={`
+        fixed top-0 w-full bg-white shadow
+        transition-transform duration-300
+        ${pinned ? 'translate-y-0' : '-translate-y-full'}
+      `}
+    >
+      <nav>{/* Navigation links */}</nav>
+    </header>
+  );
+}
+```
+
+### With custom thresholds
+
+```tsx
+const { pinned } = useHeadroom({
+  fixedAt: 100,  // Start hiding after 100px
+  tolerance: 10, // Require 10px scroll delta
+});
+
+return (
+  <header className={pinned ? 'visible' : 'hidden'}>
+    Navigation
+  </header>
+);
+```
+
+### Using scroll position
+
+```tsx
+const { pinned, scrollY } = useHeadroom({ fixedAt: 80 });
+
+const isScrolled = scrollY > 80;
+
+return (
+  <header 
+    className={`
+      fixed top-0 transition-all
+      ${pinned ? 'translate-y-0' : '-translate-y-full'}
+      ${isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'}
+    `}
+  >
+    Navigation
+  </header>
+);
+```
+
+### Animated with framer-motion
+
+```tsx
+import { motion } from 'framer-motion';
+
+function AnimatedNav() {
+  const { pinned } = useHeadroom({ fixedAt: 60 });
+
+  return (
+    <motion.header
+      className="fixed top-0 w-full"
+      animate={{ y: pinned ? 0 : -100 }}
+      transition={{ duration: 0.3 }}
+    >
+      {/* Navbar content */}
+    </motion.header>
+  );
+}
+```
+
+### With opacity transition
+
+```tsx
+const { pinned, scrollY } = useHeadroom();
+
+const opacity = scrollY > 50 ? 1 : 0.9;
+
+return (
+  <header 
+    className={pinned ? 'visible' : 'hidden'}
+    style={{ 
+      opacity,
+      transition: 'opacity 0.3s, transform 0.3s',
+    }}
+  >
+    Navigation
+  </header>
+);
+```
+
+### Show on hover at top
+
+```tsx
+function StickyHeader() {
+  const { pinned, scrollY } = useHeadroom({ fixedAt: 80 });
+  const [hovering, setHovering] = useState(false);
+
+  const isVisible = pinned || (scrollY > 80 && hovering);
+
+  return (
+    <div
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
+      className="fixed top-0 w-full"
+    >
+      <header 
+        className={`
+          transition-transform duration-300
+          ${isVisible ? 'translate-y-0' : '-translate-y-full'}
+        `}
+      >
+        Navigation
+      </header>
+    </div>
+  );
+}
+```
+
+## Notes
+
+- The navbar is always visible (`pinned: true`) when scrolled near the top (within `fixedAt`)
+- Scrolling up shows the navbar, scrolling down hides it
+- The `tolerance` prevents jittery behavior from small scroll movements
+- Uses passive scroll listeners for optimal performance
+
+## Type Definitions
+
+```ts
+interface UseHeadroomReturn {
+  pinned: boolean;
+  scrollY: number;
+}
+
+interface UseHeadroomOptions {
+  fixedAt?: number;
+  tolerance?: number;
+}
+
+function useHeadroom(options?: UseHeadroomOptions): UseHeadroomReturn;
+```

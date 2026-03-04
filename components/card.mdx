@@ -1,0 +1,156 @@
+---
+title: Card
+description: Versatile surface container with optional header and footer slots.
+---
+
+## Usage
+
+```tsx
+import { Card } from '@kivora/react';
+
+<Card>
+  <p>Card content goes here</p>
+</Card>
+```
+
+## Examples
+
+### Basic Card
+
+```tsx
+<Card>
+  <h3>Simple Card</h3>
+  <p>This is a basic card with default settings.</p>
+</Card>
+```
+
+### With Header
+
+```tsx
+<Card header="Profile">
+  <p>Name: Alice Johnson</p>
+  <p>Role: Developer</p>
+</Card>
+```
+
+### With Header and Footer
+
+```tsx
+<Card 
+  header="User Profile" 
+  footer="Last updated: 2 hours ago"
+>
+  <p>Name: Alice Johnson</p>
+  <p>Email: alice@example.com</p>
+  <p>Department: Engineering</p>
+</Card>
+```
+
+### Shadow Variants
+
+<CodeGroup>
+```tsx None
+<Card shadow="none">
+  No shadow
+</Card>
+```
+
+```tsx Small
+<Card shadow="sm">
+  Small shadow
+</Card>
+```
+
+```tsx Medium
+<Card shadow="md">
+  Medium shadow
+</Card>
+```
+
+```tsx Large
+<Card shadow="lg">
+  Large shadow
+</Card>
+```
+</CodeGroup>
+
+### Without Border
+
+```tsx
+<Card bordered={false} shadow="md">
+  <p>Card without border</p>
+</Card>
+```
+
+### No Padding
+
+```tsx
+<Card noPadding header="Image Gallery">
+  <img src="/gallery.jpg" alt="Gallery" className="w-full" />
+</Card>
+```
+
+Use `noPadding` when you need full control over spacing, such as with images or custom layouts.
+
+### Complex Example
+
+```tsx
+<Card 
+  header="Project Dashboard"
+  footer={
+    <div className="flex justify-between">
+      <span>5 tasks remaining</span>
+      <Button size="sm">View All</Button>
+    </div>
+  }
+  shadow="md"
+>
+  <div className="space-y-4">
+    <div>
+      <h4>In Progress</h4>
+      <p>3 tasks</p>
+    </div>
+    <div>
+      <h4>Completed</h4>
+      <p>12 tasks</p>
+    </div>
+  </div>
+</Card>
+```
+
+## Props
+
+<ResponseField name="children" type="React.ReactNode" required>
+  Card body content
+</ResponseField>
+
+<ResponseField name="header" type="React.ReactNode">
+  Optional header slot rendered above the body with bottom border
+</ResponseField>
+
+<ResponseField name="footer" type="React.ReactNode">
+  Optional footer slot rendered below the body with top border
+</ResponseField>
+
+<ResponseField name="shadow" type="'none' | 'sm' | 'md' | 'lg'" default="sm">
+  Box-shadow size
+</ResponseField>
+
+<ResponseField name="bordered" type="boolean" default={true}>
+  Render a border around the card
+</ResponseField>
+
+<ResponseField name="noPadding" type="boolean" default={false}>
+  Remove default body padding (header and footer keep their padding)
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+## Styling
+
+- Cards use `bg-card` and `text-card-foreground` theme tokens
+- Rounded corners with `rounded-xl`
+- Header and footer have consistent padding (`px-5 py-3`)
+- Body padding can be removed with `noPadding` prop

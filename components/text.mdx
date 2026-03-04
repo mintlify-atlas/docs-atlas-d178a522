@@ -1,0 +1,156 @@
+---
+title: Text
+description: Renders typographic text with semantic variants and optional size overrides.
+---
+
+## Overview
+
+The `Text` component provides a flexible way to render text content with semantic variants that automatically map to appropriate HTML elements. It supports size overrides, bold text, and muted styling.
+
+## Import
+
+```tsx
+import { Text } from '@kivora/react';
+```
+
+## Basic Usage
+
+```tsx
+<Text>This is body text</Text>
+```
+
+## Variants
+
+The `variant` prop determines both the semantic HTML element and visual styling:
+
+```tsx
+<Text variant="display">Display Text</Text>
+<Text variant="heading">Heading Text</Text>
+<Text variant="label">Label Text</Text>
+<Text variant="body">Body Text</Text>
+<Text variant="caption">Caption Text</Text>
+```
+
+### Variant Mappings
+
+| Variant | Element | Styling |
+|---------|---------|----------|
+| `display` | `h1` | `text-4xl font-bold tracking-tight` |
+| `heading` | `h2` | `text-2xl font-semibold tracking-tight` |
+| `label` | `label` | `text-sm font-medium` |
+| `body` | `p` | `text-base leading-relaxed` |
+| `caption` | `span` | `text-xs text-muted-foreground` |
+
+## Size Override
+
+Override the default variant size:
+
+```tsx
+<Text variant="body" size="lg">Large body text</Text>
+<Text variant="heading" size="xl">Extra large heading</Text>
+```
+
+### Available Sizes
+
+- `xs` - `text-xs`
+- `sm` - `text-sm`
+- `md` - `text-base`
+- `lg` - `text-lg`
+- `xl` - `text-xl`
+- `2xl` - `text-2xl`
+- `3xl` - `text-3xl`
+- `4xl` - `text-4xl`
+
+## Bold Text
+
+```tsx
+<Text bold>This text is bold</Text>
+<Text variant="body" bold>Bold body text</Text>
+```
+
+## Muted Text
+
+Applies `text-muted-foreground` for secondary text:
+
+```tsx
+<Text muted>This is muted text</Text>
+<Text variant="caption" muted>Last updated 3 days ago</Text>
+```
+
+## Custom Element
+
+Override the default element mapping:
+
+```tsx
+<Text as="span">Span element with body styling</Text>
+<Text variant="heading" as="h3">H3 with heading styles</Text>
+```
+
+## Examples
+
+### Article Header
+
+```tsx
+<div>
+  <Text variant="display">Welcome to Kivora</Text>
+  <Text variant="caption" muted>Published on March 4, 2026</Text>
+</div>
+```
+
+### Form Label
+
+```tsx
+<Text variant="label">Email Address</Text>
+```
+
+### Large Bold Text
+
+```tsx
+<Text size="xl" bold>Important Announcement</Text>
+```
+
+## Props
+
+<ResponseField name="variant" type="'display' | 'heading' | 'label' | 'body' | 'caption'" default="'body'">
+  Semantic text variant that determines default element and styling
+</ResponseField>
+
+<ResponseField name="size" type="'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'">
+  Override the default variant size
+</ResponseField>
+
+<ResponseField name="bold" type="boolean" default="false">
+  Apply bold font weight
+</ResponseField>
+
+<ResponseField name="muted" type="boolean" default="false">
+  Apply muted foreground color for secondary text
+</ResponseField>
+
+<ResponseField name="as" type="ElementType">
+  Override the default HTML element (defaults based on variant)
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Text content to render
+</ResponseField>
+
+## Type Definition
+
+Source: `/home/daytona/workspace/source/src/components/typography/Text.tsx:49`
+
+```tsx
+export interface TextProps {
+  variant?: 'display' | 'heading' | 'label' | 'body' | 'caption';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
+  bold?: boolean;
+  muted?: boolean;
+  as?: ElementType;
+  className?: string;
+  children?: ReactNode;
+}
+```

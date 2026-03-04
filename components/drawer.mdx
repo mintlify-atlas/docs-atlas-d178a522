@@ -1,0 +1,237 @@
+---
+title: Drawer
+description: Slide-in panel anchored to any edge of the screen
+---
+
+Slide-in panel that can be anchored to any edge of the screen. Perfect for navigation menus, filters, or contextual panels.
+
+## Import
+
+```tsx
+import { Drawer } from '@kivora/react';
+```
+
+## Usage
+
+```tsx
+import { Drawer, Button, useDisclosure } from '@kivora/react';
+
+function Example() {
+  const { isOpen, open, close } = useDisclosure();
+
+  return (
+    <>
+      <Button label="Open Menu" onClick={open} />
+      <Drawer isOpen={isOpen} onClose={close} title="Navigation">
+        <nav className="flex flex-col gap-2">
+          <a href="/" className="p-2 hover:bg-accent rounded">Home</a>
+          <a href="/about" className="p-2 hover:bg-accent rounded">About</a>
+          <a href="/contact" className="p-2 hover:bg-accent rounded">Contact</a>
+        </nav>
+      </Drawer>
+    </>
+  );
+}
+```
+
+## Positions
+
+Anchor the drawer to any edge:
+
+```tsx
+<Drawer isOpen={isOpen} onClose={close} position="left" title="Left Menu">
+  <p>Slides in from the left</p>
+</Drawer>
+
+<Drawer isOpen={isOpen} onClose={close} position="right" title="Right Panel">
+  <p>Slides in from the right (default)</p>
+</Drawer>
+
+<Drawer isOpen={isOpen} onClose={close} position="top" title="Top Panel">
+  <p>Slides down from the top</p>
+</Drawer>
+
+<Drawer isOpen={isOpen} onClose={close} position="bottom" title="Bottom Sheet">
+  <p>Slides up from the bottom</p>
+</Drawer>
+```
+
+## Sizes
+
+Control drawer dimensions with the `size` prop:
+
+```tsx
+{/* For horizontal drawers (left/right) */}
+<Drawer isOpen={isOpen} onClose={close} size="xs" position="left">
+  <p>Narrow drawer (256px)</p>
+</Drawer>
+
+<Drawer isOpen={isOpen} onClose={close} size="lg" position="right">
+  <p>Wide drawer (384px)</p>
+</Drawer>
+
+{/* For vertical drawers (top/bottom) */}
+<Drawer isOpen={isOpen} onClose={close} size="md" position="bottom">
+  <p>Medium height drawer</p>
+</Drawer>
+
+<Drawer isOpen={isOpen} onClose={close} size="full" position="top">
+  <p>Full screen drawer</p>
+</Drawer>
+```
+
+Available sizes:
+- Horizontal (left/right): `xs` (256px), `sm` (288px), `md` (320px), `lg` (384px), `xl` (512px), `full` (100vw)
+- Vertical (top/bottom): `xs` (192px), `sm` (256px), `md` (320px), `lg` (384px), `xl` (512px), `full` (100vh)
+
+## Navigation Drawer
+
+```tsx
+import { Drawer, Button, useDisclosure } from '@kivora/react';
+import { Menu, Home, Settings } from 'lucide-react';
+
+function NavDrawer() {
+  const { isOpen, open, close } = useDisclosure();
+
+  return (
+    <>
+      <Button
+        label="Menu"
+        leftIcon={<Menu size={16} />}
+        variant="ghost"
+        onClick={open}
+      />
+      <Drawer
+        isOpen={isOpen}
+        onClose={close}
+        position="left"
+        size="sm"
+        title="Navigation"
+      >
+        <div className="flex flex-col gap-1">
+          <button className="flex items-center gap-3 p-3 hover:bg-accent rounded-lg">
+            <Home size={18} />
+            <span>Home</span>
+          </button>
+          <button className="flex items-center gap-3 p-3 hover:bg-accent rounded-lg">
+            <Settings size={18} />
+            <span>Settings</span>
+          </button>
+        </div>
+      </Drawer>
+    </>
+  );
+}
+```
+
+## Filter Panel
+
+```tsx
+function FilterDrawer() {
+  const { isOpen, open, close } = useDisclosure();
+  const [filters, setFilters] = useState({ category: '', price: '' });
+
+  return (
+    <>
+      <Button label="Filters" onClick={open} />
+      <Drawer
+        isOpen={isOpen}
+        onClose={close}
+        position="right"
+        title="Filter Products"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Category</label>
+            <select className="w-full p-2 border rounded">
+              <option>All</option>
+              <option>Electronics</option>
+              <option>Clothing</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Price Range</label>
+            <input type="range" className="w-full" />
+          </div>
+          <Button label="Apply Filters" onClick={close} fullWidth />
+        </div>
+      </Drawer>
+    </>
+  );
+}
+```
+
+## Disable Backdrop Close
+
+Prevent closing when clicking outside:
+
+```tsx
+<Drawer
+  isOpen={isOpen}
+  onClose={close}
+  title="Important Form"
+  closeOnBackdrop={false}
+>
+  <form>
+    <p>Complete this form before closing</p>
+  </form>
+</Drawer>
+```
+
+## Props
+
+<ResponseField name="isOpen" type="boolean" required>
+  Whether the drawer is visible
+</ResponseField>
+
+<ResponseField name="onClose" type="() => void" required>
+  Callback to close the drawer
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Drawer body content
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  Optional title rendered in the drawer header
+</ResponseField>
+
+<ResponseField name="size" type="'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full'" default="md">
+  Width (for left/right) or height (for top/bottom) of the drawer
+</ResponseField>
+
+<ResponseField name="position" type="'left' | 'right' | 'top' | 'bottom'" default="right">
+  Which edge of the screen to anchor the drawer to
+</ResponseField>
+
+<ResponseField name="closeOnBackdrop" type="boolean" default="true">
+  Close when clicking the backdrop
+</ResponseField>
+
+<ResponseField name="closeOnEscape" type="boolean" default="true">
+  Close when pressing Escape key
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes for the drawer panel
+</ResponseField>
+
+## Accessibility
+
+- Uses `role="dialog"` and `aria-modal="true"`
+- Automatically manages focus trap within the drawer
+- Locks body scroll when open
+- Links title with `aria-labelledby`
+- Close button has `aria-label`
+- Escape key support (configurable)
+
+## Features
+
+- Portal rendering into `document.body`
+- Smooth slide animations from any edge
+- Focus trap using `useFocusTrap` hook
+- Scroll lock using `useScrollLock` hook
+- Backdrop blur effect
+- Configurable sizes and positions
+- Fixed header with close button
+- Scrollable content area

@@ -1,0 +1,151 @@
+---
+title: useViewportSize
+description: Tracks the current browser window dimensions with automatic updates on resize
+---
+
+## Usage
+
+Returns the current window dimensions and updates them automatically when the window is resized.
+
+```tsx
+import { useViewportSize } from 'kivora-react';
+
+function ViewportInfo() {
+  const { width, height } = useViewportSize();
+
+  return (
+    <div>
+      Viewport: {width} x {height}
+    </div>
+  );
+}
+```
+
+## Parameters
+
+This hook does not accept any parameters.
+
+## Returns
+
+<ResponseField name="width" type="number">
+  Current viewport width in pixels (`window.innerWidth`)
+</ResponseField>
+
+<ResponseField name="height" type="number">
+  Current viewport height in pixels (`window.innerHeight`)
+</ResponseField>
+
+## Examples
+
+### Responsive rendering
+
+```tsx
+import { useViewportSize } from 'kivora-react';
+
+function ResponsiveLayout() {
+  const { width } = useViewportSize();
+
+  if (width < 768) {
+    return <MobileLayout />;
+  }
+
+  if (width < 1024) {
+    return <TabletLayout />;
+  }
+
+  return <DesktopLayout />;
+}
+```
+
+### Adaptive grid columns
+
+```tsx
+import { useViewportSize } from 'kivora-react';
+
+function AdaptiveGrid({ items }: { items: any[] }) {
+  const { width } = useViewportSize();
+
+  const columns = width < 640 ? 1 : width < 1024 ? 2 : width < 1536 ? 3 : 4;
+
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
+        gap: '1rem',
+      }}
+    >
+      {items.map((item, i) => (
+        <div key={i}>{item}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+### Mobile detection
+
+```tsx
+import { useViewportSize } from 'kivora-react';
+
+function MobileDetector() {
+  const { width } = useViewportSize();
+  const isMobile = width < 768;
+
+  return (
+    <div>
+      <h1>Device Type</h1>
+      <p>You are viewing on a {isMobile ? 'mobile' : 'desktop'} device</p>
+      {isMobile && <button>Tap to continue</button>}
+      {!isMobile && <button>Click to continue</button>}
+    </div>
+  );
+}
+```
+
+### Dynamic canvas sizing
+
+```tsx
+import { useViewportSize } from 'kivora-react';
+import { useEffect, useRef } from 'react';
+
+function FullscreenCanvas() {
+  const { width, height } = useViewportSize();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Draw something based on viewport size
+    ctx.fillStyle = '#3b82f6';
+    ctx.fillRect(0, 0, width, height);
+  }, [width, height]);
+
+  return <canvas ref={canvasRef} width={width} height={height} />;
+}
+```
+
+### Aspect ratio calculations
+
+```tsx
+import { useViewportSize } from 'kivora-react';
+
+function AspectRatioInfo() {
+  const { width, height } = useViewportSize();
+  const aspectRatio = (width / height).toFixed(2);
+
+  const orientation = width > height ? 'landscape' : 'portrait';
+
+  return (
+    <div>
+      <p>Viewport: {width}x{height}</p>
+      <p>Aspect Ratio: {aspectRatio}</p>
+      <p>Orientation: {orientation}</p>
+    </div>
+  );
+}
+```

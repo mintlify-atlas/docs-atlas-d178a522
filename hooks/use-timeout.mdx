@@ -1,0 +1,233 @@
+---
+title: useTimeout
+description: Manage setTimeout with start, stop, and reset controls
+---
+
+## Overview
+
+The `useTimeout` hook provides a declarative way to manage `setTimeout` with programmatic control. It returns methods to start, stop, and reset the timeout.
+
+## Signature
+
+```tsx
+function useTimeout(
+  callback: () => void,
+  delay: number,
+  autoStart?: boolean
+): UseTimeoutReturn
+```
+
+## Parameters
+
+<ParamField path="callback" type="() => void" required>
+  Function to call after the delay expires
+</ParamField>
+
+<ParamField path="delay" type="number" required>
+  Delay in milliseconds before the callback is invoked
+</ParamField>
+
+<ParamField path="autoStart" type="boolean" default="true">
+  Whether to start the timeout automatically on mount
+</ParamField>
+
+## Returns
+
+<ResponseField name="start" type="() => void">
+  Start or restart the timeout
+</ResponseField>
+
+<ResponseField name="stop" type="() => void">
+  Cancel the timeout
+</ResponseField>
+
+<ResponseField name="reset" type="() => void">
+  Reset the timeout (equivalent to calling `start()`)
+</ResponseField>
+
+## Type Definitions
+
+```tsx
+interface UseTimeoutReturn {
+  start: () => void;
+  stop: () => void;
+  reset: () => void;
+}
+```
+
+## Examples
+
+### Flash message
+
+```tsx
+import { useState } from 'react';
+import { useTimeout } from 'kivora-react';
+
+function FlashMessage() {
+  const [visible, setVisible] = useState(false);
+
+  const { reset } = useTimeout(() => {
+    setVisible(false);
+  }, 2000, false);
+
+  const showMessage = () => {
+    setVisible(true);
+    reset(); // Start the timeout
+  };
+
+  return (
+    <div>
+      <button onClick={showMessage}>Show Message</button>
+      {visible && <div className="flash">This will disappear soon!</div>}
+    </div>
+  );
+}
+```
+
+### Auto-logout timer
+
+```tsx
+import { useTimeout } from 'kivora-react';
+
+function SessionManager() {
+  const { reset, stop } = useTimeout(() => {
+    // Log out user after 5 minutes of inactivity
+    logout();
+  }, 5 * 60 * 1000);
+
+  const handleActivity = () => {
+    reset(); // Reset the timer on user activity
+  };
+
+  const handleLogout = () => {
+    stop(); // Cancel auto-logout
+    logout();
+  };
+
+  return (
+    <div
+      onMouseMove={handleActivity}
+      onKeyPress={handleActivity}
+      onClick={handleActivity}
+    >
+      <button onClick={handleLogout}>Logout</button>
+      {/* App content */}
+    </div>
+  );
+}
+```
+
+### Delayed search
+
+```tsx
+import { useState } from 'react';
+import { useTimeout } from 'kivora-react';
+
+function SearchWithDelay() {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+
+  const { reset } = useTimeout(async () => {
+    if (query) {
+      const data = await fetchResults(query);
+      setResults(data);
+    }
+  }, 500, false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+    reset(); // Reset timeout on each keystroke
+  };
+
+  return (
+    <div>
+      <input value={query} onChange={handleChange} />
+      <ul>
+        {results.map(r => <li key={r.id}>{r.name}</li>)}
+      </ul>
+    </div>
+  );
+}
+```
+
+### Tooltip with delay
+
+```tsx
+import { useState } from 'react';
+import { useTimeout } from 'kivora-react';
+
+function TooltipButton() {
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const { start, stop } = useTimeout(() => {
+    setShowTooltip(true);
+  }, 500, false);
+
+  const handleMouseEnter = () => {
+    start();
+  };
+
+  const handleMouseLeave = () => {
+    stop();
+    setShowTooltip(false);
+  };
+
+  return (
+    <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      style={{ position: 'relative' }}
+    >
+      <button>Hover me</button>
+      {showTooltip && (
+        <div className="tooltip">Helpful information</div>
+      )}
+    </div>
+  );
+}
+```
+
+### Notification system
+
+```tsx
+import { useState } from 'react';
+import { useTimeout } from 'kivora-react';
+
+function Notification({ message, duration = 3000 }) {
+  const [visible, setVisible] = useState(true);
+
+  const { stop } = useTimeout(() => {
+    setVisible(false);
+  }, duration);
+
+  const handleDismiss = () => {
+    stop();
+    setVisible(false);
+  };
+
+  if (!visible) return null;
+
+  return (
+    <div className="notification">
+      {message}
+      <button onClick={handleDismiss}>×</button>
+    </div>
+  );
+}
+```
+
+## Use Cases
+
+- **Flash messages**: Show temporary notifications or alerts
+- **Auto-logout**: Implement session timeouts
+- **Delayed actions**: Execute functions after user inactivity
+- **Tooltips**: Show help text after hovering for a duration
+- **Toast notifications**: Auto-dismiss messages
+- **Debounced operations**: Delay execution with manual control
+
+## Notes
+
+- The timeout automatically cleans up when the component unmounts
+- Calling `start()` will cancel any existing timeout before starting a new one
+- The callback ref is always kept up-to-date, so you don't need to worry about stale closures
+- `reset()` is equivalent to calling `start()` - it restarts the timer from the beginning

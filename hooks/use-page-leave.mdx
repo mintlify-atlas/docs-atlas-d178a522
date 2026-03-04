@@ -1,0 +1,162 @@
+---
+title: usePageLeave
+description: Detect when user attempts to leave page
+---
+
+Fires `handler` once when the user attempts to navigate away (beforeunload). Useful for unsaved-changes warnings.
+
+## Usage
+
+```tsx
+import { usePageLeave } from 'kivora-react';
+
+function Editor({ hasUnsavedChanges }) {
+  usePageLeave(() => {
+    if (hasUnsavedChanges) {
+      console.log('User is leaving with unsaved changes');
+    }
+  });
+
+  return <textarea>{/* Editor */}</textarea>;
+}
+```
+
+## Parameters
+
+<ParamField path="handler" type="() => void" required>
+  Callback function fired when the user attempts to leave the page.
+</ParamField>
+
+## Examples
+
+### Unsaved changes warning
+
+```tsx
+function FormEditor() {
+  const [content, setContent] = useState('');
+  const [saved, setSaved] = useState(true);
+
+  usePageLeave(() => {
+    if (!saved) {
+      // Note: Modern browsers ignore custom messages
+      // but still show a generic confirmation dialog
+      return 'You have unsaved changes!';
+    }
+  });
+
+  const handleChange = (e) => {
+    setContent(e.target.value);
+    setSaved(false);
+  };
+
+  return (
+    <>
+      <textarea value={content} onChange={handleChange} />
+      <button onClick={() => {
+        saveContent(content);
+        setSaved(true);
+      }}>
+        Save
+      </button>
+    </>
+  );
+}
+```
+
+### Analytics tracking
+
+```tsx
+function Article() {
+  const [readTime, setReadTime] = useState(0);
+
+  useEffect(() => {
+    const start = Date.now();
+    return () => {
+      setReadTime(Date.now() - start);
+    };
+  }, []);
+
+  usePageLeave(() => {
+    analytics.track('article_exit', {
+      timeSpent: readTime,
+      scrollDepth: window.scrollY,
+    });
+  });
+
+  return <article>{/* Content */}</article>;
+}
+```
+
+### Auto-save on exit
+
+```tsx
+function NoteEditor() {
+  const [note, setNote] = useState('');
+
+  usePageLeave(() => {
+    if (note.trim()) {
+      localStorage.setItem('draft', note);
+    }
+  });
+
+  return (
+    <textarea 
+      value={note}
+      onChange={(e) => setNote(e.target.value)}
+      placeholder="Your notes..."
+    />
+  );
+}
+```
+
+### Conditional warning
+
+```tsx
+function CheckoutForm() {
+  const [step, setStep] = useState(1);
+  const totalSteps = 3;
+
+  usePageLeave(() => {
+    if (step > 1 && step < totalSteps) {
+      console.warn('User leaving incomplete checkout');
+    }
+  });
+
+  return <div>{/* Multi-step form */}</div>;
+}
+```
+
+### Session cleanup
+
+```tsx
+function AuthenticatedApp() {
+  usePageLeave(() => {
+    // Clean up session data
+    sessionStorage.clear();
+    
+    // Notify server
+    navigator.sendBeacon('/api/session/end', 
+      JSON.stringify({ timestamp: Date.now() })
+    );
+  });
+
+  return <div>{/* App */}</div>;
+}
+```
+
+## Notes
+
+- Uses the `beforeunload` event
+- Modern browsers ignore custom messages and show a generic confirmation dialog
+- The handler cannot prevent navigation or show custom UI
+- Use `navigator.sendBeacon()` for reliable analytics tracking on page exit
+- The handler is called when:
+  - User closes the tab/window
+  - User navigates to a different URL
+  - User refreshes the page
+
+## Type Definitions
+
+```ts
+function usePageLeave(handler: () => void): void;
+```

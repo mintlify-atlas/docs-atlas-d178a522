@@ -1,0 +1,172 @@
+---
+title: Skeleton
+description: Loading placeholder with pulse animation for content that hasn't loaded yet.
+---
+
+Loading placeholder with pulse animation. Use to show the structure of content while it's loading.
+
+## Import
+
+```tsx
+import { Skeleton } from '@kivora/react';
+```
+
+## Usage
+
+```tsx
+<Skeleton height={20} radius="md" />
+<Skeleton height="1rem" width="60%" />
+```
+
+## Sizes
+
+Control width and height with any CSS value:
+
+```tsx
+<Skeleton width={200} height={40} />
+<Skeleton width="100%" height="3rem" />
+<Skeleton width="50%" height="1.5rem" />
+```
+
+## Border Radius
+
+Customize the border radius:
+
+```tsx
+<Skeleton height={20} radius="none" />
+<Skeleton height={20} radius="sm" />
+<Skeleton height={20} radius="md" />
+<Skeleton height={20} radius="lg" />
+<Skeleton height={20} radius="full" />
+```
+
+## Circular Skeleton
+
+Create circular skeletons for avatars:
+
+```tsx
+<Skeleton width={48} height={48} radius="full" />
+```
+
+## Without Animation
+
+Disable the pulse animation:
+
+```tsx
+<Skeleton height={20} animate={false} />
+```
+
+## Content Skeleton
+
+Build realistic loading states for content:
+
+```tsx
+function ArticleSkeleton() {
+  return (
+    <div className="space-y-4">
+      {/* Title */}
+      <Skeleton height={32} width="70%" radius="md" />
+      
+      {/* Meta */}
+      <div className="flex gap-2 items-center">
+        <Skeleton width={40} height={40} radius="full" />
+        <div className="flex-1 space-y-2">
+          <Skeleton height={16} width="30%" />
+          <Skeleton height={14} width="20%" />
+        </div>
+      </div>
+      
+      {/* Content */}
+      <div className="space-y-2">
+        <Skeleton height={16} width="100%" />
+        <Skeleton height={16} width="95%" />
+        <Skeleton height={16} width="90%" />
+      </div>
+    </div>
+  );
+}
+```
+
+## Card Skeleton
+
+Example of a card loading state:
+
+```tsx
+function CardSkeleton() {
+  return (
+    <div className="border rounded-lg p-4 space-y-3">
+      <Skeleton height={160} radius="md" />
+      <Skeleton height={24} width="80%" />
+      <Skeleton height={16} width="100%" />
+      <Skeleton height={16} width="60%" />
+    </div>
+  );
+}
+```
+
+## List Skeleton
+
+Repeat skeletons for list items:
+
+```tsx
+function ListSkeleton() {
+  return (
+    <div className="space-y-3">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} className="flex gap-3 items-center">
+          <Skeleton width={40} height={40} radius="full" />
+          <div className="flex-1 space-y-2">
+            <Skeleton height={16} width="70%" />
+            <Skeleton height={14} width="40%" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+## Props
+
+<ResponseField name="width" type="string | number">
+  Width of the skeleton. Numbers are treated as pixels, strings as CSS values.
+</ResponseField>
+
+<ResponseField name="height" type="string | number" default="'1rem'">
+  Height of the skeleton. Numbers are treated as pixels, strings as CSS values.
+</ResponseField>
+
+<ResponseField name="radius" type="'none' | 'sm' | 'md' | 'lg' | 'full'" default="'md'">
+  Border radius of the skeleton:
+  - `none`: No border radius
+  - `sm`: Small rounded corners
+  - `md`: Medium rounded corners
+  - `lg`: Large rounded corners
+  - `full`: Fully circular (50%)
+</ResponseField>
+
+<ResponseField name="animate" type="boolean" default="true">
+  Enable or disable the pulse animation.
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes to apply to the skeleton.
+</ResponseField>
+
+<ResponseField name="style" type="React.CSSProperties">
+  Inline styles to apply to the skeleton.
+</ResponseField>
+
+## Accessibility
+
+- Uses `aria-hidden="true"` as skeletons are purely decorative
+- Uses `role="presentation"` to indicate non-semantic content
+- Content should be properly announced once loaded
+
+## Best Practices
+
+- Match skeleton dimensions to the actual content
+- Use multiple skeletons to show content structure
+- Keep animation enabled for better UX (indicates loading)
+- Consider disabling animation for users with `prefers-reduced-motion`
+- Replace skeletons with actual content smoothly using transitions

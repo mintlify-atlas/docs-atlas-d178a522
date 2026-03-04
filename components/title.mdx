@@ -1,0 +1,133 @@
+---
+title: Title
+description: Semantic heading component with configurable level and optional size override.
+---
+
+## Overview
+
+The `Title` component renders semantic HTML heading elements (`h1` through `h6`) with appropriate styling based on the heading level. It supports size overrides to decouple visual appearance from semantic structure.
+
+## Import
+
+```tsx
+import { Title } from '@kivora/react';
+```
+
+## Basic Usage
+
+```tsx
+<Title>Default Heading (h2)</Title>
+```
+
+## Heading Levels
+
+Control the semantic heading level with the `order` prop:
+
+```tsx
+<Title order={1}>Page Title (h1)</Title>
+<Title order={2}>Section Title (h2)</Title>
+<Title order={3}>Subsection (h3)</Title>
+<Title order={4}>Minor Heading (h4)</Title>
+<Title order={5}>Subheading (h5)</Title>
+<Title order={6}>Small Heading (h6)</Title>
+```
+
+### Default Styling by Order
+
+| Order | Element | Default Style |
+|-------|---------|---------------|
+| `1` | `h1` | `text-4xl font-extrabold tracking-tight` |
+| `2` | `h2` | `text-3xl font-bold tracking-tight` |
+| `3` | `h3` | `text-2xl font-bold` |
+| `4` | `h4` | `text-xl font-semibold` |
+| `5` | `h5` | `text-lg font-semibold` |
+| `6` | `h6` | `text-base font-semibold` |
+
+## Size Override
+
+Override the default size while maintaining semantic structure:
+
+```tsx
+<Title order={3} size="xl">Large h3 heading</Title>
+<Title order={1} size="md">Smaller h1 for visual hierarchy</Title>
+```
+
+### Available Sizes
+
+| Size | Style |
+|------|-------|
+| `xs` | `text-sm font-semibold` |
+| `sm` | `text-base font-semibold` |
+| `md` | `text-xl font-semibold` |
+| `lg` | `text-2xl font-bold` |
+| `xl` | `text-3xl font-bold` |
+| `2xl` | `text-4xl font-extrabold tracking-tight` |
+| `3xl` | `text-5xl font-extrabold tracking-tight` |
+| `4xl` | `text-6xl font-extrabold tracking-tight` |
+
+## Examples
+
+### Page Header
+
+```tsx
+<Title order={1}>Welcome to Kivora</Title>
+```
+
+### Section with Visual Override
+
+```tsx
+<Title order={2} size="xl">Features</Title>
+```
+
+### Semantic Structure
+
+Maintain proper heading hierarchy while controlling visual size:
+
+```tsx
+<article>
+  <Title order={1}>Article Title</Title>
+  <Title order={2}>Introduction</Title>
+  <Title order={3} size="md">Background</Title>
+  <Title order={2}>Main Content</Title>
+  <Title order={3}>First Topic</Title>
+</article>
+```
+
+### Extra Large Display
+
+```tsx
+<Title order={1} size="4xl">Hero Heading</Title>
+```
+
+## Props
+
+<ResponseField name="order" type="1 | 2 | 3 | 4 | 5 | 6" default="2">
+  Semantic heading level (generates h1-h6 element)
+</ResponseField>
+
+<ResponseField name="size" type="'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'">
+  Override the default size for the heading level
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Heading content
+</ResponseField>
+
+<ResponseField name="...props" type="React.ComponentPropsWithoutRef<'h1'>">
+  All standard HTML heading element props (id, aria-*, etc.)
+</ResponseField>
+
+## Type Definition
+
+Source: `/home/daytona/workspace/source/src/components/typography/Title.tsx:6`
+
+```tsx
+export interface TitleProps extends React.ComponentPropsWithoutRef<'h1'> {
+  order?: 1 | 2 | 3 | 4 | 5 | 6;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
+}
+```

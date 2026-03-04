@@ -1,0 +1,109 @@
+---
+title: useMounted
+description: Track whether a component has mounted
+---
+
+`useMounted` returns `true` after the component has mounted (false on first server render). This is useful to skip SSR-unsafe side effects.
+
+## Usage
+
+```tsx
+import { useMounted } from '@kivora/react';
+
+function MyComponent() {
+  const mounted = useMounted();
+
+  if (!mounted) {
+    return null; // Skip rendering on server
+  }
+
+  return (
+    <div>
+      {/* Client-only content */}
+      <BrowserOnlyComponent />
+    </div>
+  );
+}
+```
+
+## Returns
+
+`boolean` - Returns `false` on first render (server-side), then `true` after the component mounts on the client.
+
+## Examples
+
+### Conditional Client-Side Rendering
+
+```tsx
+function ClientOnlyChart() {
+  const mounted = useMounted();
+
+  if (!mounted) {
+    return <div>Loading...</div>;
+  }
+
+  return <Chart data={data} />;
+}
+```
+
+### Avoiding Hydration Mismatches
+
+```tsx
+function ThemeToggle() {
+  const mounted = useMounted();
+  const [theme, setTheme] = useState('light');
+
+  useEffect(() => {
+    // Read from localStorage only after mount
+    if (mounted) {
+      setTheme(localStorage.getItem('theme') || 'light');
+    }
+  }, [mounted]);
+
+  if (!mounted) {
+    return null; // Prevent hydration mismatch
+  }
+
+  return (
+    <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+      {theme}
+    </button>
+  );
+}
+```
+
+### Window API Access
+
+```tsx
+function WindowSize() {
+  const mounted = useMounted();
+  const [size, setSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    const updateSize = () => {
+      setSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, [mounted]);
+
+  if (!mounted) {
+    return <div>Calculating...</div>;
+  }
+
+  return <div>{size.width} x {size.height}</div>;
+}
+```
+
+## Notes
+
+- The hook returns `false` on the initial render and `true` after the first `useEffect` runs
+- Useful for preventing hydration mismatches when using browser-only APIs
+- Common use cases include accessing `window`, `localStorage`, or other client-only features

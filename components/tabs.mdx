@@ -1,0 +1,108 @@
+---
+title: Tabs
+description: Accessible tab navigation with keyboard support and smooth animations
+---
+
+## Overview
+
+The Tabs component provides accessible tab navigation with keyboard arrow-key support. The active indicator slides smoothly between tabs, providing visual feedback during navigation.
+
+## Import
+
+```tsx
+import { Tabs } from 'kivora-react';
+```
+
+## Basic Usage
+
+```tsx
+<Tabs 
+  tabs={[
+    { id: 'overview', label: 'Overview', content: <Overview /> },
+    { id: 'settings', label: 'Settings', content: <Settings /> },
+    { id: 'analytics', label: 'Analytics', content: <Analytics /> },
+  ]} 
+/>
+```
+
+## Controlled State
+
+```tsx
+const [activeTab, setActiveTab] = useState('overview');
+
+<Tabs 
+  tabs={[
+    { id: 'overview', label: 'Overview', content: <Overview /> },
+    { id: 'settings', label: 'Settings', content: <Settings /> },
+  ]}
+  activeTab={activeTab}
+  onChange={setActiveTab}
+/>
+```
+
+## Default Tab
+
+```tsx
+<Tabs 
+  defaultTab="settings"
+  tabs={[
+    { id: 'overview', label: 'Overview', content: <Overview /> },
+    { id: 'settings', label: 'Settings', content: <Settings /> },
+  ]} 
+/>
+```
+
+## Disabled Tabs
+
+```tsx
+<Tabs 
+  tabs={[
+    { id: 'overview', label: 'Overview', content: <Overview /> },
+    { id: 'settings', label: 'Settings', content: <Settings />, disabled: true },
+    { id: 'analytics', label: 'Analytics', content: <Analytics /> },
+  ]} 
+/>
+```
+
+## Props
+
+### TabsProps
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `tabs` | `TabItem[]` | **required** | List of tabs to render |
+| `defaultTab` | `string` | First tab ID | Initially active tab (uncontrolled) |
+| `activeTab` | `string` | `undefined` | Controlled active tab ID |
+| `onChange` | `(id: string) => void` | `undefined` | Called with the new tab ID when selection changes |
+| `className` | `string` | `''` | Additional CSS classes |
+
+### TabItem
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Unique identifier for this tab |
+| `label` | `string` | Text label shown in the tab trigger |
+| `content` | `ReactNode` | Panel content associated with this tab |
+| `disabled` | `boolean` | Prevent selection of this tab |
+
+## Keyboard Navigation
+
+The Tabs component supports full keyboard navigation:
+
+- **Arrow Right**: Move to next enabled tab
+- **Arrow Left**: Move to previous enabled tab
+- **Tab**: Focus on the tab list
+- Navigation wraps around (last tab → first tab)
+
+## Accessibility
+
+- Uses proper ARIA roles: `tablist`, `tab`, and `tabpanel`
+- Implements `aria-selected` and `aria-controls` attributes
+- Keyboard navigation with arrow keys
+- Focus management with `tabIndex`
+- Disabled tabs are excluded from keyboard navigation
+- Active tab indicator is marked with `aria-hidden`
+
+## Animation
+
+The component features a smooth sliding indicator that animates between tabs using CSS transitions. The indicator automatically adjusts its position and width based on the active tab's dimensions.

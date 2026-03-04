@@ -1,0 +1,217 @@
+---
+title: Transition
+description: Headless transition wrapper with CSS animations
+---
+
+## Usage
+
+Transition is a headless component that manages enter/exit animations using CSS properties. It uses a render prop pattern, giving you full control over what and how to render during different animation phases.
+
+```tsx
+import { Transition } from '@kivora/react';
+
+<Transition mounted={isOpen} transition="fade" duration={200}>
+  {(styles) => (
+    <div style={styles}>Animated content</div>
+  )}
+</Transition>
+```
+
+## Examples
+
+### Fade Transition
+
+```tsx
+function FadeExample() {
+  const [mounted, setMounted] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setMounted(!mounted)}>
+        Toggle
+      </button>
+      <Transition mounted={mounted} transition="fade" duration={300}>
+        {(styles) => (
+          <div style={styles} className="p-4 bg-blue-500 text-white rounded">
+            This content fades in and out
+          </div>
+        )}
+      </Transition>
+    </>
+  );
+}
+```
+
+### Slide Up Transition
+
+```tsx
+<Transition mounted={isOpen} transition="slide-up" duration={200}>
+  {(styles) => (
+    <div style={styles} className="bg-white shadow-lg rounded-lg p-6">
+      Content slides up from below
+    </div>
+  )}
+</Transition>
+```
+
+### Scale Transition
+
+```tsx
+<Transition mounted={isOpen} transition="scale" duration={150}>
+  {(styles) => (
+    <div style={styles} className="bg-white rounded-lg p-4">
+      Content scales in
+    </div>
+  )}
+</Transition>
+```
+
+### Modal with Overlay
+
+```tsx
+function Modal({ isOpen, onClose, children }) {
+  return (
+    <>
+      <Transition mounted={isOpen} transition="fade" duration={200}>
+        {(styles) => (
+          <div 
+            style={styles} 
+            className="fixed inset-0 bg-black/50"
+            onClick={onClose}
+          />
+        )}
+      </Transition>
+      <Transition mounted={isOpen} transition="scale" duration={200}>
+        {(styles) => (
+          <div 
+            style={styles} 
+            className="fixed inset-0 flex items-center justify-center"
+          >
+            <div className="bg-white rounded-lg p-6 max-w-md">
+              {children}
+            </div>
+          </div>
+        )}
+      </Transition>
+    </>
+  );
+}
+```
+
+### Different Enter/Exit Durations
+
+```tsx
+<Transition 
+  mounted={isOpen} 
+  transition="slide-down"
+  duration={300}
+  exitDuration={150}
+>
+  {(styles) => (
+    <div style={styles}>Fast exit, slow enter</div>
+  )}
+</Transition>
+```
+
+### With Enter Delay
+
+```tsx
+<Transition 
+  mounted={isOpen} 
+  transition="fade"
+  duration={200}
+  enterDelay={100}
+>
+  {(styles) => (
+    <div style={styles}>Delayed entrance</div>
+  )}
+</Transition>
+```
+
+### Keep Mounted
+
+```tsx
+<Transition 
+  mounted={isOpen} 
+  transition="fade"
+  duration={200}
+  keepMounted
+>
+  {(styles, phase) => (
+    <div style={styles}>
+      Phase: {phase}
+    </div>
+  )}
+</Transition>
+```
+
+## Props
+
+<ParamField path="mounted" type="boolean" required>
+  Whether the child element should be visible. Controls the enter/exit animation.
+</ParamField>
+
+<ParamField path="transition" type="'fade' | 'slide-up' | 'slide-down' | 'scale' | 'rotate-left'" default="'fade'">
+  The animation preset to use:
+  - `fade`: Opacity only
+  - `slide-up`: Slides up with fade
+  - `slide-down`: Slides down with fade
+  - `scale`: Scales with fade
+  - `rotate-left`: Rotates and scales with fade
+</ParamField>
+
+<ParamField path="duration" type="number" default="200">
+  Enter transition duration in milliseconds.
+</ParamField>
+
+<ParamField path="exitDuration" type="number">
+  Exit transition duration in milliseconds. If not provided, defaults to `duration`.
+</ParamField>
+
+<ParamField path="enterDelay" type="number" default="0">
+  Delay before the enter animation starts, in milliseconds.
+</ParamField>
+
+<ParamField path="keepMounted" type="boolean" default="false">
+  If true, the component stays mounted in the DOM when unmounted (with `display: none`). Useful for maintaining component state.
+</ParamField>
+
+<ParamField path="children" type="(styles: CSSProperties, phase: TransitionPhase) => ReactNode" required>
+  Render prop that receives:
+  - `styles`: CSS properties to apply for the current animation phase
+  - `phase`: Current phase (`'unmounted'`, `'entering'`, `'entered'`, `'leaving'`)
+</ParamField>
+
+## Transition Phases
+
+The component goes through these phases:
+
+1. **unmounted**: Component is not rendered (unless `keepMounted` is true)
+2. **entering**: Component is animating in
+3. **entered**: Component is fully visible
+4. **leaving**: Component is animating out
+
+## Custom Transitions
+
+While the component provides built-in presets, you can create custom animations by using the phase parameter:
+
+```tsx
+<Transition mounted={isOpen} duration={300}>
+  {(styles, phase) => (
+    <div 
+      style={{
+        ...styles,
+        transform: phase === 'entered' 
+          ? 'translateX(0)' 
+          : 'translateX(-100%)',
+      }}
+    >
+      Custom animation
+    </div>
+  )}
+</Transition>
+```
+
+## Client-Side Only
+
+Transition is marked with `'use client'` directive and manages animation state using React hooks. It's designed for client-side rendering.

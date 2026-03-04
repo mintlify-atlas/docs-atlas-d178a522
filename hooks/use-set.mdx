@@ -1,0 +1,181 @@
+---
+title: useSet
+description: State management for a Set object
+---
+
+## Usage
+
+```tsx
+import { useSet } from 'kivora-react';
+
+function TagSelector() {
+  const [tags, { add, remove, toggle }] = useSet(['react', 'typescript']);
+
+  return (
+    <div>
+      <div>
+        Selected: {Array.from(tags).join(', ')}
+      </div>
+      {['react', 'typescript', 'node', 'python'].map((tag) => (
+        <button
+          key={tag}
+          onClick={() => toggle(tag)}
+          style={{
+            fontWeight: tags.has(tag) ? 'bold' : 'normal'
+          }}
+        >
+          {tag}
+        </button>
+      ))}
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="initialValue" type="Iterable<T>" default="[]">
+  Initial set values as an iterable
+</ParamField>
+
+## Return Value
+
+Returns a tuple with the Set instance and mutation handlers:
+
+<ResponseField name="[0]" type="Set<T>">
+  Current Set instance
+</ResponseField>
+
+<ResponseField name="[1]" type="object">
+  Mutation handlers
+
+  <Expandable title="properties">
+    <ResponseField name="add" type="(item: T) => void">
+      Add an item to the set
+    </ResponseField>
+
+    <ResponseField name="remove" type="(item: T) => void">
+      Remove an item from the set
+    </ResponseField>
+
+    <ResponseField name="toggle" type="(item: T) => void">
+      Toggle an item (add if not present, remove if present)
+    </ResponseField>
+
+    <ResponseField name="reset" type="() => void">
+      Reset the set to its initial value
+    </ResponseField>
+
+    <ResponseField name="clear" type="() => void">
+      Remove all items from the set
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Examples
+
+### Multi-Select Checkbox List
+
+```tsx
+const items = ['Apple', 'Banana', 'Orange', 'Grape'];
+const [selected, { toggle }] = useSet<string>();
+
+return (
+  <div>
+    {items.map((item) => (
+      <label key={item}>
+        <input
+          type="checkbox"
+          checked={selected.has(item)}
+          onChange={() => toggle(item)}
+        />
+        {item}
+      </label>
+    ))}
+    <p>Selected: {selected.size} items</p>
+  </div>
+);
+```
+
+### Filter Panel
+
+```tsx
+const [activeFilters, { add, remove, clear }] = useSet(['inStock']);
+
+const filteredProducts = products.filter((product) => {
+  if (activeFilters.has('inStock') && !product.inStock) return false;
+  if (activeFilters.has('onSale') && !product.onSale) return false;
+  return true;
+});
+
+return (
+  <div>
+    <button onClick={() => add('inStock')}>In Stock Only</button>
+    <button onClick={() => add('onSale')}>On Sale</button>
+    <button onClick={clear}>Clear Filters</button>
+  </div>
+);
+```
+
+### Expandable Sections
+
+```tsx
+const [expandedSections, { toggle }] = useSet<string>();
+
+const sections = ['general', 'privacy', 'notifications'];
+
+return (
+  <div>
+    {sections.map((section) => (
+      <div key={section}>
+        <button onClick={() => toggle(section)}>
+          {expandedSections.has(section) ? '▼' : '▶'} {section}
+        </button>
+        {expandedSections.has(section) && (
+          <div>Section content...</div>
+        )}
+      </div>
+    ))}
+  </div>
+);
+```
+
+### Unique ID Tracker
+
+```tsx
+const [visitedPages, { add }] = useSet<string>();
+
+useEffect(() => {
+  add(currentPageId);
+}, [currentPageId, add]);
+
+return (
+  <div>
+    You've visited {visitedPages.size} unique pages
+  </div>
+);
+```
+
+### Selected Items with Reset
+
+```tsx
+const [selected, { toggle, reset, clear }] = useSet([1, 2, 3]);
+
+return (
+  <div>
+    {items.map((item) => (
+      <div
+        key={item.id}
+        onClick={() => toggle(item.id)}
+        style={{
+          background: selected.has(item.id) ? 'blue' : 'white'
+        }}
+      >
+        {item.name}
+      </div>
+    ))}
+    <button onClick={reset}>Reset to Default</button>
+    <button onClick={clear}>Clear All</button>
+  </div>
+);
+```

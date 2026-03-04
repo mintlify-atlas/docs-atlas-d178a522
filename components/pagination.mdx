@@ -1,0 +1,190 @@
+---
+title: Pagination
+description: Page navigation control with sibling pages and edge buttons
+---
+
+## Overview
+
+The Pagination component provides a flexible way to navigate through pages of content, with support for sibling page display, edge buttons, and different sizes.
+
+## Import
+
+```tsx
+import { Pagination } from 'kivora-react';
+```
+
+## Basic Usage
+
+```tsx
+const [page, setPage] = useState(1);
+
+<Pagination 
+  total={10} 
+  value={page} 
+  onChange={setPage} 
+/>
+```
+
+## Uncontrolled
+
+```tsx
+<Pagination 
+  total={10} 
+  defaultValue={1}
+  onChange={(page) => console.log('Page:', page)}
+/>
+```
+
+## With Edge Buttons
+
+```tsx
+<Pagination 
+  total={20} 
+  value={page} 
+  onChange={setPage}
+  withEdges
+/>
+```
+
+## Sibling Pages
+
+Control how many page numbers appear on each side of the current page:
+
+```tsx
+<Pagination 
+  total={50} 
+  value={page} 
+  onChange={setPage}
+  siblings={2}
+/>
+```
+
+## Sizes
+
+```tsx
+{/* Small */}
+<Pagination total={10} size="sm" />
+
+{/* Medium (default) */}
+<Pagination total={10} size="md" />
+
+{/* Large */}
+<Pagination total={10} size="lg" />
+```
+
+## Disabled State
+
+```tsx
+<Pagination 
+  total={10} 
+  value={5}
+  disabled
+/>
+```
+
+## Complete Example
+
+```tsx
+import { useState } from 'react';
+import { Pagination } from 'kivora-react';
+
+function DataTable() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 25;
+  const itemsPerPage = 10;
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentData = data.slice(startIndex, endIndex);
+
+  return (
+    <div>
+      <div className="space-y-2">
+        {currentData.map(item => (
+          <div key={item.id}>{item.name}</div>
+        ))}
+      </div>
+      
+      <Pagination
+        total={totalPages}
+        value={currentPage}
+        onChange={setCurrentPage}
+        siblings={1}
+        withEdges
+        className="mt-6"
+      />
+    </div>
+  );
+}
+```
+
+## Props
+
+### PaginationProps
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `total` | `number` | **required** | Total number of pages |
+| `value` | `number` | `undefined` | Current page (1-based, controlled) |
+| `defaultValue` | `number` | `1` | Default page for uncontrolled mode |
+| `onChange` | `(page: number) => void` | `undefined` | Called when page changes |
+| `siblings` | `number` | `1` | Number of sibling pages visible on each side |
+| `withEdges` | `boolean` | `false` | Whether to show first/last page buttons |
+| `disabled` | `boolean` | `false` | Disable all interactions |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Button size variant |
+| `className` | `string` | `''` | Additional CSS classes |
+
+## Size Dimensions
+
+| Size | Button Size | Font Size |
+|------|-------------|----------|
+| `sm` | 28px × 28px | 12px |
+| `md` | 32px × 32px | 14px |
+| `lg` | 40px × 40px | 16px |
+
+## Page Range Algorithm
+
+The component intelligently shows page numbers based on the current page:
+
+- Always shows first and last page
+- Shows `siblings` number of pages on each side of current page
+- Inserts ellipsis (`…`) when there's a gap
+- Condenses to direct page numbers when total pages is small
+
+### Example with siblings={1}:
+
+- Page 1 of 10: `[1] 2 … 10`
+- Page 5 of 10: `1 … 4 [5] 6 … 10`
+- Page 10 of 10: `1 … 9 [10]`
+
+## Navigation Buttons
+
+- **‹** Previous page
+- **›** Next page
+- **«** First page (when `withEdges={true}`)
+- **»** Last page (when `withEdges={true}`)
+
+## Accessibility
+
+- Wrapped in semantic `<nav>` with `aria-label="Pagination"`
+- Current page button has `aria-current="page"`
+- Previous/Next buttons have descriptive `aria-label` attributes
+- Edge buttons have "First page" and "Last page" labels
+- Disabled states prevent interaction
+- Focus visible ring for keyboard navigation
+- All buttons are properly labeled for screen readers
+
+## Controlled vs Uncontrolled
+
+**Controlled**: Use `value` and `onChange` props when you need to manage page state externally.
+
+```tsx
+const [page, setPage] = useState(1);
+<Pagination total={10} value={page} onChange={setPage} />
+```
+
+**Uncontrolled**: Use `defaultValue` when the component manages its own state.
+
+```tsx
+<Pagination total={10} defaultValue={1} onChange={(p) => console.log(p)} />
+```

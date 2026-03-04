@@ -1,0 +1,222 @@
+---
+title: Code
+description: Inline code snippet or syntax-highlighted code block with Prism support.
+---
+
+## Overview
+
+The `Code` component renders either inline code snippets or full syntax-highlighted code blocks. It uses `react-syntax-highlighter` with Prism themes for block mode.
+
+## Import
+
+```tsx
+import { Code } from '@kivora/react';
+```
+
+## Inline Code
+
+By default, renders inline code:
+
+```tsx
+<Code>npm install @kivora/react</Code>
+```
+
+## Code Blocks
+
+Enable block mode for syntax-highlighted multi-line code:
+
+```tsx
+<Code block language="tsx">
+{`function Welcome({ name }) {
+  return <h1>Hello, {name}!</h1>;
+}`}
+</Code>
+```
+
+## Language Syntax Highlighting
+
+Specify the programming language for proper highlighting:
+
+```tsx
+<Code block language="typescript">
+{`interface User {
+  id: number;
+  name: string;
+}`}
+</Code>
+
+<Code block language="javascript">
+{`const greeting = "Hello, World!";
+console.log(greeting);`}
+</Code>
+
+<Code block language="python">
+{`def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)`}
+</Code>
+```
+
+## Color Schemes
+
+Choose between light and dark themes:
+
+```tsx
+<Code block language="tsx" colorScheme="dark">
+{`<Button variant="primary">Click me</Button>`}
+</Code>
+
+<Code block language="tsx" colorScheme="light">
+{`<Button variant="primary">Click me</Button>`}
+</Code>
+```
+
+## Line Numbers
+
+Display line numbers in block mode:
+
+```tsx
+<Code block language="javascript" showLineNumbers>
+{`function add(a, b) {
+  return a + b;
+}
+
+const result = add(5, 3);
+console.log(result);`}
+</Code>
+```
+
+## Examples
+
+### Installation Command
+
+```tsx
+<p>Install the package using <Code>npm install @kivora/react</Code></p>
+```
+
+### TypeScript Example
+
+```tsx
+<Code block language="typescript" colorScheme="dark">
+{`import { Button } from '@kivora/react';
+
+export function App() {
+  return (
+    <Button 
+      variant="primary" 
+      onClick={() => alert('Clicked!')}
+    >
+      Click Me
+    </Button>
+  );
+}`}
+</Code>
+```
+
+### JSON Configuration
+
+```tsx
+<Code block language="json" showLineNumbers>
+{`{
+  "name": "my-app",
+  "version": "1.0.0",
+  "dependencies": {
+    "@kivora/react": "^0.0.0"
+  }
+}`}
+</Code>
+```
+
+### Bash Command
+
+```tsx
+<Code block language="bash">
+{`git clone https://github.com/example/repo.git
+cd repo
+npm install`}
+</Code>
+```
+
+### CSS Styles
+
+```tsx
+<Code block language="css" colorScheme="light">
+{`.button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  background: var(--color-primary);
+  color: white;
+}`}
+</Code>
+```
+
+## Styling
+
+### Inline Code
+- Monospace font
+- Muted background
+- Rounded corners
+- Horizontal padding: 1.5px (0.375rem)
+- Vertical padding: 0.5px (0.125rem)
+
+### Block Code
+- Custom background via CSS variable `--color-code-surface`
+- Border via CSS variable `--color-code-border`
+- Border radius: 0.625rem
+- Font size: 0.875rem
+- Line height: 1.6
+
+## Props
+
+<ResponseField name="block" type="boolean" default="false">
+  When true, renders a syntax-highlighted code block instead of inline code
+</ResponseField>
+
+<ResponseField name="language" type="string" default="'typescript'">
+  Programming language for syntax highlighting (typescript, javascript, python, bash, json, css, etc.)
+</ResponseField>
+
+<ResponseField name="colorScheme" type="'light' | 'dark'" default="'dark'">
+  Color scheme for the block highlighter
+</ResponseField>
+
+<ResponseField name="showLineNumbers" type="boolean" default="false">
+  Display line numbers in block mode
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+<ResponseField name="style" type="React.CSSProperties">
+  Inline styles
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Code content to display
+</ResponseField>
+
+<ResponseField name="...props" type="React.ComponentPropsWithoutRef<'code'>">
+  All standard HTML code element props (for inline mode)
+</ResponseField>
+
+## Type Definition
+
+Source: `/home/daytona/workspace/source/src/components/typography/Code.tsx:12`
+
+```tsx
+export interface CodeProps extends React.ComponentPropsWithoutRef<'code'> {
+  block?: boolean;
+  language?: string;
+  colorScheme?: 'light' | 'dark';
+  showLineNumbers?: boolean;
+}
+```
+
+## Notes
+
+- Uses `react-syntax-highlighter` with Prism
+- Block backgrounds are controlled by CSS custom properties for theming flexibility
+- Inline code inherits text size from parent (0.875em)
+- Long lines in block mode will not wrap by default

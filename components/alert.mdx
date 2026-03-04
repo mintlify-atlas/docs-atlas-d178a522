@@ -1,0 +1,139 @@
+---
+title: Alert
+description: Inline alert component with title, body, icon, and closable support.
+---
+
+Inline alert with title, body, icon and closable support. Displays important messages with contextual variants.
+
+## Import
+
+```tsx
+import { Alert } from '@kivora/react';
+```
+
+## Usage
+
+```tsx
+<Alert variant="success" title="Saved!">
+  Your changes have been saved.
+</Alert>
+```
+
+## Variants
+
+Alert supports different visual variants for different message types:
+
+```tsx
+<Alert variant="default" title="Note">
+  This is a default alert message.
+</Alert>
+
+<Alert variant="success" title="Success">
+  Operation completed successfully.
+</Alert>
+
+<Alert variant="warning" title="Warning">
+  Please review this important information.
+</Alert>
+
+<Alert variant="error" title="Error">
+  An error occurred while processing your request.
+</Alert>
+
+<Alert variant="info" title="Information">
+  Here's some helpful information for you.
+</Alert>
+```
+
+## Closable Alert
+
+Provide an `onClose` handler to display a close button:
+
+```tsx
+import { useState } from 'react';
+
+function Example() {
+  const [visible, setVisible] = useState(true);
+  
+  if (!visible) return null;
+  
+  return (
+    <Alert 
+      variant="error" 
+      title="Error"
+      onClose={() => setVisible(false)}
+    >
+      Something went wrong.
+    </Alert>
+  );
+}
+```
+
+## Custom Icon
+
+Replace the default icon with your own:
+
+```tsx
+<Alert 
+  variant="info"
+  title="Custom Icon"
+  icon={
+    <svg className="size-4" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
+    </svg>
+  }
+>
+  This alert uses a custom icon.
+</Alert>
+```
+
+## Without Title
+
+Alerts can be displayed without a title:
+
+```tsx
+<Alert variant="warning">
+  This is a simple warning message without a title.
+</Alert>
+```
+
+## Props
+
+<ResponseField name="title" type="string">
+  Optional title text displayed in bold.
+</ResponseField>
+
+<ResponseField name="variant" type="'default' | 'success' | 'warning' | 'error' | 'info'" default="'default'">
+  Visual variant that determines color scheme and default icon.
+</ResponseField>
+
+<ResponseField name="icon" type="React.ReactNode">
+  Custom icon to display. Overrides the default icon for the variant.
+</ResponseField>
+
+<ResponseField name="onClose" type="() => void">
+  Callback when the close button is clicked. Shows close button when provided.
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes to apply to the alert container.
+</ResponseField>
+
+<ResponseField name="children" type="React.ReactNode">
+  Alert body content.
+</ResponseField>
+
+## Accessibility
+
+- Uses `role="alert"` for screen reader announcements
+- Close button includes `aria-label="Close alert"`
+- Each variant has appropriate color contrast for readability
+
+## Styling
+
+The Alert component uses a left border accent with background colors matching each variant:
+- **default**: Neutral gray with subtle accent
+- **success**: Green accent for positive feedback
+- **warning**: Orange/yellow accent for warnings
+- **error**: Red accent for errors
+- **info**: Blue accent for informational messages

@@ -1,0 +1,152 @@
+---
+title: usePrevious
+description: Returns the previous value of a state or prop from the last render
+---
+
+## Usage
+
+```tsx
+import { usePrevious } from 'kivora-react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  const prevCount = usePrevious(count);
+
+  return (
+    <div>
+      <p>Current: {count}</p>
+      <p>Previous: {prevCount ?? 'none'}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="value" type="T">
+  The value to track. Can be any type (state, prop, derived value, etc.)
+</ParamField>
+
+## Return Value
+
+<ResponseField name="previousValue" type="T | undefined">
+  The value from the previous render. Returns `undefined` on the first render.
+</ResponseField>
+
+## Examples
+
+### Detect Value Changes
+
+```tsx
+const [searchTerm, setSearchTerm] = useState('');
+const prevSearchTerm = usePrevious(searchTerm);
+
+useEffect(() => {
+  if (prevSearchTerm !== searchTerm && searchTerm) {
+    console.log(`Search changed from "${prevSearchTerm}" to "${searchTerm}"`);
+    performSearch(searchTerm);
+  }
+}, [searchTerm, prevSearchTerm]);
+```
+
+### Animation Direction
+
+```tsx
+const [currentSlide, setCurrentSlide] = useState(0);
+const prevSlide = usePrevious(currentSlide);
+
+const direction = prevSlide !== undefined
+  ? currentSlide > prevSlide ? 'forward' : 'backward'
+  : 'none';
+
+return (
+  <Slider
+    currentSlide={currentSlide}
+    direction={direction}
+  />
+);
+```
+
+### Form Field Comparison
+
+```tsx
+const [formData, setFormData] = useState({ name: '', email: '' });
+const prevFormData = usePrevious(formData);
+
+const hasChanges = prevFormData && (
+  prevFormData.name !== formData.name ||
+  prevFormData.email !== formData.email
+);
+
+return (
+  <form>
+    <input
+      value={formData.name}
+      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+    />
+    <input
+      value={formData.email}
+      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+    />
+    <button disabled={!hasChanges}>Save Changes</button>
+  </form>
+);
+```
+
+### Track Prop Changes
+
+```tsx
+function UserProfile({ userId }: { userId: string }) {
+  const prevUserId = usePrevious(userId);
+  const [userData, setUserData] = useState(null);
+  
+  useEffect(() => {
+    if (prevUserId !== userId) {
+      console.log(`User changed from ${prevUserId} to ${userId}`);
+      fetchUserData(userId).then(setUserData);
+    }
+  }, [userId, prevUserId]);
+  
+  return <div>{userData?.name}</div>;
+}
+```
+
+### Counter Increment Detection
+
+```tsx
+const [count, setCount] = useState(0);
+const prevCount = usePrevious(count);
+
+const increment = prevCount !== undefined ? count - prevCount : 0;
+
+return (
+  <div>
+    <p>Count: {count}</p>
+    <p>Last change: {increment > 0 ? `+${increment}` : increment}</p>
+    <button onClick={() => setCount(count + 1)}>+1</button>
+    <button onClick={() => setCount(count + 5)}>+5</button>
+    <button onClick={() => setCount(count - 1)}>-1</button>
+  </div>
+);
+```
+
+### Optimistic Updates Rollback
+
+```tsx
+const [data, setData] = useState(initialData);
+const prevData = usePrevious(data);
+
+const updateData = async (newData: Data) => {
+  setData(newData); // Optimistic update
+  
+  try {
+    await api.update(newData);
+  } catch (error) {
+    // Rollback on error
+    if (prevData) {
+      setData(prevData);
+    }
+  }
+};
+```

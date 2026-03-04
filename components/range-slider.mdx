@@ -1,0 +1,224 @@
+---
+title: RangeSlider
+description: Two-handle range slider for selecting a value range with min/max constraints.
+---
+
+## Usage
+
+```tsx
+import { RangeSlider } from '@kivora/react';
+
+function Demo() {
+  const [range, setRange] = useState<[number, number]>([20, 80]);
+  
+  return (
+    <RangeSlider 
+      label="Price range" 
+      value={range}
+      onChange={setRange}
+      min={0}
+      max={100}
+      showValues
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="value" type="[number, number]">
+  Controlled value as a tuple `[low, high]`.
+</ParamField>
+
+<ParamField path="defaultValue" type="[number, number]" default="[0, 100]">
+  Default value for uncontrolled mode.
+</ParamField>
+
+<ParamField path="onChange" type="(value: [number, number]) => void">
+  Called when either handle moves. Receives the new range tuple.
+</ParamField>
+
+<ParamField path="min" type="number" default="0">
+  Minimum value of the slider range.
+</ParamField>
+
+<ParamField path="max" type="number" default="100">
+  Maximum value of the slider range.
+</ParamField>
+
+<ParamField path="step" type="number" default="1">
+  Granularity of value changes.
+</ParamField>
+
+<ParamField path="label" type="string">
+  Label text displayed above the slider.
+</ParamField>
+
+<ParamField path="showValues" type="boolean" default="false">
+  Displays the current range values (e.g., "20 – 80").
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables the slider and prevents interaction.
+</ParamField>
+
+<ParamField path="color" type="'primary' | 'success' | 'warning' | 'error'" default="'primary'">
+  Color theme for the active segment and thumbs.
+</ParamField>
+
+<ParamField path="minRange" type="number" default="0">
+  Minimum distance required between low and high values.
+</ParamField>
+
+<ParamField path="marks" type="Array<{ value: number; label?: string }>">
+  Optional mark indicators to display below the slider.
+</ParamField>
+
+<ParamField path="className" type="string" default="''">
+  Additional CSS classes to apply to the container.
+</ParamField>
+
+## Type Definitions
+
+```tsx
+type RangeSliderValue = [number, number];
+```
+
+## Examples
+
+### Basic Range Slider
+
+```tsx
+<RangeSlider 
+  defaultValue={[25, 75]} 
+  label="Select range"
+/>
+```
+
+### With Value Display
+
+```tsx
+<RangeSlider
+  label="Price range"
+  value={priceRange}
+  onChange={setPriceRange}
+  min={0}
+  max={1000}
+  showValues
+/>
+```
+
+### With Minimum Range
+
+```tsx
+<RangeSlider
+  label="Time window"
+  min={0}
+  max={24}
+  minRange={2}
+  defaultValue={[9, 17]}
+  showValues
+/>
+```
+
+### With Marks
+
+```tsx
+<RangeSlider
+  label="Age range"
+  min={0}
+  max={100}
+  defaultValue={[18, 65]}
+  marks={[
+    { value: 0, label: '0' },
+    { value: 25, label: '25' },
+    { value: 50, label: '50' },
+    { value: 75, label: '75' },
+    { value: 100, label: '100' }
+  ]}
+/>
+```
+
+### Different Colors
+
+```tsx
+<RangeSlider label="Primary" color="primary" defaultValue={[20, 80]} />
+<RangeSlider label="Success" color="success" defaultValue={[20, 80]} />
+<RangeSlider label="Warning" color="warning" defaultValue={[20, 80]} />
+<RangeSlider label="Error" color="error" defaultValue={[20, 80]} />
+```
+
+### Price Filter Example
+
+```tsx
+function PriceFilter() {
+  const [range, setRange] = useState<[number, number]>([10, 500]);
+  
+  return (
+    <div>
+      <RangeSlider
+        label="Price"
+        value={range}
+        onChange={setRange}
+        min={0}
+        max={1000}
+        step={10}
+        showValues
+      />
+      <p className="text-sm text-muted-foreground mt-2">
+        ${range[0]} – ${range[1]}
+      </p>
+    </div>
+  );
+}
+```
+
+### Time Range Picker
+
+```tsx
+function TimeRangePicker() {
+  const [hours, setHours] = useState<[number, number]>([9, 17]);
+  
+  return (
+    <RangeSlider
+      label="Working hours"
+      value={hours}
+      onChange={setHours}
+      min={0}
+      max={24}
+      minRange={1}
+      showValues
+      marks={[
+        { value: 0, label: '12am' },
+        { value: 6, label: '6am' },
+        { value: 12, label: '12pm' },
+        { value: 18, label: '6pm' },
+        { value: 24, label: '12am' }
+      ]}
+    />
+  );
+}
+```
+
+### Disabled State
+
+```tsx
+<RangeSlider 
+  label="Disabled" 
+  disabled 
+  defaultValue={[30, 70]}
+/>
+```
+
+## Notes
+
+- Two independent handles control low and high values
+- Active segment between handles shows selected range
+- Handles have dynamic z-index - clicked handle moves to front
+- Click on track moves nearest handle to that position
+- `minRange` prevents handles from getting too close
+- Values automatically clamped to enforce minRange constraint
+- Both handles use native range inputs for accessibility
+- Marks display below with optional labels
+- Smooth transitions and hover effects
+- Values display as "low – high" format when showValues is true

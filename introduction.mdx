@@ -1,0 +1,101 @@
+---
+title: Introduction
+description: A fully-typed React component library with 50+ components, 18+ hooks, and full dark-mode support.
+---
+
+Kivora React is a modern, production-ready React component library built on top of `@kivora/core`. It provides everything you need to build beautiful, accessible user interfaces with TypeScript support out of the box.
+
+## What is Kivora React?
+
+Kivora React is a comprehensive UI toolkit that combines:
+
+- **50+ React components** organized by category (buttons, inputs, feedback, overlays, navigation, and more)
+- **18+ custom hooks** for state management, async operations, DOM interactions, and browser APIs
+- **Built-in dark mode** using CSS design tokens that automatically adapt to user preferences
+- **Full TypeScript support** with comprehensive type definitions for every component and hook
+- **Tree-shakeable exports** to keep your bundle size minimal
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Fully Typed" icon="code">
+    Every component and hook is fully typed with TypeScript. Hover over any prop in your editor for inline documentation.
+  </Card>
+  
+  <Card title="Dark Mode Built-in" icon="moon">
+    Components automatically support dark mode via CSS design tokens. No extra configuration needed.
+  </Card>
+  
+  <Card title="18+ Custom Hooks" icon="link">
+    Powerful hooks for state management, async operations, DOM interactions, clipboard, storage, and more.
+  </Card>
+  
+  <Card title="Tree-Shakeable" icon="tree">
+    Import only what you need. Unused components and hooks won't bloat your bundle.
+  </Card>
+</CardGroup>
+
+## Component Categories
+
+Components are organized into logical categories to help you find what you need:
+
+- **Buttons** — Button, ActionIcon, CloseButton
+- **Inputs** — Input, Textarea, Checkbox, RadioGroup, Switch, Select, MultiSelect, NumberInput, PinInput, Slider, RangeSlider, TagsInput
+- **Layout** — Container, Flex, Grid, SimpleGrid, Stack, Group, Center, Space, AspectRatio
+- **Typography** — Text, Title, Anchor, Code, Highlight, Blockquote, List, Mark
+- **Feedback** — Alert, Notification, Spinner, Skeleton, Progress, RingProgress
+- **Navigation** — Tabs, Breadcrumbs, NavLink, Pagination, Stepper
+- **Overlays** — Modal, Drawer, Dialog, Popover, Tooltip, Menu, Toast
+- **Data Display** — Badge, Avatar, AvatarGroup, Card, Accordion, Table, Tag, Chip, Kbd, ColorSwatch, ThemeIcon
+- **Misc** — Divider, Icon, Box, Paper, Portal, Transition
+
+## Hook Categories
+
+Hooks are grouped by functionality:
+
+- **State Management** — useCounter, useToggle, useListState, useSetState, useMap, useSet, useQueue, usePrevious, useInputState, usePagination
+- **Async & Timing** — useDebounce, useThrottle, useInterval, useTimeout, useFetch
+- **DOM & Events** — useClickOutside, useWindowScroll, useMediaQuery, useIntersectionObserver, useEventListener, useViewportSize, useResizeObserver, useElementSize, useScrollIntoView, useMouse, useHover
+- **Browser APIs** — useClipboard, useColorScheme, useScrollLock, useNetwork, useOs, useReducedMotion, useDocumentTitle, useDocumentVisibility, useIdle, usePageLeave, useHeadroom
+- **Focus Management** — useFocusTrap, useHotkeys, useFocusReturn, useFocusWithin
+- **Persistence** — useLocalStorage, useSessionStorage
+- **UI Utilities** — useDisclosure, useControlled, useToast
+- **Utils** — useMounted, useForceUpdate, useDidUpdate, useMergedRef, useIsomorphicEffect
+
+## Why Kivora React?
+
+### Built for Production
+
+Every component is thoroughly tested with Vitest and Testing Library. The codebase follows strict TypeScript standards and includes comprehensive type safety.
+
+### Developer Experience
+
+Inline JSDoc comments on every prop mean you get instant documentation in your editor. No need to context-switch to the docs while coding.
+
+### Accessibility First
+
+Components follow ARIA best practices with proper keyboard navigation, focus management, and screen reader support.
+
+### Framework Agnostic Hooks
+
+While the components are React-specific, the hooks are framework-agnostic patterns that work in any React application, including Next.js, Remix, Vite, and Create React App.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Get started by installing Kivora React in your project
+  </Card>
+  
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Build your first component in under 5 minutes
+  </Card>
+  
+  <Card title="Components" icon="square" href="/components/button">
+    Explore the full component library
+  </Card>
+  
+  <Card title="Hooks" icon="link" href="/hooks/use-disclosure">
+    Discover powerful React hooks
+  </Card>
+</CardGroup>

@@ -1,0 +1,145 @@
+---
+title: Blockquote
+description: Styled blockquote element with a left border for quotations and emphasized content.
+---
+
+## Overview
+
+The `Blockquote` component renders a semantically correct `<blockquote>` element with styling that includes a left border, italic text, and muted color.
+
+## Import
+
+```tsx
+import { Blockquote } from '@kivora/react';
+```
+
+## Basic Usage
+
+```tsx
+<Blockquote>
+  "Simplicity is the ultimate sophistication." — Leonardo da Vinci
+</Blockquote>
+```
+
+## Examples
+
+### Simple Quote
+
+```tsx
+<Blockquote>
+  "The best way to predict the future is to invent it." — Alan Kay
+</Blockquote>
+```
+
+### Multi-line Quote
+
+```tsx
+<Blockquote>
+  "Design is not just what it looks like and feels like.
+  Design is how it works." — Steve Jobs
+</Blockquote>
+```
+
+### With Attribution
+
+```tsx
+<Blockquote>
+  <p>"Code is like humor. When you have to explain it, it's bad."</p>
+  <footer>— Cory House</footer>
+</Blockquote>
+```
+
+### In Content
+
+```tsx
+<article>
+  <p>The philosophy behind our design system is simple:</p>
+  
+  <Blockquote>
+    "Make it work, make it right, make it fast."
+  </Blockquote>
+  
+  <p>This principle guides every decision we make.</p>
+</article>
+```
+
+### Long Quotation
+
+```tsx
+<Blockquote>
+  "Any fool can write code that a computer can understand. 
+  Good programmers write code that humans can understand. 
+  Software is a great combination between artistry and engineering."
+  — Martin Fowler
+</Blockquote>
+```
+
+### With Custom Styling
+
+```tsx
+<Blockquote className="text-lg border-l-primary">
+  "Quality is not an act, it is a habit." — Aristotle
+</Blockquote>
+```
+
+### Multiple Paragraphs
+
+```tsx
+<Blockquote>
+  <p>"First, solve the problem. Then, write the code."</p>
+  <p>"Code never lies, comments sometimes do."</p>
+  <cite>— Ron Jeffries</cite>
+</Blockquote>
+```
+
+## Accessibility
+
+The component uses the semantic `<blockquote>` element and supports all standard attributes:
+
+```tsx
+<Blockquote cite="https://example.com/source">
+  "Innovation distinguishes between a leader and a follower."
+</Blockquote>
+```
+
+## Styling
+
+Default styles include:
+- 4px left border (`border-l-4`)
+- Border color: `border-border`
+- Left padding: 1rem (`pl-4`)
+- Vertical padding: 0.25rem (`py-1`)
+- Muted foreground color
+- Italic text
+- Small text size (`text-sm`)
+- Relaxed line height
+
+## Props
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Quote content
+</ResponseField>
+
+<ResponseField name="...props" type="React.ComponentPropsWithoutRef<'blockquote'>">
+  All standard HTML blockquote props (cite, etc.)
+</ResponseField>
+
+## Type Definition
+
+Source: `/home/daytona/workspace/source/src/components/typography/Blockquote.tsx:5`
+
+```tsx
+export type BlockquoteProps = React.ComponentPropsWithoutRef<'blockquote'>;
+```
+
+## Usage Tips
+
+- Use for direct quotations from other sources
+- Ideal for testimonials and pull quotes
+- Can contain multiple paragraphs and citation elements
+- Pairs well with `<cite>` and `<footer>` elements for attribution
+- The `cite` attribute (URL) is separate from visible citation text

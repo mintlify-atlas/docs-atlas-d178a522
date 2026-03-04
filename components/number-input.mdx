@@ -1,0 +1,205 @@
+---
+title: NumberInput
+description: Numeric input with increment/decrement controls, min/max/step validation.
+---
+
+## Usage
+
+```tsx
+import { NumberInput } from '@kivora/react';
+
+function Demo() {
+  const [quantity, setQuantity] = useState(1);
+  
+  return (
+    <NumberInput 
+      label="Quantity" 
+      value={quantity}
+      onChange={setQuantity}
+      min={0}
+      max={99}
+      step={1}
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="value" type="number">
+  Controlled value of the input.
+</ParamField>
+
+<ParamField path="defaultValue" type="number" default="0">
+  Default value for uncontrolled mode.
+</ParamField>
+
+<ParamField path="onChange" type="(value: number) => void">
+  Called when the value changes. Receives the numeric value.
+</ParamField>
+
+<ParamField path="min" type="number">
+  Minimum allowed value. Decrements are disabled when reached.
+</ParamField>
+
+<ParamField path="max" type="number">
+  Maximum allowed value. Increments are disabled when reached.
+</ParamField>
+
+<ParamField path="step" type="number" default="1">
+  Amount to increment/decrement when using controls.
+</ParamField>
+
+<ParamField path="precision" type="number" default="0">
+  Number of decimal places to display and round to.
+</ParamField>
+
+<ParamField path="label" type="string">
+  Label text displayed above the input.
+</ParamField>
+
+<ParamField path="placeholder" type="string">
+  Placeholder text when input is empty.
+</ParamField>
+
+<ParamField path="error" type="string">
+  Error message to display below the input.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables the input and controls.
+</ParamField>
+
+<ParamField path="readOnly" type="boolean" default="false">
+  Makes the input read-only (controls still work).
+</ParamField>
+
+<ParamField path="hideControls" type="boolean" default="false">
+  Hides the increment/decrement buttons.
+</ParamField>
+
+<ParamField path="size" type="'sm' | 'md' | 'lg'" default="'md'">
+  Size variant matching Input component sizes.
+</ParamField>
+
+<ParamField path="className" type="string" default="''">
+  Additional CSS classes to apply to the input element.
+</ParamField>
+
+<ParamField path="id" type="string">
+  HTML ID attribute. Auto-generated if not provided.
+</ParamField>
+
+## Examples
+
+### Basic Number Input
+
+```tsx
+<NumberInput 
+  label="Age" 
+  min={0} 
+  max={120} 
+/>
+```
+
+### With Step Controls
+
+```tsx
+<NumberInput
+  label="Price"
+  min={0}
+  step={0.01}
+  precision={2}
+  defaultValue={9.99}
+/>
+```
+
+### Without Controls
+
+```tsx
+<NumberInput
+  label="Quantity"
+  hideControls
+  min={1}
+  max={999}
+/>
+```
+
+### Different Sizes
+
+```tsx
+<NumberInput label="Small" size="sm" />
+<NumberInput label="Medium" size="md" />
+<NumberInput label="Large" size="lg" />
+```
+
+### With Error State
+
+```tsx
+function ValidatedInput() {
+  const [value, setValue] = useState(0);
+  
+  return (
+    <NumberInput
+      label="Items"
+      value={value}
+      onChange={setValue}
+      min={1}
+      max={10}
+      error={value < 1 ? 'Minimum quantity is 1' : undefined}
+    />
+  );
+}
+```
+
+### Decimal Precision
+
+```tsx
+<NumberInput
+  label="Temperature (°C)"
+  step={0.1}
+  precision={1}
+  defaultValue={23.5}
+/>
+```
+
+### Controlled Cart Quantity
+
+```tsx
+function CartItem() {
+  const [qty, setQty] = useState(1);
+  const price = 29.99;
+  
+  return (
+    <div>
+      <NumberInput
+        label="Quantity"
+        value={qty}
+        onChange={setQty}
+        min={1}
+        max={10}
+        size="sm"
+      />
+      <p>Total: ${(qty * price).toFixed(2)}</p>
+    </div>
+  );
+}
+```
+
+### Disabled and Read-Only
+
+```tsx
+<NumberInput label="Disabled" disabled defaultValue={5} />
+<NumberInput label="Read Only" readOnly value={10} />
+```
+
+## Notes
+
+- Values are automatically clamped to min/max bounds
+- Precision controls decimal places via `toFixed()`
+- Increment (+) and decrement (−) buttons are visible by default
+- Controls disable when min/max limits are reached
+- Native HTML5 number input with hidden spinners
+- Manual input is validated and clamped on change
+- Focus ring appears on the entire control group
+- Controls have hover states for better UX

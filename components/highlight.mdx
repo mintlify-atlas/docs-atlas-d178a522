@@ -1,0 +1,179 @@
+---
+title: Highlight
+description: Highlights matching substrings within text with customizable background color.
+---
+
+## Overview
+
+The `Highlight` component searches for specific substrings within text and highlights them with a colored background. It supports case-insensitive matching and multiple search terms.
+
+## Import
+
+```tsx
+import { Highlight } from '@kivora/react';
+```
+
+## Basic Usage
+
+```tsx
+<Highlight highlight="react">Learn React today</Highlight>
+```
+
+## Multiple Terms
+
+Highlight multiple substrings:
+
+```tsx
+<Highlight highlight={["react", "today"]}>
+  Learn React today
+</Highlight>
+```
+
+## Custom Color
+
+Change the highlight color using Tailwind classes:
+
+```tsx
+<Highlight highlight="important" color="bg-blue-200">
+  This is important information
+</Highlight>
+
+<Highlight highlight="error" color="bg-red-300/50">
+  Error: Something went wrong
+</Highlight>
+```
+
+## Examples
+
+### Search Results
+
+```tsx
+const searchTerm = "kivora";
+
+<Highlight highlight={searchTerm}>
+  Kivora is a React component library
+</Highlight>
+```
+
+### Multiple Keywords
+
+```tsx
+<Highlight highlight={["fast", "modern", "flexible"]}>
+  Kivora is a fast, modern, and flexible component library
+</Highlight>
+```
+
+### Warning Text
+
+```tsx
+<Highlight highlight="warning" color="bg-orange-200">
+  Warning: This action cannot be undone
+</Highlight>
+```
+
+### Code Documentation
+
+```tsx
+<Highlight highlight={["props", "component"]}>
+  Pass props to the component to customize its behavior
+</Highlight>
+```
+
+### With Custom Styling
+
+```tsx
+<Highlight 
+  highlight="featured" 
+  color="bg-purple-300" 
+  className="text-lg font-medium"
+>
+  This is a featured item
+</Highlight>
+```
+
+### Search in Long Text
+
+```tsx
+const query = "design";
+const text = "Our design system provides a consistent design language across all components.";
+
+<Highlight highlight={query}>
+  {text}
+</Highlight>
+```
+
+## Case Insensitivity
+
+Highlighting is case-insensitive by default:
+
+```tsx
+<Highlight highlight="react">
+  Learn REACT, React, and react today
+</Highlight>
+// Highlights all variations: REACT, React, react
+```
+
+## Special Characters
+
+The component automatically escapes regex special characters:
+
+```tsx
+<Highlight highlight="$price">
+  The $price is $99.99
+</Highlight>
+```
+
+## Empty Highlights
+
+If no highlight terms are provided or match, text renders normally:
+
+```tsx
+<Highlight highlight="">Normal text</Highlight>
+<Highlight highlight={[]}>Normal text</Highlight>
+```
+
+## Props
+
+<ResponseField name="children" type="string" required>
+  The full text to display
+</ResponseField>
+
+<ResponseField name="highlight" type="string | string[]" required>
+  Substring(s) to highlight (case-insensitive)
+</ResponseField>
+
+<ResponseField name="color" type="string" default="'bg-warning/40'">
+  Background color class for highlighted text (Tailwind class)
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes for the wrapper span
+</ResponseField>
+
+## Type Definition
+
+Source: `/home/daytona/workspace/source/src/components/typography/Highlight.tsx:3`
+
+```tsx
+export interface HighlightProps {
+  children: string;
+  highlight: string | string[];
+  color?: string;
+  className?: string;
+}
+```
+
+## Styling Details
+
+Highlighted text receives:
+- Rounded corners (`rounded-sm`)
+- Horizontal padding (`px-0.5`)
+- Custom background color (default: `bg-warning/40`)
+
+## Notes
+
+- Matching is case-insensitive
+- Special regex characters are automatically escaped
+- Multiple occurrences of the same term are all highlighted
+- Works with single or multiple search terms
+- Returns plain text if no valid highlight terms provided

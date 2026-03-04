@@ -1,0 +1,192 @@
+---
+title: useIsomorphicEffect
+description: SSR-safe useLayoutEffect alternative
+---
+
+`useIsomorphicEffect` uses `useLayoutEffect` in the browser and `useEffect` on the server. This is a drop-in replacement when you need layout effects without SSR warnings.
+
+## Usage
+
+```tsx
+import { useIsomorphicEffect } from '@kivora/react';
+
+function MyComponent() {
+  useIsomorphicEffect(() => {
+    // Runs as useLayoutEffect in browser
+    // Runs as useEffect on server (no warning)
+  }, []);
+
+  return <div>Content</div>;
+}
+```
+
+## Parameters
+
+<ParamField path="effect" type="() => void | (() => void)" required>
+  The effect function to run. Can optionally return a cleanup function.
+</ParamField>
+
+<ParamField path="deps" type="React.DependencyList">
+  Optional dependency array, same as `useEffect` or `useLayoutEffect`.
+</ParamField>
+
+## Returns
+
+`void`
+
+## Examples
+
+### Measuring DOM Elements
+
+```tsx
+function MeasuredBox() {
+  const [height, setHeight] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useIsomorphicEffect(() => {
+    if (ref.current) {
+      // Measure synchronously before paint (in browser)
+      setHeight(ref.current.getBoundingClientRect().height);
+    }
+  }, []);
+
+  return (
+    <div>
+      <div ref={ref}>Content to measure</div>
+      <p>Height: {height}px</p>
+    </div>
+  );
+}
+```
+
+### Synchronizing with External Libraries
+
+```tsx
+function ChartComponent({ data }: { data: number[] }) {
+  const chartRef = useRef<HTMLCanvasElement>(null);
+  const chartInstance = useRef<Chart>();
+
+  useIsomorphicEffect(() => {
+    if (!chartRef.current) return;
+
+    // Initialize chart synchronously before paint
+    chartInstance.current = new Chart(chartRef.current, {
+      type: 'line',
+      data: { datasets: [{ data }] },
+    });
+
+    return () => {
+      chartInstance.current?.destroy();
+    };
+  }, []);
+
+  useIsomorphicEffect(() => {
+    // Update chart data synchronously
+    if (chartInstance.current) {
+      chartInstance.current.data.datasets[0].data = data;
+      chartInstance.current.update();
+    }
+  }, [data]);
+
+  return <canvas ref={chartRef} />;
+}
+```
+
+### Managing Focus
+
+```tsx
+function AutoFocusInput({ shouldFocus }: { shouldFocus: boolean }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useIsomorphicEffect(() => {
+    if (shouldFocus && inputRef.current) {
+      // Focus synchronously before paint to avoid flicker
+      inputRef.current.focus();
+    }
+  }, [shouldFocus]);
+
+  return <input ref={inputRef} />;
+}
+```
+
+### Reading Layout Information
+
+```tsx
+function ScrollPosition() {
+  const [scrollY, setScrollY] = useState(0);
+
+  useIsomorphicEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    // Read initial scroll position synchronously
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return <div>Scroll position: {scrollY}px</div>;
+}
+```
+
+### Preventing Layout Shift
+
+```tsx
+function DynamicHeight({ content }: { content: string }) {
+  const [minHeight, setMinHeight] = useState<number>();
+  const ref = useRef<HTMLDivElement>(null);
+
+  useIsomorphicEffect(() => {
+    if (ref.current) {
+      // Set min-height synchronously to prevent layout shift
+      const height = ref.current.getBoundingClientRect().height;
+      setMinHeight(height);
+    }
+  }, [content]);
+
+  return (
+    <div ref={ref} style={{ minHeight }}>
+      {content}
+    </div>
+  );
+}
+```
+
+### Animation Setup
+
+```tsx
+function AnimatedComponent({ isVisible }: { isVisible: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useIsomorphicEffect(() => {
+    if (!ref.current) return;
+
+    // Set up animation synchronously before paint
+    const animation = ref.current.animate(
+      [
+        { opacity: 0, transform: 'translateY(-10px)' },
+        { opacity: 1, transform: 'translateY(0)' },
+      ],
+      { duration: 300, fill: 'forwards' }
+    );
+
+    if (!isVisible) {
+      animation.reverse();
+    }
+
+    return () => animation.cancel();
+  }, [isVisible]);
+
+  return <div ref={ref}>Animated content</div>;
+}
+```
+
+## Notes
+
+- Resolves to `useLayoutEffect` in browser environments (when `window` is defined)
+- Resolves to `useEffect` on the server to avoid SSR warnings
+- Use this instead of `useLayoutEffect` when building SSR-compatible components
+- The effect timing matches `useLayoutEffect` in the browser (synchronous after DOM mutations, before paint)
+- Ideal for measurements, DOM manipulations, and synchronous updates that must happen before paint

@@ -1,0 +1,285 @@
+---
+title: useSessionStorage
+description: Persist state to sessionStorage with automatic cleanup on tab close
+---
+
+## Overview
+
+The `useSessionStorage` hook persists state to `sessionStorage`, which is automatically cleared when the browser tab is closed. It provides the same API as `useLocalStorage` but with session-scoped persistence, making it ideal for temporary data like authentication tokens or form data that shouldn't persist across browser sessions.
+
+## Usage
+
+```tsx
+import { useSessionStorage } from 'kivora-react';
+
+function LoginForm() {
+  const [token, setToken] = useSessionStorage('auth_token', '');
+
+  const handleLogin = (newToken: string) => {
+    setToken(newToken);
+  };
+
+  return (
+    <div>
+      <p>Token: {token ? 'Authenticated' : 'Not logged in'}</p>
+      <button onClick={() => handleLogin('abc123xyz')}>Login</button>
+      <button onClick={() => setToken('')}>Logout</button>
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="key" type="string" required>
+  The sessionStorage key to use for storing the value.
+</ParamField>
+
+<ParamField path="defaultValue" type="T" required>
+  The fallback value to use when the key doesn't exist in sessionStorage or when JSON parsing fails.
+</ParamField>
+
+## Returns
+
+Returns a tuple with two elements:
+
+<ResponseField name="storedValue" type="T">
+  The current value stored in sessionStorage, or the default value if not found.
+</ResponseField>
+
+<ResponseField name="setValue" type="(value: T | ((prev: T) => T)) => void">
+  Function to update the stored value. Accepts either a new value or an updater function that receives the previous value.
+</ResponseField>
+
+## Examples
+
+### Authentication Token
+
+```tsx
+function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [token, setToken] = useSessionStorage<string | null>('auth_token', null);
+
+  const login = async (username: string, password: string) => {
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      body: JSON.stringify({ username, password }),
+    });
+    const { token } = await response.json();
+    setToken(token);
+  };
+
+  const logout = () => {
+    setToken(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ token, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+```
+
+### Form Draft State
+
+```tsx
+interface FormData {
+  title: string;
+  content: string;
+  tags: string[];
+}
+
+function BlogPostEditor() {
+  const [draft, setDraft] = useSessionStorage<FormData>('post-draft', {
+    title: '',
+    content: '',
+    tags: [],
+  });
+
+  const updateField = (field: keyof FormData, value: any) => {
+    setDraft((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async () => {
+    await fetch('/api/posts', {
+      method: 'POST',
+      body: JSON.stringify(draft),
+    });
+    // Clear draft after successful submission
+    setDraft({ title: '', content: '', tags: [] });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        value={draft.title}
+        onChange={(e) => updateField('title', e.target.value)}
+        placeholder="Title"
+      />
+      <textarea
+        value={draft.content}
+        onChange={(e) => updateField('content', e.target.value)}
+        placeholder="Content"
+      />
+      <button type="submit">Publish</button>
+    </form>
+  );
+}
+```
+
+### Wizard Step Progress
+
+```tsx
+interface WizardState {
+  currentStep: number;
+  completedSteps: number[];
+  formData: Record<string, any>;
+}
+
+function MultiStepWizard() {
+  const [wizardState, setWizardState] = useSessionStorage<WizardState>(
+    'wizard-progress',
+    {
+      currentStep: 1,
+      completedSteps: [],
+      formData: {},
+    }
+  );
+
+  const nextStep = () => {
+    setWizardState((prev) => ({
+      ...prev,
+      currentStep: prev.currentStep + 1,
+      completedSteps: [...prev.completedSteps, prev.currentStep],
+    }));
+  };
+
+  const updateFormData = (data: Record<string, any>) => {
+    setWizardState((prev) => ({
+      ...prev,
+      formData: { ...prev.formData, ...data },
+    }));
+  };
+
+  return (
+    <div>
+      <p>Step {wizardState.currentStep}</p>
+      <button onClick={nextStep}>Next</button>
+    </div>
+  );
+}
+```
+
+### Session-Scoped Preferences
+
+```tsx
+interface ViewPreferences {
+  layout: 'grid' | 'list';
+  sortBy: string;
+  filters: string[];
+}
+
+function ProductCatalog() {
+  const [viewPrefs, setViewPrefs] = useSessionStorage<ViewPreferences>(
+    'catalog-view',
+    {
+      layout: 'grid',
+      sortBy: 'name',
+      filters: [],
+    }
+  );
+
+  const toggleLayout = () => {
+    setViewPrefs((prev) => ({
+      ...prev,
+      layout: prev.layout === 'grid' ? 'list' : 'grid',
+    }));
+  };
+
+  return (
+    <div>
+      <button onClick={toggleLayout}>
+        Switch to {viewPrefs.layout === 'grid' ? 'List' : 'Grid'}
+      </button>
+      <div className={viewPrefs.layout}>
+        {/* Product items */}
+      </div>
+    </div>
+  );
+}
+```
+
+### Temporary Shopping Cart
+
+```tsx
+interface CartItem {
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
+}
+
+function ShoppingCart() {
+  const [cart, setCart] = useSessionStorage<CartItem[]>('temp-cart', []);
+
+  const addItem = (item: CartItem) => {
+    setCart((prev) => {
+      const existing = prev.find((i) => i.id === item.id);
+      if (existing) {
+        return prev.map((i) =>
+          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+        );
+      }
+      return [...prev, item];
+    });
+  };
+
+  const removeItem = (id: string) => {
+    setCart((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  return (
+    <div>
+      <h2>Cart ({cart.length} items)</h2>
+      <ul>
+        {cart.map((item) => (
+          <li key={item.id}>
+            {item.name} x {item.quantity} = ${item.price * item.quantity}
+            <button onClick={() => removeItem(item.id)}>Remove</button>
+          </li>
+        ))}
+      </ul>
+      <p>Total: ${total}</p>
+    </div>
+  );
+}
+```
+
+## Features
+
+- **Session-Scoped**: Data is automatically cleared when the browser tab is closed
+- **Automatic Serialization**: Handles JSON serialization and deserialization automatically
+- **SSR Safe**: Returns the default value during server-side rendering
+- **Error Handling**: Gracefully handles JSON parsing errors and storage quota exceeded errors
+- **Updater Functions**: Supports functional updates for safe concurrent modifications
+- **TypeScript**: Full type safety with generic type parameter
+
+## Differences from useLocalStorage
+
+| Feature | useLocalStorage | useSessionStorage |
+|---------|----------------|-------------------|
+| **Persistence** | Persists across browser sessions | Cleared when tab is closed |
+| **Cross-Tab Sync** | Yes (via storage event) | No (session is tab-specific) |
+| **Remove Function** | Yes (3rd return value) | No (2 return values only) |
+| **Use Cases** | User preferences, settings | Auth tokens, form drafts |
+
+## Notes
+
+- Values are stored as JSON strings in sessionStorage, so only JSON-serializable values are supported
+- Unlike `localStorage`, `sessionStorage` is scoped to the browser tab and doesn't sync across tabs
+- Data persists through page reloads but is cleared when the tab is closed
+- In private browsing mode or when storage quota is exceeded, write operations fail silently
+- The hook returns the default value when running in a non-browser environment (SSR)
+- Note that `useSessionStorage` returns a tuple of 2 elements while `useLocalStorage` returns 3 (no `removeValue` function)

@@ -1,0 +1,83 @@
+---
+title: Icon
+description: Display icons from the Kivora icon set
+---
+
+## Usage
+
+The Icon component renders icons from the Kivora icon set, which is powered by Lucide React. It provides a consistent API for rendering icons with customizable size and color.
+
+```tsx
+import { Icon } from '@kivora/react';
+
+<Icon name="check" size={20} />
+```
+
+## Examples
+
+### Basic Icon
+
+```tsx
+<Icon name="check" />
+```
+
+### Custom Size and Color
+
+```tsx
+<Icon name="heart" size={24} color="red" />
+```
+
+### With Accessibility Label
+
+```tsx
+<button>
+  <Icon name="close" aria-label="Close dialog" />
+</button>
+```
+
+### In Buttons
+
+```tsx
+<button className="flex items-center gap-2">
+  <Icon name="download" size={16} />
+  Download
+</button>
+```
+
+## Props
+
+<ParamField path="name" type="IconName" required>
+  The name of the icon to render. Available icons include:
+  - Navigation: `arrow-left`, `arrow-right`, `arrow-up`, `arrow-down`, `chevron-left`, `chevron-right`, `chevron-up`, `chevron-down`, `home`, `menu`
+  - Actions: `check`, `close`, `plus`, `minus`, `edit`, `trash`, `copy`, `share`, `download`, `upload`, `search`
+  - UI: `eye`, `eye-off`, `more-horizontal`, `more-vertical`, `loader`
+  - Status: `info`, `warning`, `error`, `success`
+  - User: `user`, `users`, `settings`, `bell`, `mail`, `lock`, `unlock`
+  - Misc: `star`, `heart`, `calendar`, `clock`
+</ParamField>
+
+<ParamField path="size" type="number" default="16">
+  The size of the icon in pixels.
+</ParamField>
+
+<ParamField path="color" type="string" default="'currentColor'">
+  The color of the icon. Defaults to inheriting the current text color.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes to apply to the icon.
+</ParamField>
+
+<ParamField path="aria-label" type="string">
+  Accessibility label for the icon. Use when the icon is the only content (e.g., in icon-only buttons).
+</ParamField>
+
+<ParamField path="accessibilityLabel" type="string">
+  Alternative to `aria-label` for accessibility labels.
+</ParamField>
+
+## Accessibility
+
+- When `aria-label` or `accessibilityLabel` is provided, the icon is visible to screen readers
+- When no label is provided, `aria-hidden="true"` is automatically set
+- Always provide an accessibility label for standalone icons that convey meaning

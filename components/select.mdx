@@ -1,0 +1,202 @@
+---
+title: Select
+description: Single-value select dropdown with optional search and clear functionality.
+---
+
+## Usage
+
+```tsx
+import { Select } from '@kivora/react';
+
+function Demo() {
+  const [framework, setFramework] = useState<string | null>(null);
+  
+  return (
+    <Select 
+      data={['React', 'Vue', 'Solid', 'Svelte']}
+      value={framework}
+      onChange={setFramework}
+      placeholder="Pick framework"
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="data" type="SelectOption[] | string[]" required>
+  Options data. Can be an array of strings or objects with `{ value, label, disabled?, group? }`.
+</ParamField>
+
+<ParamField path="value" type="string | null">
+  Controlled selected value.
+</ParamField>
+
+<ParamField path="defaultValue" type="string | null" default="null">
+  Default selected value for uncontrolled mode.
+</ParamField>
+
+<ParamField path="onChange" type="(value: string | null) => void">
+  Called when selection changes. Receives the selected value or null.
+</ParamField>
+
+<ParamField path="label" type="string">
+  Label text displayed above the select.
+</ParamField>
+
+<ParamField path="placeholder" type="string" default="'Select…'">
+  Placeholder text shown when no option is selected.
+</ParamField>
+
+<ParamField path="error" type="string">
+  Error message to display. When set, applies error styling.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables the select and prevents user interaction.
+</ParamField>
+
+<ParamField path="clearable" type="boolean" default="false">
+  Shows a clear button to deselect the current value.
+</ParamField>
+
+<ParamField path="searchable" type="boolean" default="false">
+  Enables search/filter functionality in the dropdown.
+</ParamField>
+
+<ParamField path="size" type="'sm' | 'md' | 'lg'" default="'md'">
+  Size variant matching Input component sizes.
+</ParamField>
+
+<ParamField path="className" type="string" default="''">
+  Additional CSS classes to apply to the select container.
+</ParamField>
+
+<ParamField path="id" type="string">
+  HTML ID attribute. Auto-generated if not provided.
+</ParamField>
+
+## Type Definitions
+
+```tsx
+interface SelectOption<V extends string = string> {
+  value: V;
+  label: string;
+  disabled?: boolean;
+  group?: string;
+}
+```
+
+## Examples
+
+### Basic Select (String Array)
+
+```tsx
+<Select 
+  data={['React', 'Vue', 'Solid', 'Svelte']}
+  placeholder="Pick framework"
+/>
+```
+
+### With Objects
+
+```tsx
+<Select
+  data={[
+    { value: 'react', label: 'React' },
+    { value: 'vue', label: 'Vue' },
+    { value: 'solid', label: 'Solid' }
+  ]}
+  value={selected}
+  onChange={setSelected}
+/>
+```
+
+### Searchable Select
+
+```tsx
+<Select
+  data={countries}
+  label="Country"
+  searchable
+  placeholder="Search country..."
+/>
+```
+
+### Clearable Select
+
+```tsx
+<Select
+  data={options}
+  value={value}
+  onChange={setValue}
+  clearable
+  placeholder="Select option"
+/>
+```
+
+### With Disabled Options
+
+```tsx
+<Select
+  data={[
+    { value: 'free', label: 'Free' },
+    { value: 'pro', label: 'Pro' },
+    { value: 'enterprise', label: 'Enterprise', disabled: true }
+  ]}
+/>
+```
+
+### Different Sizes
+
+```tsx
+<Select data={options} size="sm" />
+<Select data={options} size="md" />
+<Select data={options} size="lg" />
+```
+
+### With Error State
+
+```tsx
+<Select
+  data={options}
+  value={value}
+  onChange={setValue}
+  error="Please select an option"
+/>
+```
+
+### Form Example
+
+```tsx
+function FormDemo() {
+  const [country, setCountry] = useState<string | null>(null);
+  
+  return (
+    <Select
+      label="Country"
+      data={[
+        { value: 'us', label: 'United States' },
+        { value: 'uk', label: 'United Kingdom' },
+        { value: 'ca', label: 'Canada' }
+      ]}
+      value={country}
+      onChange={setCountry}
+      searchable
+      clearable
+      error={!country ? 'Country is required' : undefined}
+    />
+  );
+}
+```
+
+## Notes
+
+- Dropdown closes when clicking outside (useClickOutside)
+- Search input auto-focuses when dropdown opens
+- Chevron icon rotates based on open state
+- Selected option shows checkmark icon
+- Empty state displays "Nothing found" message
+- Clear button only shows when `clearable={true}` and value is selected
+- Uses combobox ARIA role for accessibility
+- Smooth open/close animations

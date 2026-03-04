@@ -1,0 +1,165 @@
+---
+title: Button
+description: Clickable button with semantic variants, sizes, loading and disabled states
+---
+
+## Import
+
+```tsx
+import { Button } from '@kivora/react';
+```
+
+## Usage
+
+<CodeGroup>
+
+```tsx Basic
+<Button variant="primary" onClick={() => console.log('Clicked')}>
+  Click me
+</Button>
+```
+
+```tsx Variants
+<div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+  <Button variant="primary" label="Primary" />
+  <Button variant="secondary" label="Secondary" />
+  <Button variant="ghost" label="Ghost" />
+  <Button variant="outline" label="Outline" />
+  <Button variant="destructive" label="Destructive" />
+</div>
+```
+
+```tsx Sizes
+<div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+  <Button size="xs" label="Extra Small" />
+  <Button size="sm" label="Small" />
+  <Button size="md" label="Medium" />
+  <Button size="lg" label="Large" />
+  <Button size="xl" label="Extra Large" />
+</div>
+```
+
+```tsx Loading State
+<div style={{ display: 'flex', gap: '0.5rem' }}>
+  <Button variant="primary" label="Save" loading />
+  <Button variant="destructive" label="Delete" loading />
+</div>
+```
+
+```tsx Disabled
+<Button variant="primary" label="Disabled Button" disabled />
+```
+
+```tsx Custom Styling
+<Button 
+  variant="primary" 
+  label="Custom Button"
+  className="w-full"
+/>
+```
+
+</CodeGroup>
+
+## Props
+
+<ParamField path="label" type="string" required>
+  The text content displayed on the button.
+</ParamField>
+
+<ParamField path="variant" type="'primary' | 'secondary' | 'ghost' | 'destructive' | 'outline'" default="'primary'">
+  The visual style variant of the button:
+  - `primary` - Filled button with primary color and shadow
+  - `secondary` - Filled button with secondary color
+  - `ghost` - Transparent background with hover effect
+  - `destructive` - Filled button with destructive/danger color and shadow
+  - `outline` - Transparent with border outline
+</ParamField>
+
+<ParamField path="size" type="'xs' | 'sm' | 'md' | 'lg' | 'xl'" default="'md'">
+  The size of the button:
+  - `xs` - Height 7 (28px), text xs, padding 2.5
+  - `sm` - Height 8 (32px), text sm, padding 3
+  - `md` - Height 9 (36px), text sm, padding 4
+  - `lg` - Height 10 (40px), text base, padding 5
+  - `xl` - Height 11 (44px), text base, padding 6
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Whether the button is disabled. Disabled buttons have reduced opacity and cannot be clicked.
+</ParamField>
+
+<ParamField path="loading" type="boolean" default="false">
+  Whether the button is in a loading state. Shows a spinner and disables interaction.
+  The aria-label is updated to include "loading" for accessibility.
+</ParamField>
+
+<ParamField path="onClick" type="() => void">
+  Callback function triggered when the button is clicked. Ignored when disabled or loading.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes to apply to the button element.
+</ParamField>
+
+<ParamField path="ref" type="React.Ref<HTMLButtonElement>">
+  Forward ref to the underlying button element.
+</ParamField>
+
+## Accessibility
+
+- Uses semantic `<button>` element with `type="button"`
+- Sets `disabled` and `aria-disabled` attributes when disabled or loading
+- Updates `aria-label` to include loading state: `"{label} — loading"`
+- Includes focus-visible ring for keyboard navigation
+- Click handlers are properly disabled when button is disabled or loading
+
+## Styling
+
+The Button component uses Tailwind CSS classes and supports:
+
+- Smooth transitions (150ms ease-out)
+- Focus ring with offset for keyboard navigation
+- Hover and active states for all variants
+- Disabled state with reduced opacity (50%)
+- Shadow effects on primary and destructive variants
+
+### Variant Styles
+
+- **Primary**: Primary background with shadow, 90% opacity on hover, 80% on active
+- **Secondary**: Secondary background, transitions to accent on hover/active
+- **Ghost**: Transparent background, accent background on hover
+- **Destructive**: Destructive background with shadow, 90% opacity on hover, 80% on active
+- **Outline**: Border with transparent background, accent on hover
+
+## Examples
+
+### Form Actions
+
+```tsx
+<div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+  <Button variant="ghost" label="Cancel" onClick={onCancel} />
+  <Button variant="primary" label="Save" onClick={onSave} loading={isSaving} />
+</div>
+```
+
+### Destructive Action
+
+```tsx
+<Button 
+  variant="destructive" 
+  label="Delete Account"
+  onClick={handleDelete}
+  loading={isDeleting}
+/>
+```
+
+### Full Width Button
+
+```tsx
+<Button 
+  variant="primary" 
+  label="Sign In"
+  className="w-full"
+  onClick={handleSignIn}
+/>
+```

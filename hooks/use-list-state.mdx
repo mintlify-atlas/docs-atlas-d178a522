@@ -1,0 +1,149 @@
+---
+title: useListState
+description: State management for arrays with helpers for common list mutations
+---
+
+## Usage
+
+```tsx
+import { useListState } from 'kivora-react';
+
+function TodoList() {
+  const [items, handlers] = useListState(['Buy milk', 'Walk dog']);
+
+  return (
+    <div>
+      {items.map((item, index) => (
+        <div key={index}>
+          <span>{item}</span>
+          <button onClick={() => handlers.remove(index)}>Remove</button>
+        </div>
+      ))}
+      <button onClick={() => handlers.append('New task')}>Add Task</button>
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="initialValue" type="T[]" default="[]">
+  Initial array value
+</ParamField>
+
+## Return Value
+
+Returns a tuple with the current array and an object of mutation handlers:
+
+<ResponseField name="[0]" type="T[]">
+  Current array state
+</ResponseField>
+
+<ResponseField name="[1]" type="UseListStateHandlers<T>">
+  Mutation handlers
+
+  <Expandable title="properties">
+    <ResponseField name="append" type="(...items: T[]) => void">
+      Add items to the end of the list
+    </ResponseField>
+
+    <ResponseField name="prepend" type="(...items: T[]) => void">
+      Add items to the beginning of the list
+    </ResponseField>
+
+    <ResponseField name="insert" type="(index: number, ...items: T[]) => void">
+      Insert items at a specific index
+    </ResponseField>
+
+    <ResponseField name="remove" type="(...indices: number[]) => void">
+      Remove items at the specified indices
+    </ResponseField>
+
+    <ResponseField name="reorder" type="(from: number, to: number) => void">
+      Move an item from one index to another
+    </ResponseField>
+
+    <ResponseField name="swap" type="(indexA: number, indexB: number) => void">
+      Swap two items by their indices
+    </ResponseField>
+
+    <ResponseField name="set" type="(list: T[]) => void">
+      Replace the entire list
+    </ResponseField>
+
+    <ResponseField name="setItem" type="(index: number, item: T) => void">
+      Update a specific item by index
+    </ResponseField>
+
+    <ResponseField name="apply" type="(fn: (list: T[]) => T[]) => void">
+      Apply a transformation function to the entire list
+    </ResponseField>
+
+    <ResponseField name="filter" type="(predicate: (item: T, index: number) => boolean) => void">
+      Filter the list using a predicate function
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Examples
+
+### Managing a Todo List
+
+```tsx
+const [todos, handlers] = useListState([
+  { id: 1, text: 'Learn React', done: false },
+  { id: 2, text: 'Build app', done: false }
+]);
+
+// Add new todo
+handlers.append({ id: 3, text: 'Deploy', done: false });
+
+// Remove completed todos
+handlers.filter((todo) => !todo.done);
+
+// Mark todo as done
+handlers.setItem(0, { ...todos[0], done: true });
+```
+
+### Drag and Drop Reordering
+
+```tsx
+const [items, handlers] = useListState(['A', 'B', 'C', 'D']);
+
+const onDragEnd = (result) => {
+  if (!result.destination) return;
+  handlers.reorder(result.source.index, result.destination.index);
+};
+```
+
+### Form Fields Array
+
+```tsx
+const [fields, handlers] = useListState([{ name: '', email: '' }]);
+
+return (
+  <div>
+    {fields.map((field, index) => (
+      <div key={index}>
+        <input
+          value={field.name}
+          onChange={(e) => handlers.setItem(index, { ...field, name: e.target.value })}
+        />
+        <button onClick={() => handlers.remove(index)}>Remove</button>
+      </div>
+    ))}
+    <button onClick={() => handlers.append({ name: '', email: '' })}>
+      Add Field
+    </button>
+  </div>
+);
+```
+
+### Insert at Position
+
+```tsx
+const [list, handlers] = useListState([1, 2, 4, 5]);
+
+// Insert 3 at index 2
+handlers.insert(2, 3); // [1, 2, 3, 4, 5]
+```

@@ -1,0 +1,109 @@
+---
+title: Avatar Group
+description: Stacked group of overlapping avatars with overflow counter.
+---
+
+## Usage
+
+```tsx
+import { AvatarGroup } from '@kivora/react';
+
+const users = [
+  { src: '/user1.jpg', alt: 'Alice' },
+  { src: '/user2.jpg', alt: 'Bob' },
+  { src: '/user3.jpg', alt: 'Charlie' },
+];
+
+<AvatarGroup items={users} max={3} />
+```
+
+## Examples
+
+### Basic Group
+
+```tsx
+const users = [
+  { alt: 'Alice Johnson' },
+  { alt: 'Bob Smith' },
+  { alt: 'Charlie Davis' },
+  { alt: 'Diana Prince' },
+];
+
+<AvatarGroup items={users} />
+```
+
+### With Max Limit
+
+```tsx
+const users = [
+  { alt: 'Alice' },
+  { alt: 'Bob' },
+  { alt: 'Charlie' },
+  { alt: 'Diana' },
+  { alt: 'Eve' },
+  { alt: 'Frank' },
+  { alt: 'Grace' },
+];
+
+<AvatarGroup items={users} max={4} />
+```
+
+When the number of items exceeds `max`, remaining avatars are shown as "+N".
+
+### Different Sizes
+
+<CodeGroup>
+```tsx Small
+<AvatarGroup items={users} size="sm" max={3} />
+```
+
+```tsx Medium
+<AvatarGroup items={users} size="md" max={3} />
+```
+
+```tsx Large
+<AvatarGroup items={users} size="lg" max={3} />
+```
+
+```tsx Extra Large
+<AvatarGroup items={users} size="xl" max={3} />
+```
+</CodeGroup>
+
+### With Images
+
+```tsx
+const teamMembers = [
+  { src: '/alice.jpg', alt: 'Alice Johnson' },
+  { src: '/bob.jpg', alt: 'Bob Smith' },
+  { src: '/charlie.jpg', alt: 'Charlie Davis' },
+  { alt: 'Diana Prince' },
+  { alt: 'Eve Anderson' },
+];
+
+<AvatarGroup items={teamMembers} max={4} size="md" />
+```
+
+## Props
+
+<ResponseField name="items" type="AvatarProps[]" required>
+  Array of avatar configurations. Each item can include `src`, `alt`, `initials`
+</ResponseField>
+
+<ResponseField name="max" type="number" default={5}>
+  Maximum number of avatars to show before "+N" overflow counter
+</ResponseField>
+
+<ResponseField name="size" type="'sm' | 'md' | 'lg' | 'xl'" default="md">
+  Size applied to all avatars in the group
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+## Accessibility
+
+- Group uses `role="group"` with an `aria-label` indicating the number of members
+- Each avatar maintains its own accessibility features
+- Overflow counter includes `aria-label` with count of hidden members

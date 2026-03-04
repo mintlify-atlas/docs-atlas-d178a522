@@ -1,0 +1,345 @@
+---
+title: Menu
+description: Dropdown menu with items, labels, and dividers
+---
+
+Dropdown menu with items, labels, and dividers. Perfect for action menus, context menus, and navigation dropdowns.
+
+## Import
+
+```tsx
+import { Menu } from '@kivora/react';
+```
+
+## Usage
+
+```tsx
+import { Menu, Button } from '@kivora/react';
+
+function Example() {
+  return (
+    <Menu>
+      <Menu.Target>
+        <Button label="Actions" />
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Menu.Item>Edit</Menu.Item>
+        <Menu.Item>Duplicate</Menu.Item>
+        <Menu.Divider />
+        <Menu.Item color="error">Delete</Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+  );
+}
+```
+
+## With Icons
+
+```tsx
+import { Edit, Copy, Trash } from 'lucide-react';
+
+<Menu>
+  <Menu.Target>
+    <Button label="Options" />
+  </Menu.Target>
+  <Menu.Dropdown>
+    <Menu.Item leftSection={<Edit size={16} />}>Edit</Menu.Item>
+    <Menu.Item leftSection={<Copy size={16} />}>Duplicate</Menu.Item>
+    <Menu.Divider />
+    <Menu.Item leftSection={<Trash size={16} />} color="error">
+      Delete
+    </Menu.Item>
+  </Menu.Dropdown>
+</Menu>
+```
+
+## With Keyboard Shortcuts
+
+```tsx
+<Menu>
+  <Menu.Target>
+    <Button label="Edit" />
+  </Menu.Target>
+  <Menu.Dropdown>
+    <Menu.Item rightSection="⌘Z">Undo</Menu.Item>
+    <Menu.Item rightSection="⌘⇧Z">Redo</Menu.Item>
+    <Menu.Divider />
+    <Menu.Item rightSection="⌘X">Cut</Menu.Item>
+    <Menu.Item rightSection="⌘C">Copy</Menu.Item>
+    <Menu.Item rightSection="⌘V">Paste</Menu.Item>
+  </Menu.Dropdown>
+</Menu>
+```
+
+## With Labels
+
+```tsx
+<Menu>
+  <Menu.Target>
+    <Button label="File" />
+  </Menu.Target>
+  <Menu.Dropdown>
+    <Menu.Label>File</Menu.Label>
+    <Menu.Item>New</Menu.Item>
+    <Menu.Item>Open</Menu.Item>
+    <Menu.Item>Save</Menu.Item>
+    <Menu.Divider />
+    <Menu.Label>Recent</Menu.Label>
+    <Menu.Item>Project A</Menu.Item>
+    <Menu.Item>Project B</Menu.Item>
+  </Menu.Dropdown>
+</Menu>
+```
+
+## Positions
+
+Control where the menu appears:
+
+```tsx
+<Menu position="bottom-start">
+  <Menu.Target><Button label="Bottom Start" /></Menu.Target>
+  <Menu.Dropdown>
+    <Menu.Item>Item</Menu.Item>
+  </Menu.Dropdown>
+</Menu>
+
+<Menu position="bottom-end">
+  <Menu.Target><Button label="Bottom End" /></Menu.Target>
+  <Menu.Dropdown>
+    <Menu.Item>Item</Menu.Item>
+  </Menu.Dropdown>
+</Menu>
+
+<Menu position="top-start">
+  <Menu.Target><Button label="Top Start" /></Menu.Target>
+  <Menu.Dropdown>
+    <Menu.Item>Item</Menu.Item>
+  </Menu.Dropdown>
+</Menu>
+```
+
+## Custom Width
+
+```tsx
+<Menu width={300}>
+  <Menu.Target>
+    <Button label="Wide Menu" />
+  </Menu.Target>
+  <Menu.Dropdown>
+    <Menu.Item>Item with more space</Menu.Item>
+  </Menu.Dropdown>
+</Menu>
+
+{/* Match trigger width */}
+<Menu width="target">
+  <Menu.Target>
+    <Button label="Matching Width" />
+  </Menu.Target>
+  <Menu.Dropdown>
+    <Menu.Item>Item</Menu.Item>
+  </Menu.Dropdown>
+</Menu>
+```
+
+## Controlled
+
+```tsx
+function ControlledMenu() {
+  const [opened, setOpened] = useState(false);
+
+  return (
+    <Menu
+      opened={opened}
+      onOpen={() => setOpened(true)}
+      onClose={() => setOpened(false)}
+    >
+      <Menu.Target>
+        <Button label="Controlled" />
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Menu.Item onClick={() => console.log('Clicked')}>Action</Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+  );
+}
+```
+
+## Disable Auto Close
+
+Prevent menu from closing when items are clicked:
+
+```tsx
+<Menu closeOnItemClick={false}>
+  <Menu.Target>
+    <Button label="Filters" />
+  </Menu.Target>
+  <Menu.Dropdown>
+    <Menu.Item>
+      <label className="flex items-center gap-2">
+        <input type="checkbox" />
+        Option 1
+      </label>
+    </Menu.Item>
+    <Menu.Item>
+      <label className="flex items-center gap-2">
+        <input type="checkbox" />
+        Option 2
+      </label>
+    </Menu.Item>
+  </Menu.Dropdown>
+</Menu>
+```
+
+## Context Menu
+
+```tsx
+import { MoreVertical, Eye, Download, Link, Trash } from 'lucide-react';
+
+function ContextMenu() {
+  return (
+    <Menu position="bottom-end">
+      <Menu.Target>
+        <button className="p-2 rounded hover:bg-accent">
+          <MoreVertical size={16} />
+        </button>
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Menu.Item leftSection={<Eye size={16} />}>View details</Menu.Item>
+        <Menu.Item leftSection={<Download size={16} />}>Download</Menu.Item>
+        <Menu.Item leftSection={<Link size={16} />}>Copy link</Menu.Item>
+        <Menu.Divider />
+        <Menu.Item leftSection={<Trash size={16} />} color="error">
+          Delete
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+  );
+}
+```
+
+## Nested Sections
+
+```tsx
+<Menu>
+  <Menu.Target>
+    <Button label="Settings" />
+  </Menu.Target>
+  <Menu.Dropdown>
+    <Menu.Label>Account</Menu.Label>
+    <Menu.Item>Profile</Menu.Item>
+    <Menu.Item>Preferences</Menu.Item>
+    <Menu.Divider label="Workspace" />
+    <Menu.Item>Members</Menu.Item>
+    <Menu.Item>Billing</Menu.Item>
+    <Menu.Divider />
+    <Menu.Item>Sign out</Menu.Item>
+  </Menu.Dropdown>
+</Menu>
+```
+
+## Disabled Items
+
+```tsx
+<Menu>
+  <Menu.Target>
+    <Button label="Actions" />
+  </Menu.Target>
+  <Menu.Dropdown>
+    <Menu.Item>Active item</Menu.Item>
+    <Menu.Item disabled>Disabled item</Menu.Item>
+    <Menu.Item>Another active item</Menu.Item>
+  </Menu.Dropdown>
+</Menu>
+```
+
+## Props
+
+### Menu
+
+<ResponseField name="children" type="ReactNode" required>
+  Must include `Menu.Target` and `Menu.Dropdown` components
+</ResponseField>
+
+<ResponseField name="position" type="'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'" default="bottom-start">
+  Where the menu appears relative to the trigger
+</ResponseField>
+
+<ResponseField name="width" type="number | 'target'" default="220">
+  Width in pixels or 'target' to match trigger width
+</ResponseField>
+
+<ResponseField name="closeOnItemClick" type="boolean" default="true">
+  Whether clicking menu items closes the menu
+</ResponseField>
+
+<ResponseField name="opened" type="boolean">
+  Controlled open state
+</ResponseField>
+
+<ResponseField name="onOpen" type="() => void">
+  Callback fired when menu opens
+</ResponseField>
+
+<ResponseField name="onClose" type="() => void">
+  Callback fired when menu closes
+</ResponseField>
+
+### Menu.Item
+
+<ResponseField name="children" type="ReactNode" required>
+  Item label or content
+</ResponseField>
+
+<ResponseField name="leftSection" type="ReactNode">
+  Content shown on the left (typically an icon)
+</ResponseField>
+
+<ResponseField name="rightSection" type="ReactNode">
+  Content shown on the right (typically a keyboard shortcut)
+</ResponseField>
+
+<ResponseField name="color" type="'default' | 'error'" default="default">
+  Color variant for destructive actions
+</ResponseField>
+
+<ResponseField name="disabled" type="boolean">
+  Whether the item is disabled
+</ResponseField>
+
+<ResponseField name="onClick" type="(e: React.MouseEvent) => void">
+  Click handler
+</ResponseField>
+
+### Menu.Divider
+
+<ResponseField name="label" type="string">
+  Optional label for the divider
+</ResponseField>
+
+### Menu.Label
+
+<ResponseField name="children" type="ReactNode" required>
+  Label text
+</ResponseField>
+
+## Accessibility
+
+- Uses `role="menu"` and `role="menuitem"`
+- Keyboard navigation support
+- Focus management
+- Click outside to close
+- Disabled state support
+- Proper ARIA labels
+
+## Features
+
+- Compound component pattern
+- Click to toggle open/close
+- Configurable positioning
+- Custom width options
+- Auto-close on item click (configurable)
+- Controlled and uncontrolled modes
+- Icons and keyboard shortcuts
+- Labels and dividers
+- Destructive action styling
+- Smooth animations

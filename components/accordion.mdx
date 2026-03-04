@@ -1,0 +1,170 @@
+---
+title: Accordion
+description: Expandable accordion that supports single or multiple open sections.
+---
+
+## Usage
+
+```tsx
+import { Accordion } from '@kivora/react';
+
+const items = [
+  {
+    id: 'item-1',
+    trigger: 'What is Kivora?',
+    content: <p>A modern React design system.</p>,
+  },
+  {
+    id: 'item-2',
+    trigger: 'How do I install it?',
+    content: <p>Run: npm install @kivora/react</p>,
+  },
+];
+
+<Accordion items={items} />
+```
+
+## Examples
+
+### Single Open Section
+
+```tsx
+const faqItems = [
+  {
+    id: 'q1',
+    trigger: 'What is Kivora?',
+    content: <p>Kivora is a comprehensive React design system.</p>,
+  },
+  {
+    id: 'q2',
+    trigger: 'Is it free?',
+    content: <p>Yes, Kivora is open source and free to use.</p>,
+  },
+  {
+    id: 'q3',
+    trigger: 'What components are included?',
+    content: <p>Over 30 components including buttons, forms, modals, and more.</p>,
+  },
+];
+
+<Accordion items={faqItems} />
+```
+
+By default, only one section can be open at a time.
+
+### Multiple Open Sections
+
+```tsx
+<Accordion items={items} multiple />
+```
+
+Allow multiple accordion sections to be open simultaneously.
+
+### Default Open
+
+```tsx
+<Accordion 
+  items={items} 
+  defaultOpen={['q1', 'q3']}
+  multiple
+/>
+```
+
+Specify which sections should be open on initial render.
+
+### Disabled Sections
+
+```tsx
+const items = [
+  {
+    id: 'item-1',
+    trigger: 'Active Section',
+    content: <p>This section can be toggled.</p>,
+  },
+  {
+    id: 'item-2',
+    trigger: 'Disabled Section',
+    content: <p>This content is not accessible.</p>,
+    disabled: true,
+  },
+];
+
+<Accordion items={items} />
+```
+
+### Rich Content
+
+```tsx
+const items = [
+  {
+    id: 'features',
+    trigger: 'Key Features',
+    content: (
+      <div className="space-y-2">
+        <ul className="list-disc pl-5">
+          <li>TypeScript support</li>
+          <li>Themeable components</li>
+          <li>Accessibility built-in</li>
+          <li>Tree-shakeable</li>
+        </ul>
+      </div>
+    ),
+  },
+  {
+    id: 'pricing',
+    trigger: 'Pricing Plans',
+    content: (
+      <div className="grid grid-cols-2 gap-4">
+        <Card>
+          <h4>Free</h4>
+          <p>$0/month</p>
+        </Card>
+        <Card>
+          <h4>Pro</h4>
+          <p>$29/month</p>
+        </Card>
+      </div>
+    ),
+  },
+];
+
+<Accordion items={items} multiple />
+```
+
+## Props
+
+<ResponseField name="items" type="AccordionItem[]" required>
+  Sections to render. Each item has:
+  - `id` (string): Unique identifier
+  - `trigger` (ReactNode): Label rendered in clickable trigger
+  - `content` (ReactNode): Content revealed when open
+  - `disabled` (boolean, optional): Prevent toggling
+</ResponseField>
+
+<ResponseField name="multiple" type="boolean" default={false}>
+  Allow multiple sections to be open simultaneously
+</ResponseField>
+
+<ResponseField name="defaultOpen" type="string[]" default={[]}>
+  Array of item IDs that should be open on first render
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+## Accessibility
+
+- Uses semantic `button` elements for triggers
+- Implements ARIA attributes: `aria-expanded`, `aria-controls`, `aria-labelledby`
+- Keyboard navigable with proper focus management
+- Disabled sections use `disabled` attribute and reduced opacity
+- Smooth animations for expand/collapse with CSS transitions
+- Chevron icon rotates to indicate state
+
+## Animation
+
+Accordion panels use CSS Grid-based animation for smooth expand/collapse transitions:
+- Transition duration: 200ms
+- Easing: ease-out
+- Animates both height and opacity

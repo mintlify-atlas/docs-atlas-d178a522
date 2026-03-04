@@ -1,0 +1,106 @@
+---
+title: useClipboard
+description: Copy text to clipboard with status tracking
+---
+
+Copies text to the clipboard and tracks the copy status.
+
+## Usage
+
+```tsx
+import { useClipboard } from 'kivora-react';
+
+function CopyButton() {
+  const { copy, copied } = useClipboard();
+
+  return (
+    <button onClick={() => copy('Hello, world!')}>
+      {copied ? 'Copied!' : 'Copy'}
+    </button>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="timeout" type="number" default="2000">
+  Milliseconds before status resets to `'idle'`.
+</ParamField>
+
+## Returns
+
+<ResponseField name="copy" type="(text: string) => Promise<void>">
+  Function to copy text to clipboard.
+</ResponseField>
+
+<ResponseField name="status" type="ClipboardStatus">
+  Current clipboard status: `'idle'` | `'copied'` | `'error'`.
+</ResponseField>
+
+<ResponseField name="copied" type="boolean">
+  `true` when status is `'copied'`.
+</ResponseField>
+
+<ResponseField name="reset" type="() => void">
+  Manually resets status to `'idle'`.
+</ResponseField>
+
+## Examples
+
+### Basic copy button
+
+```tsx
+const { copy, copied } = useClipboard();
+
+<button onClick={() => copy('Hello!')}>
+  {copied ? 'Copied!' : 'Copy'}
+</button>
+```
+
+### With custom timeout
+
+```tsx
+const { copy, status } = useClipboard(5000); // 5 second timeout
+
+const handleCopy = async () => {
+  await copy('https://example.com/share');
+};
+
+return (
+  <div>
+    <button onClick={handleCopy}>Share Link</button>
+    {status === 'copied' && <span>Link copied!</span>}
+    {status === 'error' && <span>Failed to copy</span>}
+  </div>
+);
+```
+
+### Manual reset
+
+```tsx
+const { copy, copied, reset } = useClipboard();
+
+return (
+  <>
+    <button onClick={() => copy('Code snippet')}>
+      {copied ? 'Copied!' : 'Copy Code'}
+    </button>
+    {copied && <button onClick={reset}>Reset</button>}
+  </>
+);
+```
+
+## Type Definitions
+
+```ts
+type ClipboardStatus = 'idle' | 'copied' | 'error';
+
+interface UseClipboardReturn {
+  copy: (text: string) => Promise<void>;
+  status: ClipboardStatus;
+  copied: boolean;
+  reset: () => void;
+}
+
+function useClipboard(timeout?: number): UseClipboardReturn;
+```

@@ -1,0 +1,117 @@
+---
+title: useDocumentTitle
+description: Update document title dynamically
+---
+
+Programmatically updates `document.title` and restores the original title on unmount.
+
+## Usage
+
+```tsx
+import { useDocumentTitle } from 'kivora-react';
+
+function ProfilePage({ username }) {
+  useDocumentTitle(`${username} | Kivora`);
+
+  return <div>{/* Profile content */}</div>;
+}
+```
+
+## Parameters
+
+<ParamField path="title" type="string" required>
+  The title string to set.
+</ParamField>
+
+<ParamField path="revertOnUnmount" type="boolean" default="true">
+  Whether to revert to the previous title when the component unmounts.
+</ParamField>
+
+## Examples
+
+### Dynamic page title
+
+```tsx
+function ArticlePage({ article }) {
+  useDocumentTitle(article.title);
+
+  return (
+    <article>
+      <h1>{article.title}</h1>
+      <p>{article.content}</p>
+    </article>
+  );
+}
+```
+
+### Without revert on unmount
+
+```tsx
+function CheckoutPage() {
+  useDocumentTitle('Checkout | Store', false);
+
+  return <div>{/* Checkout form */}</div>;
+}
+```
+
+### Notification count
+
+```tsx
+function Inbox({ unreadCount }) {
+  const title = unreadCount > 0 
+    ? `(${unreadCount}) Inbox | Mail`
+    : 'Inbox | Mail';
+  
+  useDocumentTitle(title);
+
+  return <div>{/* Inbox content */}</div>;
+}
+```
+
+### Route-based titles
+
+```tsx
+function Dashboard() {
+  const location = useLocation();
+
+  const titles = {
+    '/dashboard': 'Dashboard',
+    '/dashboard/settings': 'Settings',
+    '/dashboard/profile': 'Profile',
+  };
+
+  useDocumentTitle(titles[location.pathname] || 'Dashboard');
+
+  return <Outlet />;
+}
+```
+
+### Loading state
+
+```tsx
+function DataPage() {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
+
+  useDocumentTitle(
+    loading ? 'Loading...' : `${data.name} | App`
+  );
+
+  return <div>{/* Content */}</div>;
+}
+```
+
+## Notes
+
+- Automatically saves the previous title when the component mounts
+- Restores the original title on unmount (unless `revertOnUnmount` is `false`)
+- Updates the title whenever the `title` parameter changes
+
+## Type Definitions
+
+```ts
+function useDocumentTitle(
+  title: string,
+  revertOnUnmount?: boolean
+): void;
+```

@@ -1,0 +1,137 @@
+---
+title: useDebounce
+description: Delay updating a value until after a specified time has passed since the last change
+---
+
+## Overview
+
+The `useDebounce` hook delays updating a value until after a specified delay has passed since the last change. This is particularly useful for search inputs, form validation, and preventing excessive API calls.
+
+## Hooks
+
+### useDebounce
+
+Delays updating a value until the specified delay has elapsed.
+
+```tsx
+function useDebounce<T>(value: T, delay: number): T
+```
+
+#### Parameters
+
+<ParamField path="value" type="T" required>
+  The value to debounce
+</ParamField>
+
+<ParamField path="delay" type="number" required>
+  Delay in milliseconds before updating the value
+</ParamField>
+
+#### Returns
+
+<ResponseField name="debouncedValue" type="T">
+  The debounced value that updates only after the delay period
+</ResponseField>
+
+### useDebouncedCallback
+
+Returns a debounced version of the provided callback function.
+
+```tsx
+function useDebouncedCallback<T extends (...args: unknown[]) => void>(
+  callback: T,
+  delay: number
+): (...args: Parameters<T>) => void
+```
+
+#### Parameters
+
+<ParamField path="callback" type="T" required>
+  Function to debounce
+</ParamField>
+
+<ParamField path="delay" type="number" required>
+  Delay in milliseconds before invoking the callback
+</ParamField>
+
+#### Returns
+
+<ResponseField name="debouncedCallback" type="function">
+  A debounced callback that resets the timer on every call
+</ResponseField>
+
+## Examples
+
+### Basic search debouncing
+
+```tsx
+import { useState, useEffect } from 'react';
+import { useDebounce } from 'kivora-react';
+
+function SearchComponent() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearch = useDebounce(searchQuery, 300);
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      fetchResults(debouncedSearch);
+    }
+  }, [debouncedSearch]);
+
+  return (
+    <input
+      type="text"
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      placeholder="Search..."
+    />
+  );
+}
+```
+
+### Debouncing a callback
+
+```tsx
+import { useDebouncedCallback } from 'kivora-react';
+
+function FormComponent() {
+  const saveChanges = useDebouncedCallback((formData) => {
+    // This will only fire 500ms after the last call
+    api.saveForm(formData);
+  }, 500);
+
+  return (
+    <form onChange={(e) => saveChanges(new FormData(e.currentTarget))}>
+      {/* Form fields */}
+    </form>
+  );
+}
+```
+
+### Window resize handler
+
+```tsx
+import { useEffect } from 'react';
+import { useDebouncedCallback } from 'kivora-react';
+
+function ResponsiveComponent() {
+  const handleResize = useDebouncedCallback(() => {
+    console.log('Window resized to:', window.innerWidth);
+  }, 250);
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [handleResize]);
+
+  return <div>Resize the window</div>;
+}
+```
+
+## Use Cases
+
+- **Search inputs**: Delay API calls until the user stops typing
+- **Form validation**: Validate fields only after the user has finished editing
+- **Auto-save**: Save changes after a period of inactivity
+- **Scroll/resize handlers**: Prevent excessive event handler calls
+- **API rate limiting**: Reduce the frequency of API requests

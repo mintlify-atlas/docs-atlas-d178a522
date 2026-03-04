@@ -1,0 +1,216 @@
+---
+title: useScrollIntoView
+description: Returns a function that smoothly scrolls an element into the viewport
+---
+
+## Usage
+
+Returns a memoized function that scrolls the referenced element into the viewport using `scrollIntoView`.
+
+```tsx
+import { useRef } from 'react';
+import { useScrollIntoView } from 'kivora-react';
+
+function ScrollableSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const scrollTo = useScrollIntoView(ref);
+
+  return (
+    <div>
+      <button onClick={scrollTo}>Scroll to section</button>
+      <div style={{ height: '1000px' }}>Spacer</div>
+      <div ref={ref}>Target section</div>
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="ref" type="RefObject<T | null>" required>
+  React ref object pointing to the element to scroll into view
+</ParamField>
+
+<ParamField path="options" type="ScrollIntoViewOptions">
+  Scroll behavior configuration
+
+  <Expandable title="properties">
+    <ParamField path="behavior" type="'auto' | 'smooth' | 'instant'" default="'smooth'">
+      Scroll animation behavior
+    </ParamField>
+
+    <ParamField path="block" type="'start' | 'center' | 'end' | 'nearest'" default="'start'">
+      Vertical alignment of the element
+    </ParamField>
+
+    <ParamField path="inline" type="'start' | 'center' | 'end' | 'nearest'" default="'nearest'">
+      Horizontal alignment of the element
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Returns
+
+`() => void` - A memoized function that scrolls the element into view when called.
+
+## Examples
+
+### Smooth scroll navigation
+
+```tsx
+import { useRef } from 'react';
+import { useScrollIntoView } from 'kivora-react';
+
+function PageWithSections() {
+  const section1Ref = useRef<HTMLElement>(null);
+  const section2Ref = useRef<HTMLElement>(null);
+  const section3Ref = useRef<HTMLElement>(null);
+
+  const scrollToSection1 = useScrollIntoView(section1Ref);
+  const scrollToSection2 = useScrollIntoView(section2Ref);
+  const scrollToSection3 = useScrollIntoView(section3Ref);
+
+  return (
+    <div>
+      <nav style={{ position: 'fixed', top: 0, background: 'white' }}>
+        <button onClick={scrollToSection1}>Section 1</button>
+        <button onClick={scrollToSection2}>Section 2</button>
+        <button onClick={scrollToSection3}>Section 3</button>
+      </nav>
+
+      <section ref={section1Ref} style={{ height: '100vh' }}>
+        <h2>Section 1</h2>
+      </section>
+      <section ref={section2Ref} style={{ height: '100vh' }}>
+        <h2>Section 2</h2>
+      </section>
+      <section ref={section3Ref} style={{ height: '100vh' }}>
+        <h2>Section 3</h2>
+      </section>
+    </div>
+  );
+}
+```
+
+### Center alignment
+
+```tsx
+import { useRef } from 'react';
+import { useScrollIntoView } from 'kivora-react';
+
+function CenteredScroll() {
+  const targetRef = useRef<HTMLDivElement>(null);
+  const scrollToCenter = useScrollIntoView(targetRef, {
+    behavior: 'smooth',
+    block: 'center',
+  });
+
+  return (
+    <div>
+      <button onClick={scrollToCenter}>Center target</button>
+      <div style={{ height: '1500px', padding: '20px' }}>
+        <div ref={targetRef} style={{ background: '#3b82f6', color: 'white', padding: '20px' }}>
+          This will be centered in viewport
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Instant scroll
+
+```tsx
+import { useRef } from 'react';
+import { useScrollIntoView } from 'kivora-react';
+
+function InstantJump() {
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const jumpToBottom = useScrollIntoView(bottomRef, {
+    behavior: 'instant',
+    block: 'end',
+  });
+
+  return (
+    <div>
+      <button onClick={jumpToBottom}>Jump to bottom</button>
+      <div style={{ height: '2000px' }}>Long content...</div>
+      <div ref={bottomRef}>Bottom of page</div>
+    </div>
+  );
+}
+```
+
+### Form validation scroll
+
+```tsx
+import { useRef } from 'react';
+import { useScrollIntoView } from 'kivora-react';
+
+function Form() {
+  const errorRef = useRef<HTMLDivElement>(null);
+  const scrollToError = useScrollIntoView(errorRef, { block: 'center' });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validation logic
+    const hasError = true;
+    
+    if (hasError) {
+      scrollToError();
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div style={{ height: '1000px' }}>Form fields...</div>
+      
+      <div ref={errorRef} style={{ color: 'red', padding: '10px', background: '#fee' }}>
+        Please fix the errors above
+      </div>
+      
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+### Scroll to active item
+
+```tsx
+import { useRef, useEffect } from 'react';
+import { useScrollIntoView } from 'kivora-react';
+
+function List({ items, activeId }: { items: any[]; activeId: string }) {
+  const activeRef = useRef<HTMLDivElement>(null);
+  const scrollToActive = useScrollIntoView(activeRef, {
+    behavior: 'smooth',
+    block: 'nearest',
+  });
+
+  useEffect(() => {
+    if (activeId) {
+      scrollToActive();
+    }
+  }, [activeId, scrollToActive]);
+
+  return (
+    <div style={{ height: '300px', overflow: 'auto' }}>
+      {items.map((item) => (
+        <div
+          key={item.id}
+          ref={item.id === activeId ? activeRef : null}
+          style={{
+            padding: '10px',
+            background: item.id === activeId ? '#3b82f6' : '#f0f0f0',
+            color: item.id === activeId ? 'white' : 'black',
+          }}
+        >
+          {item.name}
+        </div>
+      ))}
+    </div>
+  );
+}
+```

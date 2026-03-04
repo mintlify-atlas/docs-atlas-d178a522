@@ -1,0 +1,110 @@
+---
+title: Box
+description: Polymorphic layout primitive that can render as any HTML element
+---
+
+## Usage
+
+Box is a polymorphic component that can render as any HTML element via the `as` prop. It's useful for creating flexible layout primitives while maintaining TypeScript type safety.
+
+```tsx
+import { Box } from '@kivora/react';
+
+<Box>Content</Box>
+```
+
+## Examples
+
+### Default Div
+
+```tsx
+<Box className="p-4 bg-gray-100">
+  This renders as a div element
+</Box>
+```
+
+### As Section
+
+```tsx
+<Box as="section" className="py-8">
+  <h2>Section Title</h2>
+  <p>Section content</p>
+</Box>
+```
+
+### As Button
+
+```tsx
+<Box 
+  as="button" 
+  onClick={() => console.log('clicked')}
+  className="px-4 py-2 bg-blue-500 text-white rounded"
+>
+  Click Me
+</Box>
+```
+
+### As Link
+
+```tsx
+<Box 
+  as="a" 
+  href="https://example.com"
+  className="text-blue-600 hover:underline"
+>
+  External Link
+</Box>
+```
+
+### As Article
+
+```tsx
+<Box as="article" className="prose">
+  <h1>Article Title</h1>
+  <p>Article content goes here...</p>
+</Box>
+```
+
+## Props
+
+<ParamField path="as" type="ElementType" default="'div'">
+  The HTML element or React component to render. Can be any valid HTML tag name (e.g., `'div'`, `'section'`, `'button'`, `'a'`) or a React component.
+</ParamField>
+
+<ParamField path="className" type="string">
+  CSS classes to apply to the element.
+</ParamField>
+
+<ParamField path="children" type="ReactNode">
+  The content to render inside the Box.
+</ParamField>
+
+<ParamField path="ref" type="Ref">
+  Ref forwarding is supported with proper TypeScript typing based on the `as` prop.
+</ParamField>
+
+<ParamField path="...rest" type="HTMLAttributes">
+  All other props are forwarded to the underlying element. The available props depend on the `as` prop value and are fully typed.
+</ParamField>
+
+## Type Safety
+
+Box provides full TypeScript type safety. When you change the `as` prop, the available props automatically update to match the target element:
+
+```tsx
+// ✅ Valid: button elements have onClick
+<Box as="button" onClick={() => {}} />
+
+// ✅ Valid: anchor elements have href
+<Box as="a" href="/path" />
+
+// ❌ Invalid: div doesn't have href
+<Box as="div" href="/path" />
+```
+
+## Use Cases
+
+- Creating semantic HTML structure with consistent styling
+- Building layout primitives that can adapt to different contexts
+- Avoiding unnecessary wrapper divs
+- Maintaining type safety in polymorphic components

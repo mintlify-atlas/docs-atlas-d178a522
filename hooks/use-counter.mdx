@@ -1,0 +1,111 @@
+---
+title: useCounter
+description: Counter with optional min/max clamping
+---
+
+## Usage
+
+```tsx
+import { useCounter } from 'kivora-react';
+
+function Demo() {
+  const { count, increment, decrement, reset } = useCounter({
+    initialValue: 0,
+    min: 0,
+    max: 10
+  });
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => increment()}>+1</button>
+      <button onClick={() => decrement()}>-1</button>
+      <button onClick={() => increment(5)}>+5</button>
+      <button onClick={reset}>Reset</button>
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="options" type="UseCounterOptions">
+  Configuration object for the counter
+
+  <Expandable title="properties">
+    <ParamField path="initialValue" type="number" default="0">
+      Initial counter value
+    </ParamField>
+
+    <ParamField path="min" type="number">
+      Minimum value (no limit by default)
+    </ParamField>
+
+    <ParamField path="max" type="number">
+      Maximum value (no limit by default)
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Return Value
+
+<ResponseField name="count" type="number">
+  Current counter value
+</ResponseField>
+
+<ResponseField name="increment" type="(step?: number) => void">
+  Increment the counter by `step` (default: 1). Value is clamped to `max` if set.
+</ResponseField>
+
+<ResponseField name="decrement" type="(step?: number) => void">
+  Decrement the counter by `step` (default: 1). Value is clamped to `min` if set.
+</ResponseField>
+
+<ResponseField name="set" type="(value: number) => void">
+  Set the counter to a specific value. Value is clamped to min/max if set.
+</ResponseField>
+
+<ResponseField name="reset" type="() => void">
+  Reset the counter to `initialValue`
+</ResponseField>
+
+## Examples
+
+### Basic Counter
+
+```tsx
+const { count, increment, decrement } = useCounter();
+
+return (
+  <div>
+    <button onClick={() => decrement()}>-</button>
+    <span>{count}</span>
+    <button onClick={() => increment()}>+</button>
+  </div>
+);
+```
+
+### With Min/Max Limits
+
+```tsx
+const { count, increment, decrement } = useCounter({
+  initialValue: 50,
+  min: 0,
+  max: 100
+});
+
+// count will never go below 0 or above 100
+```
+
+### Custom Step Size
+
+```tsx
+const { count, increment, decrement } = useCounter({ initialValue: 0 });
+
+return (
+  <div>
+    <button onClick={() => decrement(10)}>-10</button>
+    <button onClick={() => increment(10)}>+10</button>
+  </div>
+);
+```

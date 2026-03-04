@@ -1,0 +1,83 @@
+---
+title: Badge
+description: Small status label to convey category, state or priority at a glance.
+---
+
+## Usage
+
+```tsx
+import { Badge } from '@kivora/react';
+
+<Badge variant="success">Active</Badge>
+```
+
+## Examples
+
+### Variants
+
+<CodeGroup>
+```tsx Default
+<Badge variant="default">Default</Badge>
+```
+
+```tsx Success
+<Badge variant="success">Success</Badge>
+```
+
+```tsx Warning
+<Badge variant="warning">Warning</Badge>
+```
+
+```tsx Error
+<Badge variant="error">Error</Badge>
+```
+
+```tsx Info
+<Badge variant="info">Info</Badge>
+```
+</CodeGroup>
+
+### Sizes
+
+<CodeGroup>
+```tsx Small
+<Badge size="sm">Small</Badge>
+```
+
+```tsx Medium
+<Badge size="md">Medium</Badge>
+```
+</CodeGroup>
+
+### Status Examples
+
+```tsx
+<Badge variant="success">Active</Badge>
+<Badge variant="warning">Pending</Badge>
+<Badge variant="error">Failed</Badge>
+<Badge variant="info">New</Badge>
+```
+
+## Props
+
+<ResponseField name="children" type="React.ReactNode">
+  Badge content
+</ResponseField>
+
+<ResponseField name="variant" type="'default' | 'success' | 'warning' | 'error' | 'info'" default="default">
+  Visual style variant
+</ResponseField>
+
+<ResponseField name="size" type="'sm' | 'md'" default="md">
+  Badge size
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+## Accessibility
+
+- Badge is rendered as a `<span>` element
+- Ensure badge text is concise and meaningful
+- Consider using ARIA labels for icon-only badges

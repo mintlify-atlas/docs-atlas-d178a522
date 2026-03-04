@@ -1,0 +1,204 @@
+---
+title: Slider
+description: Range slider with optional marks, label, and value display.
+---
+
+## Usage
+
+```tsx
+import { Slider } from '@kivora/react';
+
+function Demo() {
+  const [volume, setVolume] = useState(50);
+  
+  return (
+    <Slider 
+      label="Volume" 
+      value={volume}
+      onChange={setVolume}
+      min={0}
+      max={100}
+      showValue
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="value" type="number">
+  Controlled value of the slider.
+</ParamField>
+
+<ParamField path="defaultValue" type="number" default="0">
+  Default value for uncontrolled mode.
+</ParamField>
+
+<ParamField path="onChange" type="(value: number) => void">
+  Called when the slider value changes.
+</ParamField>
+
+<ParamField path="min" type="number" default="0">
+  Minimum value of the slider range.
+</ParamField>
+
+<ParamField path="max" type="number" default="100">
+  Maximum value of the slider range.
+</ParamField>
+
+<ParamField path="step" type="number" default="1">
+  Granularity of value changes.
+</ParamField>
+
+<ParamField path="label" type="string">
+  Label text displayed above the slider.
+</ParamField>
+
+<ParamField path="showValue" type="boolean" default="false">
+  Displays the current value next to the label.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables the slider and prevents interaction.
+</ParamField>
+
+<ParamField path="color" type="'primary' | 'success' | 'warning' | 'error'" default="'primary'">
+  Color theme for the track and thumb.
+</ParamField>
+
+<ParamField path="size" type="'sm' | 'md' | 'lg'" default="'md'">
+  Size variant affecting thumb size.
+</ParamField>
+
+<ParamField path="marks" type="Array<{ value: number; label?: string }>">
+  Optional mark indicators to display below the slider.
+</ParamField>
+
+<ParamField path="className" type="string" default="''">
+  Additional CSS classes to apply to the container.
+</ParamField>
+
+## Examples
+
+### Basic Slider
+
+```tsx
+<Slider 
+  label="Brightness" 
+  min={0} 
+  max={100} 
+  defaultValue={75}
+/>
+```
+
+### With Value Display
+
+```tsx
+<Slider
+  label="Volume"
+  value={volume}
+  onChange={setVolume}
+  showValue
+/>
+```
+
+### With Step
+
+```tsx
+<Slider
+  label="Rating"
+  min={0}
+  max={10}
+  step={0.5}
+  showValue
+/>
+```
+
+### With Marks
+
+```tsx
+<Slider
+  label="Temperature"
+  min={0}
+  max={100}
+  marks={[
+    { value: 0, label: '0°C' },
+    { value: 25, label: '25°C' },
+    { value: 50, label: '50°C' },
+    { value: 75, label: '75°C' },
+    { value: 100, label: '100°C' }
+  ]}
+/>
+```
+
+### Different Colors
+
+```tsx
+<Slider label="Primary" color="primary" defaultValue={50} />
+<Slider label="Success" color="success" defaultValue={50} />
+<Slider label="Warning" color="warning" defaultValue={50} />
+<Slider label="Error" color="error" defaultValue={50} />
+```
+
+### Different Sizes
+
+```tsx
+<Slider label="Small" size="sm" defaultValue={50} />
+<Slider label="Medium" size="md" defaultValue={50} />
+<Slider label="Large" size="lg" defaultValue={50} />
+```
+
+### Disabled State
+
+```tsx
+<Slider label="Disabled" disabled defaultValue={50} />
+```
+
+### Custom Range
+
+```tsx
+<Slider
+  label="Price"
+  min={10}
+  max={1000}
+  step={10}
+  showValue
+  defaultValue={250}
+/>
+```
+
+### Volume Control Example
+
+```tsx
+function VolumeControl() {
+  const [volume, setVolume] = useState(50);
+  
+  return (
+    <Slider
+      label="Volume"
+      value={volume}
+      onChange={setVolume}
+      min={0}
+      max={100}
+      showValue
+      marks={[
+        { value: 0, label: '🔇' },
+        { value: 50, label: '🔉' },
+        { value: 100, label: '🔊' }
+      ]}
+    />
+  );
+}
+```
+
+## Notes
+
+- Track fills from left to represent current value
+- Custom thumb visual positioned over native range input
+- Native input is invisible but fully functional for accessibility
+- Marks display below the slider with optional labels
+- Value is displayed as tabular numbers for consistent width
+- Thumb size varies with `size` prop
+- Color applies to both track fill and thumb
+- Disabled state reduces opacity and prevents interaction
+- Smooth transitions on value changes

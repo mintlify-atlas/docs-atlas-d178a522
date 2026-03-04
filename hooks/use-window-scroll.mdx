@@ -1,0 +1,116 @@
+---
+title: useWindowScroll
+description: Tracks the current window scroll position with automatic updates
+---
+
+## Usage
+
+Tracks `window.scrollX` and `window.scrollY` with a passive listener, re-rendering when the scroll position changes.
+
+```tsx
+import { useWindowScroll } from 'kivora-react';
+
+function ScrollIndicator() {
+  const { x, y } = useWindowScroll();
+
+  return (
+    <div className="scroll-info">
+      Scroll position: {x}px, {y}px
+    </div>
+  );
+}
+```
+
+## Parameters
+
+This hook does not accept any parameters.
+
+## Returns
+
+<ResponseField name="x" type="number">
+  Current horizontal scroll position in pixels
+</ResponseField>
+
+<ResponseField name="y" type="number">
+  Current vertical scroll position in pixels
+</ResponseField>
+
+## Examples
+
+### Sticky header on scroll
+
+```tsx
+import { useWindowScroll } from 'kivora-react';
+
+function Header() {
+  const { y } = useWindowScroll();
+  const isScrolled = y > 64;
+
+  return (
+    <header
+      className={isScrolled ? 'header-sticky' : 'header'}
+      style={{
+        boxShadow: isScrolled ? '0 2px 8px rgba(0,0,0,0.1)' : 'none',
+      }}
+    >
+      <h1>My Website</h1>
+    </header>
+  );
+}
+```
+
+### Scroll progress bar
+
+```tsx
+import { useWindowScroll } from 'kivora-react';
+
+function ScrollProgress() {
+  const { y } = useWindowScroll();
+  const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (y / documentHeight) * 100;
+
+  return (
+    <div
+      className="progress-bar"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: `${progress}%`,
+        height: '4px',
+        background: 'blue',
+      }}
+    />
+  );
+}
+```
+
+### Scroll to top button
+
+```tsx
+import { useWindowScroll } from 'kivora-react';
+
+function ScrollToTop() {
+  const { y } = useWindowScroll();
+  const showButton = y > 300;
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (!showButton) return null;
+
+  return (
+    <button
+      onClick={scrollToTop}
+      style={{
+        position: 'fixed',
+        bottom: '20px',
+        right: '20px',
+      }}
+    >
+      ↑ Back to top
+    </button>
+  );
+}
+```

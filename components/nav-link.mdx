@@ -1,0 +1,167 @@
+---
+title: NavLink
+description: Navigation link with icon, description, and active state support
+---
+
+## Overview
+
+The NavLink component is a rich navigation link that supports icons, descriptions, active states, and nested levels. Perfect for building sidebars and navigation menus.
+
+## Import
+
+```tsx
+import { NavLink } from 'kivora-react';
+```
+
+## Basic Usage
+
+```tsx
+<NavLink 
+  href="/dashboard" 
+  label="Dashboard" 
+/>
+```
+
+## With Icon
+
+```tsx
+<NavLink 
+  href="/dashboard" 
+  label="Dashboard" 
+  icon={<HomeIcon />}
+  active
+/>
+```
+
+## With Description
+
+```tsx
+<NavLink 
+  href="/settings" 
+  label="Settings" 
+  description="Manage your account settings"
+  icon={<SettingsIcon />}
+/>
+```
+
+## Active State
+
+```tsx
+<NavLink 
+  href="/dashboard" 
+  label="Dashboard" 
+  icon={<HomeIcon />}
+  active
+/>
+```
+
+## With Right Section
+
+```tsx
+<NavLink 
+  href="/messages" 
+  label="Messages" 
+  icon={<MessageIcon />}
+  rightSection={<Badge>3</Badge>}
+/>
+```
+
+## Nested Navigation Levels
+
+```tsx
+<div className="space-y-1">
+  <NavLink href="/docs" label="Documentation" level={0} />
+  <NavLink href="/docs/getting-started" label="Getting Started" level={1} />
+  <NavLink href="/docs/installation" label="Installation" level={2} />
+</div>
+```
+
+## Disabled State
+
+```tsx
+<NavLink 
+  href="/premium" 
+  label="Premium Features" 
+  icon={<StarIcon />}
+  disabled
+/>
+```
+
+## Navigation Menu Example
+
+```tsx
+<nav className="space-y-1 p-2">
+  <NavLink 
+    href="/dashboard" 
+    label="Dashboard" 
+    icon={<HomeIcon />}
+    active
+  />
+  <NavLink 
+    href="/projects" 
+    label="Projects" 
+    description="View all projects"
+    icon={<FolderIcon />}
+  />
+  <NavLink 
+    href="/team" 
+    label="Team" 
+    icon={<UsersIcon />}
+    rightSection={<Badge>12</Badge>}
+  />
+  <NavLink 
+    href="/settings" 
+    label="Settings" 
+    icon={<SettingsIcon />}
+  />
+</nav>
+```
+
+## Props
+
+### NavLinkProps
+
+Extends `React.ComponentPropsWithoutRef<'a'>`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | **required** | Primary text label |
+| `description` | `string` | `undefined` | Optional secondary description text |
+| `icon` | `ReactNode` | `undefined` | Optional icon element |
+| `rightSection` | `ReactNode` | `undefined` | Content displayed on the right (badges, counts, etc.) |
+| `active` | `boolean` | `false` | Whether this link is currently active |
+| `disabled` | `boolean` | `false` | Whether the link is disabled |
+| `level` | `0 \| 1 \| 2` | `0` | Visual indent level for nested navigation |
+| `className` | `string` | `''` | Additional CSS classes |
+| `children` | `ReactNode` | `undefined` | Additional content below the label |
+
+## Indentation Levels
+
+The `level` prop controls visual indentation:
+
+- `level={0}`: No indentation (12px left padding)
+- `level={1}`: First level indent (28px left padding)
+- `level={2}`: Second level indent (44px left padding)
+
+## Active State Styling
+
+- Active links have a primary background (`bg-primary/10`)
+- Active links use primary text color
+- Icons in active links are tinted with primary color
+
+## Accessibility
+
+- Uses semantic `<a>` element
+- Active state indicated with `aria-current="page"`
+- Disabled state indicated with `aria-disabled`
+- Focus visible ring for keyboard navigation
+- Disabled links use `pointer-events-none` to prevent interaction
+- Icon and right section are properly sized for readability
+
+## Styling Notes
+
+- Label text truncates with ellipsis if too long
+- Description text is smaller and in muted color
+- Hover state changes background to accent color
+- Smooth color transitions for all interactive states
+- Icons and right sections maintain proper spacing with flexbox

@@ -1,0 +1,195 @@
+---
+title: Mark
+description: Inline text highlight using the HTML mark element with customizable background color.
+---
+
+## Overview
+
+The `Mark` component renders the semantic `<mark>` element to highlight inline text with a background color, typically used to draw attention to specific words or phrases.
+
+## Import
+
+```tsx
+import { Mark } from '@kivora/react';
+```
+
+## Basic Usage
+
+```tsx
+<p>
+  This is <Mark>important</Mark> information.
+</p>
+```
+
+## Custom Colors
+
+Change the highlight color using Tailwind background classes:
+
+```tsx
+<Mark color="bg-blue-200">Blue highlight</Mark>
+<Mark color="bg-green-300/50">Green with opacity</Mark>
+<Mark color="bg-red-200">Red highlight</Mark>
+<Mark color="bg-purple-300">Purple highlight</Mark>
+```
+
+## Examples
+
+### Default Warning Color
+
+```tsx
+<p>
+  Please review the <Mark>terms and conditions</Mark> before proceeding.
+</p>
+```
+
+### Success Highlight
+
+```tsx
+<p>
+  Your payment of <Mark color="bg-success/30">$99.00</Mark> was successful.
+</p>
+```
+
+### Error Highlight
+
+```tsx
+<p>
+  The field <Mark color="bg-destructive/20">email address</Mark> is required.
+</p>
+```
+
+### Information Highlight
+
+```tsx
+<p>
+  Kivora supports <Mark color="bg-blue-200">TypeScript</Mark> out of the box.
+</p>
+```
+
+### Multiple Highlights
+
+```tsx
+<p>
+  Kivora offers <Mark>responsive</Mark> design, <Mark>dark mode</Mark>, 
+  and <Mark>accessibility</Mark> features.
+</p>
+```
+
+### In Text Component
+
+```tsx
+import { Text, Mark } from '@kivora/react';
+
+<Text variant="body">
+  The <Mark>new features</Mark> will be released next week.
+</Text>
+```
+
+### Search Results
+
+```tsx
+const searchTerm = "component";
+
+<p>
+  Found: "The <Mark color="bg-yellow-200">component</Mark> library includes 
+  buttons, forms, and more <Mark color="bg-yellow-200">components</Mark>."
+</p>
+```
+
+### Documentation
+
+```tsx
+<p>
+  Pass the <Mark color="bg-violet-200">variant</Mark> prop to change the 
+  button style.
+</p>
+```
+
+### Code References
+
+```tsx
+<p>
+  The <Mark color="bg-cyan-200">useState</Mark> hook is part of React.
+</p>
+```
+
+### With Custom Class
+
+```tsx
+<Mark color="bg-orange-300" className="font-semibold">
+  Featured Item
+</Mark>
+```
+
+## Accessibility
+
+The `<mark>` element has semantic meaning and is recognized by screen readers as highlighted content:
+
+```tsx
+<Mark>Important notice</Mark>
+```
+
+## Styling
+
+Default styles include:
+- Rounded corners (`rounded-sm`)
+- Horizontal padding: 0.5px (`px-0.5`)
+- Default background: `bg-warning/40`
+
+## Props
+
+<ResponseField name="color" type="string" default="'bg-warning/40'">
+  Background color class (Tailwind class)
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Text content to highlight
+</ResponseField>
+
+<ResponseField name="...props" type="React.ComponentPropsWithoutRef<'mark'>">
+  All standard HTML mark element props
+</ResponseField>
+
+## Type Definition
+
+Source: `/home/daytona/workspace/source/src/components/typography/Mark.tsx:5`
+
+```tsx
+export interface MarkProps extends React.ComponentPropsWithoutRef<'mark'> {
+  color?: string;
+}
+```
+
+## Mark vs Highlight
+
+### Use Mark when:
+- You want to manually highlight specific inline text
+- The highlight is static and part of the content
+- You're emphasizing individual words or short phrases
+
+### Use Highlight when:
+- You need to programmatically search and highlight text
+- You want to highlight multiple occurrences of search terms
+- You're implementing search functionality
+
+```tsx
+// Mark - Manual, static highlighting
+<p>This is <Mark>important</Mark></p>
+
+// Highlight - Dynamic search-based highlighting
+<Highlight highlight="important">
+  This is important information
+</Highlight>
+```
+
+## Common Use Cases
+
+- Highlighting key terms in documentation
+- Emphasizing important information in alerts
+- Showing active/selected text
+- Drawing attention to new or updated content
+- Indicating matched search terms in static content

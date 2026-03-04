@@ -1,0 +1,186 @@
+---
+title: Installation
+description: Install Kivora React in your project with npm, yarn, or pnpm.
+---
+
+## Requirements
+
+Before installing Kivora React, ensure you meet the following requirements:
+
+| Peer Dependency | Version |
+| --------------- | ------- |
+| `react`         | ≥ 18    |
+| `react-dom`     | ≥ 18    |
+
+<Info>
+  Kivora React requires React 18 or higher to support concurrent features and improved hooks behavior.
+</Info>
+
+## Install the Package
+
+Choose your preferred package manager to install Kivora React:
+
+<CodeGroup>
+
+```bash npm
+npm install @kivora/react
+```
+
+```bash pnpm
+pnpm add @kivora/react
+```
+
+```bash yarn
+yarn add @kivora/react
+```
+
+</CodeGroup>
+
+This will install `@kivora/react` along with its internal dependency `@kivora/core`, which provides the design system and type definitions.
+
+## Import Global Styles
+
+Kivora React uses CSS design tokens for theming and dark mode support. Import the global stylesheet **once** at the root of your application:
+
+<CodeGroup>
+
+```tsx Next.js (app/layout.tsx)
+import '@kivora/react/styles';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'My App',
+  description: 'Built with Kivora React',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+```tsx Vite (main.tsx)
+import '@kivora/react/styles';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
+
+```tsx Create React App (index.tsx)
+import '@kivora/react/styles';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
+
+</CodeGroup>
+
+<Warning>
+  Only import the stylesheet **once** in your application. Importing it multiple times can cause style conflicts and increase bundle size.
+</Warning>
+
+## Optional: Setup Toast Notifications
+
+If you plan to use the toast notification system, wrap your app with the `ToastProvider` component:
+
+```tsx
+import { ToastProvider } from '@kivora/react';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <ToastProvider />
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+
+The `ToastProvider` uses [Sonner](https://sonner.emilkowal.ski/) under the hood for beautiful, accessible toast notifications.
+
+## Verify Installation
+
+Create a simple test component to verify everything is working:
+
+```tsx
+import { Button } from '@kivora/react';
+
+export default function TestPage() {
+  return (
+    <div>
+      <h1>Kivora React is installed!</h1>
+      <Button label="Click me" variant="primary" />
+    </div>
+  );
+}
+```
+
+If you see a styled button when you run your app, you're all set!
+
+## TypeScript Configuration
+
+Kivora React is built with TypeScript and ships with type definitions. No additional `@types` packages are needed.
+
+If you're using TypeScript, ensure your `tsconfig.json` includes:
+
+```json
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true
+  }
+}
+```
+
+## Bundle Optimization
+
+Kivora React is tree-shakeable by default. Modern bundlers like Vite, Webpack 5, and Next.js will automatically remove unused components and hooks from your production bundle.
+
+<Tip>
+  Import components individually to ensure optimal tree-shaking:
+  
+  ```tsx
+  import { Button, Input, Badge } from '@kivora/react';
+  ```
+  
+  This is more efficient than importing everything with `import *`.
+</Tip>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Build your first component in 5 minutes
+  </Card>
+  
+  <Card title="Theming Guide" icon="palette" href="/guides/theming">
+    Customize colors and design tokens
+  </Card>
+</CardGroup>

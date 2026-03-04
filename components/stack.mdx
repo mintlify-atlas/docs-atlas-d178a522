@@ -1,0 +1,252 @@
+---
+title: Stack
+description: Vertical flex column with configurable gap and alignment
+---
+
+## Overview
+
+Stack arranges children vertically in a flex column with consistent spacing. It's the go-to component for vertical layouts, providing a simpler API than Flex for the common case of stacking elements.
+
+## Import
+
+```tsx
+import { Stack } from '@kivora/react';
+```
+
+## Props
+
+<ResponseField name="gap" type="0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16" default="4">
+  Spacing between items in Tailwind units (1 = 0.25rem, 4 = 1rem).
+</ResponseField>
+
+<ResponseField name="align" type="'start' | 'center' | 'end' | 'stretch'" default="'stretch'">
+  Horizontal alignment of children (cross-axis).
+</ResponseField>
+
+<ResponseField name="wrap" type="boolean" default="false">
+  Whether children should wrap when they overflow.
+</ResponseField>
+
+## Usage
+
+### Basic stack
+
+```tsx
+<Stack gap={4}>
+  <Heading>Title</Heading>
+  <Text>Description goes here...</Text>
+  <Button>Action</Button>
+</Stack>
+```
+
+### Centered items
+
+```tsx
+<Stack align="center" gap={6}>
+  <Icon name="check" size="xl" />
+  <Heading>Success!</Heading>
+  <Text>Your changes have been saved.</Text>
+  <Button variant="primary">Continue</Button>
+</Stack>
+```
+
+### Tight spacing
+
+```tsx
+<Stack gap={1}>
+  <Text size="sm" className="text-gray-600">Email</Text>
+  <Text>user@example.com</Text>
+</Stack>
+```
+
+### Form layout
+
+```tsx
+<Stack gap={4}>
+  <div>
+    <Label>Name</Label>
+    <Input type="text" placeholder="Enter your name" />
+  </div>
+  <div>
+    <Label>Email</Label>
+    <Input type="email" placeholder="Enter your email" />
+  </div>
+  <div>
+    <Label>Message</Label>
+    <Textarea placeholder="Your message..." />
+  </div>
+  <Button variant="primary">Submit</Button>
+</Stack>
+```
+
+### With dividers
+
+```tsx
+<Stack gap={0}>
+  <div className="p-4">
+    <Text>Item 1</Text>
+  </div>
+  <div className="border-t" />
+  <div className="p-4">
+    <Text>Item 2</Text>
+  </div>
+  <div className="border-t" />
+  <div className="p-4">
+    <Text>Item 3</Text>
+  </div>
+</Stack>
+```
+
+## Layout Examples
+
+### Card content
+
+```tsx
+<Card className="p-6">
+  <Stack gap={4}>
+    <Group justify="between" align="center">
+      <Heading size="lg">Project Name</Heading>
+      <Badge>Active</Badge>
+    </Group>
+    
+    <Text className="text-gray-600">
+      Project description and details go here.
+    </Text>
+    
+    <Stack gap={2}>
+      <Group gap={2}>
+        <Icon name="calendar" size="sm" />
+        <Text size="sm">Due: March 15, 2026</Text>
+      </Group>
+      <Group gap={2}>
+        <Icon name="users" size="sm" />
+        <Text size="sm">3 team members</Text>
+      </Group>
+    </Stack>
+    
+    <Group gap={2} className="pt-2">
+      <Button variant="primary">Open Project</Button>
+      <Button variant="secondary">Archive</Button>
+    </Group>
+  </Stack>
+</Card>
+```
+
+### Page section
+
+```tsx
+<Container>
+  <Stack gap={8}>
+    <Stack gap={3} align="center">
+      <Badge>New Feature</Badge>
+      <Heading size="3xl">Introducing Workspaces</Heading>
+      <Text size="lg" className="text-gray-600 text-center max-w-2xl">
+        Organize your projects with powerful workspace features.
+      </Text>
+    </Stack>
+    
+    <Center>
+      <Button variant="primary" size="lg">Get Started</Button>
+    </Center>
+    
+    <Image src="/hero.png" alt="Product screenshot" />
+  </Stack>
+</Container>
+```
+
+### Sidebar navigation
+
+```tsx
+<aside className="w-64 p-4 bg-gray-50">
+  <Stack gap={6}>
+    <Heading size="sm">Navigation</Heading>
+    
+    <Stack gap={1}>
+      <Button variant="ghost" className="justify-start">
+        Dashboard
+      </Button>
+      <Button variant="ghost" className="justify-start">
+        Projects
+      </Button>
+      <Button variant="ghost" className="justify-start">
+        Team
+      </Button>
+    </Stack>
+    
+    <div className="border-t" />
+    
+    <Stack gap={1}>
+      <Text size="sm" className="font-semibold">Settings</Text>
+      <Button variant="ghost" className="justify-start">
+        Profile
+      </Button>
+      <Button variant="ghost" className="justify-start">
+        Preferences
+      </Button>
+    </Stack>
+  </Stack>
+</aside>
+```
+
+### List with metadata
+
+```tsx
+<Stack gap={4}>
+  {notifications.map(notification => (
+    <Stack key={notification.id} gap={1}>
+      <Group justify="between">
+        <Text className="font-medium">{notification.title}</Text>
+        <Text size="sm" className="text-gray-500">
+          {notification.time}
+        </Text>
+      </Group>
+      <Text className="text-gray-600">{notification.message}</Text>
+    </Stack>
+  ))}
+</Stack>
+```
+
+### Pricing card
+
+```tsx
+<Card className="p-8">
+  <Stack gap={6}>
+    <Stack gap={2}>
+      <Heading size="xl">Pro Plan</Heading>
+      <Text className="text-gray-600">For growing teams</Text>
+    </Stack>
+    
+    <div>
+      <Text size="4xl" className="font-bold">$49</Text>
+      <Text className="text-gray-600">/month</Text>
+    </div>
+    
+    <Stack gap={3}>
+      <Group gap={2}>
+        <Icon name="check" className="text-green-600" />
+        <Text>Unlimited projects</Text>
+      </Group>
+      <Group gap={2}>
+        <Icon name="check" className="text-green-600" />
+        <Text>10 team members</Text>
+      </Group>
+      <Group gap={2}>
+        <Icon name="check" className="text-green-600" />
+        <Text>Priority support</Text>
+      </Group>
+    </Stack>
+    
+    <Button variant="primary" size="lg">Subscribe</Button>
+  </Stack>
+</Card>
+```
+
+## Best Practices
+
+- Use Stack as the default for vertical layouts
+- Use smaller gaps (1-3) for related content like labels and values
+- Use medium gaps (4-6) for section content
+- Use larger gaps (8-16) for distinct sections
+- Combine `align="center"` for centered content like empty states
+- Nest Stacks to create hierarchical spacing
+- Use with Group for mixed horizontal/vertical layouts

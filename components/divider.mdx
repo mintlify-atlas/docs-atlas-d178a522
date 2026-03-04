@@ -1,0 +1,68 @@
+---
+title: Divider
+description: Visual separator between content sections
+---
+
+## Usage
+
+The Divider component creates a visual separator between content sections. It supports both horizontal and vertical orientations, and can optionally display a label.
+
+```tsx
+import { Divider } from '@kivora/react';
+
+<Divider />
+```
+
+## Examples
+
+### Basic Divider
+
+```tsx
+<div>
+  <p>Content above</p>
+  <Divider />
+  <p>Content below</p>
+</div>
+```
+
+### With Label
+
+```tsx
+<div>
+  <button>Sign in with Google</button>
+  <Divider label="or continue with" />
+  <button>Sign in with Email</button>
+</div>
+```
+
+### Vertical Divider
+
+```tsx
+<div className="flex items-center gap-4">
+  <button>Home</button>
+  <Divider orientation="vertical" className="h-6" />
+  <button>About</button>
+  <Divider orientation="vertical" className="h-6" />
+  <button>Contact</button>
+</div>
+```
+
+## Props
+
+<ParamField path="orientation" type="'horizontal' | 'vertical'" default="'horizontal'">
+  The orientation of the divider. Use `vertical` inside flex containers.
+</ParamField>
+
+<ParamField path="label" type="string">
+  Optional text label displayed in the center of a horizontal divider.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes to apply to the divider.
+</ParamField>
+
+## Accessibility
+
+- Uses the semantic `role="separator"` attribute
+- Includes appropriate `aria-orientation` for screen readers
+- Horizontal dividers without labels render as `<hr>` elements

@@ -1,0 +1,156 @@
+---
+title: Textarea
+description: Multi-line text input with optional auto-grow functionality.
+---
+
+## Usage
+
+```tsx
+import { Textarea } from '@kivora/react';
+
+function Demo() {
+  const [bio, setBio] = useState('');
+  
+  return (
+    <Textarea 
+      label="Bio" 
+      value={bio}
+      onChange={setBio}
+      rows={4}
+      placeholder="Tell us about yourself..."
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="value" type="string">
+  Controlled value of the textarea.
+</ParamField>
+
+<ParamField path="defaultValue" type="string" default="''">
+  Default value for uncontrolled mode.
+</ParamField>
+
+<ParamField path="onChange" type="(value: string) => void">
+  Called when the textarea value changes. Receives the string value directly.
+</ParamField>
+
+<ParamField path="placeholder" type="string">
+  Placeholder text displayed when textarea is empty.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables the textarea and prevents user interaction.
+</ParamField>
+
+<ParamField path="readOnly" type="boolean" default="false">
+  Makes the textarea read-only (value visible but not editable).
+</ParamField>
+
+<ParamField path="error" type="string">
+  Error message to display below the textarea. When set, applies error styling.
+</ParamField>
+
+<ParamField path="label" type="string">
+  Label text displayed above the textarea.
+</ParamField>
+
+<ParamField path="rows" type="number" default="4">
+  Number of visible text rows (ignored when `autosize` is true).
+</ParamField>
+
+<ParamField path="autosize" type="boolean" default="false">
+  Auto-grow to fit content. When enabled, height adjusts dynamically.
+</ParamField>
+
+<ParamField path="minRows" type="number" default="2">
+  Minimum number of rows when `autosize` is enabled.
+</ParamField>
+
+<ParamField path="maxRows" type="number" default="8">
+  Maximum number of rows when `autosize` is enabled.
+</ParamField>
+
+<ParamField path="className" type="string" default="''">
+  Additional CSS classes to apply to the textarea element.
+</ParamField>
+
+<ParamField path="id" type="string">
+  HTML ID attribute. Auto-generated if not provided.
+</ParamField>
+
+## Examples
+
+### Basic Textarea
+
+```tsx
+<Textarea 
+  label="Description" 
+  placeholder="Enter description..."
+  rows={6}
+/>
+```
+
+### Auto-Growing Textarea
+
+```tsx
+<Textarea 
+  label="Comments" 
+  autosize 
+  minRows={2} 
+  maxRows={6}
+  placeholder="Type your comment..."
+/>
+```
+
+### With Error State
+
+```tsx
+<Textarea 
+  label="Message" 
+  value={message}
+  onChange={setMessage}
+  error="Message must be at least 10 characters"
+/>
+```
+
+### Controlled with Character Count
+
+```tsx
+function CharCountDemo() {
+  const [text, setText] = useState('');
+  const maxChars = 200;
+  
+  return (
+    <div>
+      <Textarea 
+        label="Tweet"
+        value={text}
+        onChange={setText}
+        rows={3}
+        error={text.length > maxChars ? 'Too many characters' : undefined}
+      />
+      <p className="text-sm text-muted-foreground mt-1">
+        {text.length}/{maxChars}
+      </p>
+    </div>
+  );
+}
+```
+
+### Disabled and Read-Only
+
+```tsx
+<Textarea label="Disabled" disabled rows={3} />
+<Textarea label="Read Only" readOnly value="This text cannot be edited" />
+```
+
+## Notes
+
+- Auto-resize functionality only works when `autosize={true}`
+- When `autosize` is enabled, the `rows` prop is ignored
+- Resize is disabled when `autosize` is true (resize: none)
+- Min/max rows control height constraints in autosize mode
+- Focus states include visible ring for accessibility

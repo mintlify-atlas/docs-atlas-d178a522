@@ -1,0 +1,479 @@
+---
+title: Contributing
+description: How to contribute to Kivora React — report issues, submit pull requests, and add new components.
+---
+
+We welcome contributions to Kivora React! Whether you're fixing a bug, adding a feature, or improving documentation, your help is appreciated.
+
+## Before You Start
+
+Before opening a pull request:
+
+1. **Search existing issues** to see if your bug/feature has already been reported
+2. **Open an issue first** for significant changes to discuss the approach
+3. **Read the code of conduct** and follow our style guidelines
+4. **Ensure tests pass** before submitting your PR
+
+## Getting Started
+
+<Steps>
+
+<Step title="Fork and clone the repository">
+  ```bash
+  git clone https://github.com/your-org/kivora.git
+  cd kivora
+  ```
+</Step>
+
+<Step title="Install dependencies">
+  Kivora uses pnpm for package management:
+
+  ```bash
+  pnpm install
+  ```
+
+  <Note>
+    You must use **pnpm** (not npm or yarn) because this is a monorepo managed with pnpm workspaces.
+  </Note>
+</Step>
+
+<Step title="Build the package">
+  ```bash
+  pnpm --filter @kivora/react build
+  ```
+</Step>
+
+<Step title="Run tests">
+  ```bash
+  pnpm --filter @kivora/react test
+  ```
+</Step>
+
+</Steps>
+
+## Project Structure
+
+Kivora React is organized by component categories:
+
+```
+src/
+  components/
+    buttons/        # Button, ActionIcon, CloseButton
+    inputs/         # Input, Checkbox, RadioGroup, Switch, etc.
+    feedback/       # Alert, Notification, Spinner, Skeleton, etc.
+    overlays/       # Modal, Drawer, Dialog, Popover, Tooltip, etc.
+    navigation/     # Tabs, Breadcrumbs, NavLink, Pagination, etc.
+    data-display/   # Badge, Avatar, Card, Accordion, etc.
+    layout/         # Container, Flex, Grid, Stack, etc.
+    typography/     # Text, Title, Anchor, Code, etc.
+    misc/           # Divider, Icon, Box, Paper, etc.
+  hooks/
+    async/          # useDebounce, useThrottle, useInterval, etc.
+    browser/        # useClipboard, useColorScheme, useNetwork, etc.
+    dom/            # useClickOutside, useMediaQuery, useEventListener, etc.
+    state/          # useCounter, useToggle, useListState, etc.
+    ui/             # useDisclosure, useControlled, useToast
+    utils/          # useMounted, useForceUpdate, useMergedRef, etc.
+  index.ts          # Public barrel export
+test/               # Vitest + Testing Library test suites
+```
+
+## Development Workflow
+
+### Watch Mode
+
+For active development, run the package in watch mode:
+
+```bash
+pnpm --filter @kivora/react dev
+```
+
+This rebuilds the package automatically when you make changes.
+
+### Running Tests
+
+<CodeGroup>
+
+```bash Run all tests
+pnpm --filter @kivora/react test
+```
+
+```bash Watch mode
+pnpm --filter @kivora/react test:watch
+```
+
+```bash Coverage report
+pnpm --filter @kivora/react test:coverage
+```
+
+</CodeGroup>
+
+### Type Checking
+
+Run TypeScript type checking without emitting files:
+
+```bash
+pnpm --filter @kivora/react type-check
+```
+
+## Adding a New Component
+
+<Steps>
+
+<Step title="Create the component file">
+  Add a new file in the appropriate category:
+
+  ```bash
+  src/components/buttons/MyButton.tsx
+  ```
+</Step>
+
+<Step title="Implement the component">
+  Follow the existing component structure:
+
+  ```tsx src/components/buttons/MyButton.tsx
+  import type { MyButtonProps } from '@kivora/core';
+  import { forwardRef } from 'react';
+
+  /**
+   * Brief description of what this component does.
+   *
+   * @example
+   * ```tsx
+   * <MyButton label="Click me" />
+   * ```
+   */
+  export const MyButton = forwardRef<HTMLButtonElement, MyButtonProps>(
+    ({ label, onClick, className = '' }, ref) => {
+      return (
+        <button
+          ref={ref}
+          onClick={onClick}
+          className={['base-classes', className].join(' ')}
+        >
+          {label}
+        </button>
+      );
+    }
+  );
+
+  MyButton.displayName = 'MyButton';
+  ```
+</Step>
+
+<Step title="Export the component">
+  Add exports to the appropriate files:
+
+  ```tsx src/components/index.ts
+  export * from './buttons/MyButton';
+  ```
+
+  ```tsx src/index.ts
+  // Already exports from './components'
+  ```
+</Step>
+
+<Step title="Add tests">
+  Create a test file:
+
+  ```tsx test/MyButton.test.tsx
+  import { render, screen } from '@testing-library/react';
+  import { MyButton } from '../src/components/buttons/MyButton';
+  import { describe, it, expect } from 'vitest';
+
+  describe('MyButton', () => {
+    it('renders with label', () => {
+      render(<MyButton label="Click me" />);
+      expect(screen.getByText('Click me')).toBeInTheDocument();
+    });
+
+    it('calls onClick when clicked', () => {
+      const onClick = vi.fn();
+      render(<MyButton label="Click" onClick={onClick} />);
+      screen.getByText('Click').click();
+      expect(onClick).toHaveBeenCalledTimes(1);
+    });
+  });
+  ```
+</Step>
+
+<Step title="Add documentation">
+  Create a doc page:
+
+  ```bash
+  apps/web/src/app/docs/components/my-button/page.tsx
+  ```
+</Step>
+
+</Steps>
+
+<Warning>
+  Every new component must have at least one test. PRs without tests will not be merged.
+</Warning>
+
+## Adding a New Hook
+
+<Steps>
+
+<Step title="Create the hook file">
+  Add a new file in the appropriate category:
+
+  ```bash
+  src/hooks/browser/useMyHook.ts
+  ```
+</Step>
+
+<Step title="Implement the hook">
+  ```tsx src/hooks/browser/useMyHook.ts
+  import { useState, useEffect } from 'react';
+
+  /**
+   * Brief description of what this hook does.
+   *
+   * @example
+   * ```tsx
+   * const value = useMyHook();
+   * ```
+   */
+  export function useMyHook() {
+    const [value, setValue] = useState(null);
+
+    useEffect(() => {
+      // Hook logic
+    }, []);
+
+    return value;
+  }
+  ```
+</Step>
+
+<Step title="Export the hook">
+  ```tsx src/hooks/index.ts
+  export * from './browser/useMyHook';
+  ```
+</Step>
+
+<Step title="Add tests">
+  ```tsx test/useMyHook.test.ts
+  import { renderHook } from '@testing-library/react';
+  import { useMyHook } from '../src/hooks/browser/useMyHook';
+  import { describe, it, expect } from 'vitest';
+
+  describe('useMyHook', () => {
+    it('returns expected value', () => {
+      const { result } = renderHook(() => useMyHook());
+      expect(result.current).toBeDefined();
+    });
+  });
+  ```
+</Step>
+
+<Step title="Add documentation">
+  ```bash
+  apps/web/src/app/docs/hooks/use-my-hook/page.tsx
+  ```
+</Step>
+
+</Steps>
+
+## Branch Naming Conventions
+
+Use descriptive branch names with prefixes:
+
+- `feat/` — New component or hook
+- `fix/` — Bug fix
+- `chore/` — Tooling, dependencies, refactor
+- `docs/` — Documentation only
+- `test/` — Tests only
+
+**Examples:**
+
+```bash
+git checkout -b feat/add-tooltip-component
+git checkout -b fix/button-disabled-state
+git checkout -b docs/update-installation-guide
+```
+
+## Commit Message Format
+
+Use [Conventional Commits](https://www.conventionalcommits.org/) format:
+
+```
+feat(button): add fullWidth prop
+fix(input): correct focus ring on disabled state
+test(modal): add controlled open/close tests
+docs(readme): update installation instructions
+chore(deps): upgrade react to 19.0.0
+```
+
+**Format:**
+
+```
+type(scope): subject
+```
+
+- **type**: `feat`, `fix`, `docs`, `test`, `chore`, `refactor`, `perf`
+- **scope**: Component or hook name (lowercase)
+- **subject**: Brief description in present tense
+
+## Code Style Guidelines
+
+### Components
+
+- Use `forwardRef` for components that render HTML elements
+- Add `displayName` to all components
+- Include JSDoc comments with examples
+- Use Tailwind utility classes for styling
+- Destructure props in the function signature
+- Use meaningful default values
+
+### Hooks
+
+- Prefix all hooks with `use`
+- Return objects for multiple values, not tuples (unless following React conventions)
+- Include JSDoc with examples
+- Add explicit return types
+
+### TypeScript
+
+- Enable strict mode
+- Use explicit types for function parameters and return values
+- Prefer `interface` over `type` for prop types
+- Use `React.ReactNode` for children
+- Avoid `any` — use `unknown` if type is truly unknown
+
+## Testing Guidelines
+
+Every component and hook must have tests:
+
+- **Components**: Use `@testing-library/react` to test rendering and user interactions
+- **Hooks**: Use `renderHook` from `@testing-library/react`
+- **Coverage**: Aim for >80% code coverage
+- **Test file naming**: Match the component/hook name (`Button.test.tsx`, `useDisclosure.test.ts`)
+
+**Example component test:**
+
+```tsx
+import { render, screen } from '@testing-library/react';
+import { Button } from '../src/components/buttons/Button';
+import { describe, it, expect } from 'vitest';
+
+describe('Button', () => {
+  it('renders label', () => {
+    render(<Button label="Click" />);
+    expect(screen.getByText('Click')).toBeInTheDocument();
+  });
+
+  it('calls onClick when clicked', () => {
+    const onClick = vi.fn();
+    render(<Button label="Click" onClick={onClick} />);
+    screen.getByText('Click').click();
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+});
+```
+
+## Submitting a Pull Request
+
+<Steps>
+
+<Step title="Create your feature branch">
+  ```bash
+  git checkout -b feat/my-new-feature
+  ```
+</Step>
+
+<Step title="Make your changes">
+  - Write clean, readable code
+  - Follow the style guidelines
+  - Add tests for new functionality
+  - Update documentation if needed
+</Step>
+
+<Step title="Run tests and type checking">
+  ```bash
+  pnpm --filter @kivora/react test
+  pnpm --filter @kivora/react type-check
+  ```
+</Step>
+
+<Step title="Commit your changes">
+  ```bash
+  git add .
+  git commit -m "feat(button): add fullWidth prop"
+  ```
+</Step>
+
+<Step title="Push to your fork">
+  ```bash
+  git push origin feat/my-new-feature
+  ```
+</Step>
+
+<Step title="Open a Pull Request">
+  - Go to the Kivora repository on GitHub
+  - Click **New Pull Request**
+  - Select your branch
+  - Fill in the PR template with details about your changes
+  - Link any related issues
+</Step>
+
+</Steps>
+
+## Pull Request Checklist
+
+Before submitting your PR, ensure:
+
+- [ ] Code follows the style guidelines
+- [ ] All tests pass (`pnpm --filter @kivora/react test`)
+- [ ] TypeScript compiles without errors (`pnpm --filter @kivora/react type-check`)
+- [ ] New features include tests
+- [ ] JSDoc comments added to public APIs
+- [ ] Documentation updated (if applicable)
+- [ ] Commit messages follow Conventional Commits format
+
+## Reporting Issues
+
+Found a bug or have a feature request?
+
+1. **Search existing issues** first at [github.com/your-org/kivora/issues](https://github.com/your-org/kivora/issues)
+2. Click **New Issue** and choose the appropriate template:
+   - 🐛 **Bug report** — Wrong behavior, broken styles, TypeScript errors
+   - 💡 **Feature request** — New component, new hook, new prop
+   - 📚 **Documentation** — Missing or incorrect docs
+
+### Bug Report Template
+
+For bugs, always include:
+
+- `@kivora/react` version
+- React version
+- Browser and OS
+- Minimal reproduction (StackBlitz or CodeSandbox link preferred)
+- Expected vs actual behavior
+- Steps to reproduce
+
+## Code Review Process
+
+All PRs are reviewed by maintainers:
+
+1. **Automated checks** run on every PR (tests, type checking, linting)
+2. **Code review** by at least one maintainer
+3. **Feedback** is provided for any necessary changes
+4. **Approval** and merge once all checks pass
+
+<Tip>
+  Respond to feedback promptly and make requested changes to speed up the review process.
+</Tip>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Components" icon="square" href="/components/button">
+    Explore existing components for reference
+  </Card>
+  
+  <Card title="Hooks" icon="link" href="/hooks/use-disclosure">
+    See how hooks are implemented
+  </Card>
+</CardGroup>

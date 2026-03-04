@@ -1,0 +1,225 @@
+---
+title: TagsInput
+description: Free-form tag input with keyboard support for adding and removing tags.
+---
+
+## Usage
+
+```tsx
+import { TagsInput } from '@kivora/react';
+
+function Demo() {
+  const [tags, setTags] = useState<string[]>([]);
+  
+  return (
+    <TagsInput 
+      label="Topics" 
+      value={tags}
+      onChange={setTags}
+      placeholder="Add topic..."
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="value" type="string[]">
+  Controlled array of tag strings.
+</ParamField>
+
+<ParamField path="defaultValue" type="string[]" default="[]">
+  Default tags for uncontrolled mode.
+</ParamField>
+
+<ParamField path="onChange" type="(tags: string[]) => void">
+  Called when tags change. Receives the updated array of tags.
+</ParamField>
+
+<ParamField path="label" type="string">
+  Label text displayed above the input.
+</ParamField>
+
+<ParamField path="placeholder" type="string" default="'Add tag…'">
+  Placeholder text shown when no tags exist.
+</ParamField>
+
+<ParamField path="error" type="string">
+  Error message to display below the input.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables the input and prevents tag management.
+</ParamField>
+
+<ParamField path="maxTags" type="number">
+  Maximum number of tags allowed.
+</ParamField>
+
+<ParamField path="allowDuplicates" type="boolean" default="false">
+  Allow duplicate tags. When false, adding an existing tag is ignored.
+</ParamField>
+
+<ParamField path="splitChars" type="string[]" default="['Enter', ',']">
+  Characters/keys that trigger tag creation.
+</ParamField>
+
+<ParamField path="size" type="'sm' | 'md'" default="'md'">
+  Size variant affecting input and tag sizing.
+</ParamField>
+
+<ParamField path="className" type="string" default="''">
+  Additional CSS classes to apply to the container.
+</ParamField>
+
+<ParamField path="id" type="string">
+  HTML ID attribute. Auto-generated if not provided.
+</ParamField>
+
+## Examples
+
+### Basic Tags Input
+
+```tsx
+<TagsInput 
+  label="Skills" 
+  placeholder="Add skill..."
+/>
+```
+
+### Controlled Tags
+
+```tsx
+function ControlledDemo() {
+  const [tags, setTags] = useState<string[]>(['React', 'TypeScript']);
+  
+  return (
+    <TagsInput
+      label="Technologies"
+      value={tags}
+      onChange={setTags}
+      placeholder="Add technology..."
+    />
+  );
+}
+```
+
+### With Max Tags
+
+```tsx
+<TagsInput
+  label="Top 3 Skills"
+  maxTags={3}
+  placeholder="Add up to 3 skills..."
+/>
+```
+
+### Allow Duplicates
+
+```tsx
+<TagsInput
+  label="Keywords"
+  allowDuplicates
+  placeholder="Add keyword..."
+/>
+```
+
+### Custom Split Characters
+
+```tsx
+<TagsInput
+  label="Email addresses"
+  splitChars={['Enter', ',', ';', ' ']}
+  placeholder="Add email..."
+/>
+```
+
+### Different Sizes
+
+```tsx
+<TagsInput label="Small" size="sm" />
+<TagsInput label="Medium" size="md" />
+```
+
+### With Error State
+
+```tsx
+function ValidatedTags() {
+  const [tags, setTags] = useState<string[]>([]);
+  
+  return (
+    <TagsInput
+      label="Categories"
+      value={tags}
+      onChange={setTags}
+      error={tags.length === 0 ? 'At least one tag required' : undefined}
+    />
+  );
+}
+```
+
+### Blog Post Tags Example
+
+```tsx
+function BlogTagsInput() {
+  const [tags, setTags] = useState<string[]>([]);
+  const maxTags = 5;
+  
+  return (
+    <div>
+      <TagsInput
+        label="Post Tags"
+        value={tags}
+        onChange={setTags}
+        maxTags={maxTags}
+        placeholder="Add tag and press Enter..."
+        error={tags.length > maxTags ? `Maximum ${maxTags} tags allowed` : undefined}
+      />
+      <p className="text-xs text-muted-foreground mt-1">
+        {tags.length}/{maxTags} tags
+      </p>
+    </div>
+  );
+}
+```
+
+### Email Recipients
+
+```tsx
+function EmailInput() {
+  const [recipients, setRecipients] = useState<string[]>([]);
+  
+  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  
+  return (
+    <TagsInput
+      label="To"
+      value={recipients}
+      onChange={setRecipients}
+      splitChars={['Enter', ',', ';', ' ']}
+      placeholder="Enter email addresses..."
+    />
+  );
+}
+```
+
+## Keyboard Behavior
+
+- **Enter**: Create tag from current input
+- **Comma (,)**: Create tag from current input (default)
+- **Backspace**: Remove last tag if input is empty
+- **Blur**: Create tag from current input if not empty
+
+## Notes
+
+- Tags display as removable chips with × button
+- Type text and press Enter or comma to add tag
+- Click × on tag to remove it
+- Backspace on empty input removes last tag
+- Blur (unfocus) automatically adds pending input as tag
+- Empty/whitespace-only tags are ignored
+- Duplicate detection trims and compares tags
+- When maxTags is reached, input becomes disabled
+- Focus ring appears around entire container
+- Chips size adjusts based on `size` prop
+- Click anywhere in container to focus input

@@ -1,0 +1,93 @@
+---
+title: useClickOutside
+description: Fires a callback when the user clicks or touches outside a referenced element
+---
+
+## Usage
+
+Fires `handler` whenever the user clicks or touches outside the referenced element.
+
+```tsx
+import { useRef, useState } from 'react';
+import { useClickOutside } from 'kivora-react';
+
+function Dropdown() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useClickOutside(ref, () => setOpen(false));
+
+  return (
+    <div ref={ref}>
+      <button onClick={() => setOpen(!open)}>Toggle</button>
+      {open && <div className="dropdown-menu">Menu content</div>}
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="ref" type="RefObject<T | null>" required>
+  React ref object pointing to the element to monitor
+</ParamField>
+
+<ParamField path="handler" type="(event: MouseEvent | TouchEvent) => void" required>
+  Callback function invoked when a click or touch occurs outside the element
+</ParamField>
+
+## Returns
+
+`void` - This hook does not return a value.
+
+## Examples
+
+### Modal with click outside
+
+```tsx
+import { useRef, useState } from 'react';
+import { useClickOutside } from 'kivora-react';
+
+function Modal({ onClose }: { onClose: () => void }) {
+  const modalRef = useRef<HTMLDivElement>(null);
+  
+  useClickOutside(modalRef, onClose);
+
+  return (
+    <div className="overlay">
+      <div ref={modalRef} className="modal">
+        <h2>Modal Content</h2>
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+}
+```
+
+### Popover menu
+
+```tsx
+import { useRef, useState } from 'react';
+import { useClickOutside } from 'kivora-react';
+
+function Popover() {
+  const [isOpen, setIsOpen] = useState(false);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(popoverRef, () => setIsOpen(false));
+
+  return (
+    <div ref={popoverRef}>
+      <button onClick={() => setIsOpen(!isOpen)}>
+        Options
+      </button>
+      {isOpen && (
+        <div className="popover">
+          <button>Edit</button>
+          <button>Delete</button>
+        </div>
+      )}
+    </div>
+  );
+}
+```

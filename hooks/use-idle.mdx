@@ -1,0 +1,159 @@
+---
+title: useIdle
+description: Detect user inactivity
+---
+
+Tracks user inactivity. Returns `true` after `idleTime` ms without mouse/keyboard/touch events.
+
+## Usage
+
+```tsx
+import { useIdle } from 'kivora-react';
+
+function App() {
+  const idle = useIdle(60_000); // idle after 1 minute
+
+  return (
+    <div>
+      {idle && <InactivityWarning />}
+      {/* App content */}
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="idleTime" type="number" default="3000">
+  Idle threshold in milliseconds.
+</ParamField>
+
+## Returns
+
+<ResponseField name="idle" type="boolean">
+  `true` when the user has been inactive for the specified duration.
+</ResponseField>
+
+## Examples
+
+### Inactivity timeout
+
+```tsx
+const idle = useIdle(60_000); // 1 minute
+
+return (
+  <>
+    {idle && (
+      <div className="warning">
+        You've been inactive. Click anywhere to continue.
+      </div>
+    )}
+    <main>{/* Content */}</main>
+  </>
+);
+```
+
+### Auto-lock screen
+
+```tsx
+function SecureApp() {
+  const idle = useIdle(5 * 60 * 1000); // 5 minutes
+  const [locked, setLocked] = useState(false);
+
+  useEffect(() => {
+    if (idle && !locked) {
+      setLocked(true);
+    }
+  }, [idle, locked]);
+
+  if (locked) {
+    return <LockScreen onUnlock={() => setLocked(false)} />;
+  }
+
+  return <div>{/* App content */}</div>;
+}
+```
+
+### Hide UI elements
+
+```tsx
+function VideoPlayer() {
+  const idle = useIdle(3000); // 3 seconds
+
+  return (
+    <div className="player">
+      <video src="video.mp4" />
+      <div 
+        className={`controls ${idle ? 'hidden' : 'visible'}`}
+      >
+        {/* Playback controls */}
+      </div>
+    </div>
+  );
+}
+```
+
+### Pause expensive operations
+
+```tsx
+function Dashboard() {
+  const idle = useIdle(30_000); // 30 seconds
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    if (idle) return; // Don't poll when idle
+
+    const interval = setInterval(() => {
+      fetchData().then(setData);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [idle]);
+
+  return <div>{/* Display data */}</div>;
+}
+```
+
+### Session timeout warning
+
+```tsx
+function App() {
+  const idle = useIdle(14 * 60 * 1000); // 14 minutes
+  const [showWarning, setShowWarning] = useState(false);
+
+  useEffect(() => {
+    if (idle) {
+      setShowWarning(true);
+    } else {
+      setShowWarning(false);
+    }
+  }, [idle]);
+
+  return (
+    <>
+      {showWarning && (
+        <Modal>
+          Your session will expire in 1 minute due to inactivity.
+          <button onClick={() => setShowWarning(false)}>
+            Continue Session
+          </button>
+        </Modal>
+      )}
+      {/* App content */}
+    </>
+  );
+}
+```
+
+## Notes
+
+- Tracks the following events: `mousemove`, `mousedown`, `keydown`, `touchstart`, `wheel`, `scroll`
+- Timer resets on any tracked user activity
+- Automatically cleans up event listeners on unmount
+- Events use passive listeners for better performance
+
+## Type Definitions
+
+```ts
+function useIdle(idleTime?: number): boolean;
+```

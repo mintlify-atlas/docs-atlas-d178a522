@@ -1,0 +1,166 @@
+---
+title: useEventListener
+description: Attaches an event listener to an element, window, or document with automatic cleanup
+---
+
+## Usage
+
+Attaches an event listener to a target (element ref, window, or document) and automatically removes it on cleanup.
+
+```tsx
+import { useRef } from 'react';
+import { useEventListener } from 'kivora-react';
+
+function KeyboardHandler() {
+  const handler = (event: KeyboardEvent) => {
+    console.log('Key pressed:', event.key);
+  };
+
+  useEventListener('keydown', handler);
+
+  return <div>Press any key</div>;
+}
+```
+
+## Parameters
+
+<ParamField path="event" type="string" required>
+  Event name to listen for (e.g., `'click'`, `'keydown'`, `'resize'`)
+</ParamField>
+
+<ParamField path="handler" type="(event: Event) => void" required>
+  Callback function invoked when the event occurs
+</ParamField>
+
+<ParamField path="target" type="RefObject<EventTarget | null>" default="{ current: window }">
+  Target to attach the listener to. Can be a ref to an element, `{ current: window }`, or `{ current: document }`
+</ParamField>
+
+<ParamField path="options" type="boolean | AddEventListenerOptions">
+  Event listener options (e.g., `{ passive: true, capture: true }`)
+</ParamField>
+
+## Returns
+
+`void` - This hook does not return a value.
+
+## Examples
+
+### Listen to window resize
+
+```tsx
+import { useState } from 'react';
+import { useEventListener } from 'kivora-react';
+
+function WindowSize() {
+  const [size, setSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+
+  useEventListener(
+    'resize',
+    () => setSize({ width: window.innerWidth, height: window.innerHeight }),
+    { current: window }
+  );
+
+  return (
+    <div>
+      Window size: {size.width} x {size.height}
+    </div>
+  );
+}
+```
+
+### Listen to element clicks
+
+```tsx
+import { useRef } from 'react';
+import { useEventListener } from 'kivora-react';
+
+function ClickableBox() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEventListener(
+    'click',
+    (event: MouseEvent) => {
+      console.log('Box clicked at:', event.clientX, event.clientY);
+    },
+    ref
+  );
+
+  return (
+    <div ref={ref} style={{ width: '200px', height: '200px', background: '#eee' }}>
+      Click me
+    </div>
+  );
+}
+```
+
+### Keyboard shortcuts
+
+```tsx
+import { useEventListener } from 'kivora-react';
+
+function KeyboardShortcuts() {
+  useEventListener('keydown', (event: KeyboardEvent) => {
+    if (event.metaKey && event.key === 's') {
+      event.preventDefault();
+      console.log('Save triggered');
+    }
+    if (event.metaKey && event.key === 'k') {
+      event.preventDefault();
+      console.log('Search triggered');
+    }
+  });
+
+  return <div>Press Cmd+S to save, Cmd+K to search</div>;
+}
+```
+
+### Document click tracking
+
+```tsx
+import { useState } from 'react';
+import { useEventListener } from 'kivora-react';
+
+function ClickCounter() {
+  const [clicks, setClicks] = useState(0);
+
+  useEventListener(
+    'click',
+    () => setClicks((c) => c + 1),
+    { current: document }
+  );
+
+  return <div>Total clicks on page: {clicks}</div>;
+}
+```
+
+### Scroll with passive listener
+
+```tsx
+import { useState, useRef } from 'react';
+import { useEventListener } from 'kivora-react';
+
+function ScrollTracker() {
+  const [scrollTop, setScrollTop] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEventListener(
+    'scroll',
+    (event: Event) => {
+      const target = event.target as HTMLDivElement;
+      setScrollTop(target.scrollTop);
+    },
+    containerRef,
+    { passive: true }
+  );
+
+  return (
+    <div>
+      <div>Scrolled: {scrollTop}px</div>
+      <div ref={containerRef} style={{ height: '200px', overflow: 'auto' }}>
+        <div style={{ height: '1000px' }}>Scroll me</div>
+      </div>
+    </div>
+  );
+}
+```

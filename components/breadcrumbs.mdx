@@ -1,0 +1,104 @@
+---
+title: Breadcrumbs
+description: Navigation breadcrumb trail showing the current page hierarchy
+---
+
+## Overview
+
+The Breadcrumbs component displays a navigation trail that helps users understand their current location within the application hierarchy.
+
+## Import
+
+```tsx
+import { Breadcrumbs } from 'kivora-react';
+```
+
+## Basic Usage
+
+```tsx
+<Breadcrumbs 
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Products', href: '/products' },
+    { label: 'Sneakers' },
+  ]} 
+/>
+```
+
+## With Click Handlers
+
+```tsx
+<Breadcrumbs 
+  items={[
+    { label: 'Home', onClick: () => navigate('/') },
+    { label: 'Products', onClick: () => navigate('/products') },
+    { label: 'Current Page' },
+  ]} 
+/>
+```
+
+## Custom Separator
+
+```tsx
+<Breadcrumbs 
+  separator="›"
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Products', href: '/products' },
+    { label: 'Sneakers' },
+  ]} 
+/>
+```
+
+```tsx
+<Breadcrumbs 
+  separator={<ChevronRight className="size-4" />}
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Products', href: '/products' },
+    { label: 'Sneakers' },
+  ]} 
+/>
+```
+
+## Props
+
+### BreadcrumbsProps
+
+Extends `React.ComponentPropsWithoutRef<'nav'>`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `BreadcrumbsItem[]` | **required** | Array of breadcrumb items to display |
+| `separator` | `ReactNode` | `'/'` | Separator element between items |
+| `className` | `string` | `''` | Additional CSS classes |
+
+### BreadcrumbsItem
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `label` | `string` | Text to display for this breadcrumb |
+| `href` | `string` | Optional link URL |
+| `onClick` | `() => void` | Optional click handler |
+
+## Behavior
+
+- The last item is automatically marked as the current page
+- Items without `href` or `onClick` are rendered as plain text
+- The last item is always non-interactive
+- Separators are hidden from screen readers with `aria-hidden`
+
+## Accessibility
+
+- Wrapped in a `<nav>` element with `aria-label="Breadcrumb"`
+- Uses semantic `<ol>` list structure
+- Last item has `aria-current="page"` attribute
+- Separators are decorative and hidden from screen readers
+- Links have proper focus styles with visible ring
+
+## Styling
+
+- Current page (last item) is displayed in `foreground` color with medium font weight
+- Interactive links are in `muted-foreground` with hover transitions
+- Separators are in `muted-foreground` and non-selectable
+- Responsive layout with flex wrap for narrow viewports

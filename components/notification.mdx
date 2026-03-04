@@ -1,0 +1,152 @@
+---
+title: Notification
+description: In-app notification card with left color border, icon and close button.
+---
+
+In-app notification card with left color border, icon and close button. Ideal for toast-style messages and status updates.
+
+## Import
+
+```tsx
+import { Notification } from '@kivora/react';
+```
+
+## Usage
+
+```tsx
+<Notification title="Saved!" color="success" onClose={dismiss}>
+  Your file has been saved.
+</Notification>
+```
+
+## Colors
+
+Notifications support different color accents:
+
+```tsx
+<Notification title="Primary" color="primary">
+  This is a primary notification.
+</Notification>
+
+<Notification title="Success" color="success">
+  Operation completed successfully.
+</Notification>
+
+<Notification title="Warning" color="warning">
+  Please review this information.
+</Notification>
+
+<Notification title="Error" color="error">
+  An error occurred.
+</Notification>
+
+<Notification title="Info" color="info">
+  Here's some useful information.
+</Notification>
+```
+
+## With Icon
+
+Add a custom icon to your notification:
+
+```tsx
+<Notification 
+  title="New Message"
+  color="info"
+  icon={
+    <svg className="size-4" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+    </svg>
+  }
+>
+  You have a new message.
+</Notification>
+```
+
+## Loading State
+
+Show a loading spinner instead of an icon:
+
+```tsx
+<Notification title="Processing" color="primary" loading>
+  Your request is being processed...
+</Notification>
+```
+
+## Dismissible
+
+Provide an `onClose` handler to make the notification dismissible:
+
+```tsx
+import { useState } from 'react';
+
+function Example() {
+  const [visible, setVisible] = useState(true);
+  
+  if (!visible) return null;
+  
+  return (
+    <Notification
+      title="Dismissible Notification"
+      color="success"
+      onClose={() => setVisible(false)}
+    >
+      Click the X to dismiss this notification.
+    </Notification>
+  );
+}
+```
+
+## Without Title
+
+Notifications can be displayed without a title:
+
+```tsx
+<Notification color="info">
+  Simple notification without a title.
+</Notification>
+```
+
+## Props
+
+<ResponseField name="title" type="string">
+  Optional title text displayed in bold.
+</ResponseField>
+
+<ResponseField name="color" type="'primary' | 'success' | 'warning' | 'error' | 'info'" default="'primary'">
+  Color accent on the left border.
+</ResponseField>
+
+<ResponseField name="icon" type="React.ReactNode">
+  Custom icon to display before the content.
+</ResponseField>
+
+<ResponseField name="onClose" type="() => void">
+  Callback when the close button is clicked. Shows close button when provided.
+</ResponseField>
+
+<ResponseField name="loading" type="boolean" default="false">
+  Show loading spinner instead of icon when true.
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes to apply to the notification container.
+</ResponseField>
+
+<ResponseField name="children" type="React.ReactNode">
+  Notification body content.
+</ResponseField>
+
+## Accessibility
+
+- Uses `role="status"` and `aria-live="polite"` for screen reader announcements
+- Close button includes `aria-label="Dismiss notification"`
+- Loading state shows an animated spinner with appropriate ARIA attributes
+
+## Styling
+
+Notifications feature:
+- Shadow elevation for visual prominence
+- Left border accent in the selected color
+- White/background fill for contrast
+- Smooth transitions for interactive elements

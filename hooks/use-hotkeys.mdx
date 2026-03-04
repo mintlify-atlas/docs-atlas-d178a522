@@ -1,0 +1,198 @@
+---
+title: useHotkeys
+description: Register keyboard shortcuts for your application
+---
+
+Registers keyboard shortcuts using simple key string syntax (e.g., `'ctrl+s'`, `'Escape'`). Supports modifier keys and multiple key combinations mapping to the same handler.
+
+## Import
+
+```tsx
+import { useHotkeys } from 'kivora-react';
+```
+
+## Usage
+
+```tsx
+import { useHotkeys } from 'kivora-react';
+
+function Editor() {
+  const save = () => console.log('Saving...');
+  const undo = () => console.log('Undoing...');
+
+  useHotkeys([
+    ['ctrl+s', save],
+    ['ctrl+z', undo],
+    ['Escape', () => console.log('Escaped')],
+  ]);
+
+  return <textarea />;
+}
+```
+
+## Parameters
+
+<ParamField path="hotkeys" type="Array<[string, (event: KeyboardEvent) => void]>" required>
+  An array of `[keyCombo, handler]` tuples. Each key combo is a string like `'ctrl+s'` or `'Escape'`, and the handler is a function called when that combination is pressed.
+</ParamField>
+
+<ParamField path="options" type="HotkeyOptions" default="{}">
+  Optional configuration object.
+  
+  <Expandable title="properties">
+    <ParamField path="preventDefault" type="boolean" default="false">
+      Whether to call `preventDefault()` on the keyboard event when a hotkey matches.
+    </ParamField>
+    
+    <ParamField path="target" type="EventTarget | null" default="document">
+      The element to attach the keyboard listener to. Defaults to `document` for global shortcuts.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Returns
+
+`void` - This hook does not return a value.
+
+## Key Syntax
+
+### Modifier Keys
+
+- `ctrl` - Control key
+- `alt` - Alt/Option key
+- `shift` - Shift key
+- `meta` - Command (Mac) / Windows key
+
+### Combinations
+
+Combine modifiers with `+`:
+- `'ctrl+s'` - Control + S
+- `'ctrl+shift+k'` - Control + Shift + K
+- `'meta+k'` - Command + K (Mac) / Windows + K
+
+### Single Keys
+
+Use key names directly:
+- `'Escape'`
+- `'Enter'`
+- `'ArrowDown'`
+- `'/'`
+
+## Examples
+
+### Save Shortcut
+
+```tsx
+function DocumentEditor() {
+  const handleSave = () => {
+    // Save document logic
+    console.log('Document saved');
+  };
+
+  useHotkeys([['ctrl+s', handleSave]], { preventDefault: true });
+
+  return <textarea placeholder="Type here..." />;
+}
+```
+
+### Cross-Platform Shortcuts
+
+```tsx
+function App() {
+  const search = () => console.log('Opening search...');
+
+  // Support both Ctrl (Windows/Linux) and Cmd (Mac)
+  useHotkeys([
+    ['ctrl+k', search],
+    ['meta+k', search],
+  ]);
+
+  return <div>Press Ctrl+K or Cmd+K to search</div>;
+}
+```
+
+### Modal with Close Shortcut
+
+```tsx
+function Modal({ isOpen, onClose }) {
+  useHotkeys([['Escape', onClose]]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal">
+      <h2>Modal Title</h2>
+      <p>Press Escape to close</p>
+      <button onClick={onClose}>Close</button>
+    </div>
+  );
+}
+```
+
+### Multiple Shortcuts
+
+```tsx
+function CodeEditor() {
+  const save = () => console.log('Saving...');
+  const undo = () => console.log('Undo');
+  const redo = () => console.log('Redo');
+  const find = () => console.log('Find');
+  const format = () => console.log('Formatting...');
+
+  useHotkeys(
+    [
+      ['ctrl+s', save],
+      ['ctrl+z', undo],
+      ['ctrl+shift+z', redo],
+      ['ctrl+f', find],
+      ['ctrl+shift+f', format],
+    ],
+    { preventDefault: true }
+  );
+
+  return <textarea className="editor" />;
+}
+```
+
+### Scoped Shortcuts
+
+```tsx
+function Sidebar() {
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  useHotkeys(
+    [['j', () => console.log('Next item')], ['k', () => console.log('Previous item')]],
+    { target: sidebarRef.current }
+  );
+
+  return (
+    <div ref={sidebarRef} tabIndex={0}>
+      <p>Focus here and press J/K to navigate</p>
+    </div>
+  );
+}
+```
+
+### Navigation Shortcuts
+
+```tsx
+function Gallery() {
+  const [index, setIndex] = useState(0);
+
+  useHotkeys([
+    ['ArrowLeft', () => setIndex(i => Math.max(0, i - 1))],
+    ['ArrowRight', () => setIndex(i => i + 1)],
+    ['Home', () => setIndex(0)],
+  ]);
+
+  return <img src={`/image-${index}.jpg`} alt="Gallery" />;
+}
+```
+
+## Best Practices
+
+- Use `preventDefault: true` to prevent browser default behavior (e.g., Ctrl+S opening save dialog)
+- Support cross-platform shortcuts by providing both `ctrl` and `meta` variants
+- Document keyboard shortcuts in your UI so users can discover them
+- Be mindful of conflicting with browser or OS shortcuts
+- Use scoped shortcuts with `target` option when shortcuts should only work in specific areas

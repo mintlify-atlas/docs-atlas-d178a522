@@ -1,0 +1,382 @@
+---
+title: Toast
+description: Toast notification system powered by Sonner
+---
+
+Toast notification system powered by [Sonner](https://sonner.emilkowal.ski/). Display temporary notifications for user actions and system events.
+
+## Import
+
+```tsx
+import { Toaster, toast } from '@kivora/react';
+```
+
+## Setup
+
+Add `Toaster` to your root layout once:
+
+```tsx
+import { Toaster } from '@kivora/react';
+
+function App() {
+  return (
+    <>
+      {/* Your app content */}
+      <Toaster position="bottom-right" richColors />
+    </>
+  );
+}
+```
+
+## Usage
+
+Use the `toast` function anywhere in your app:
+
+```tsx
+import { toast, Button } from '@kivora/react';
+
+function Example() {
+  return (
+    <Button
+      label="Show Toast"
+      onClick={() => toast('Hello world!')}
+    />
+  );
+}
+```
+
+## Variants
+
+```tsx
+import { toast, Button } from '@kivora/react';
+
+function ToastExamples() {
+  return (
+    <div className="flex gap-2">
+      <Button
+        label="Default"
+        onClick={() => toast('This is a default toast')}
+      />
+      <Button
+        label="Success"
+        onClick={() => toast.success('Changes saved successfully!')}
+      />
+      <Button
+        label="Error"
+        onClick={() => toast.error('Something went wrong')}
+      />
+      <Button
+        label="Warning"
+        onClick={() => toast.warning('Unsaved changes')}
+      />
+      <Button
+        label="Info"
+        onClick={() => toast.info('New update available')}
+      />
+    </div>
+  );
+}
+```
+
+## With Description
+
+```tsx
+toast('Event created', {
+  description: 'Your event has been scheduled for tomorrow at 10 AM',
+});
+
+toast.success('Deployment complete', {
+  description: 'Your application is now live at app.example.com',
+});
+```
+
+## With Actions
+
+```tsx
+toast('Meeting invitation', {
+  description: 'Team sync at 3 PM today',
+  action: {
+    label: 'Accept',
+    onClick: () => console.log('Accepted'),
+  },
+});
+
+toast.error('Failed to save', {
+  description: 'Could not save your changes',
+  action: {
+    label: 'Retry',
+    onClick: () => saveChanges(),
+  },
+});
+```
+
+## Custom Duration
+
+```tsx
+// Show for 5 seconds
+toast('Quick message', { duration: 5000 });
+
+// Show until dismissed
+toast('Important notice', { duration: Infinity });
+```
+
+## Promise Toasts
+
+Show loading, success, and error states automatically:
+
+```tsx
+import { toast, Button } from '@kivora/react';
+
+function SaveButton() {
+  const handleSave = async () => {
+    const promise = fetch('/api/save', { method: 'POST' });
+
+    toast.promise(promise, {
+      loading: 'Saving...',
+      success: 'Saved successfully!',
+      error: 'Failed to save',
+    });
+  };
+
+  return <Button label="Save" onClick={handleSave} />;
+}
+```
+
+With data:
+
+```tsx
+const promise = fetchUser(id);
+
+toast.promise(promise, {
+  loading: 'Loading user...',
+  success: (data) => `Welcome back, ${data.name}!`,
+  error: (err) => `Error: ${err.message}`,
+});
+```
+
+## Dismissing Toasts
+
+```tsx
+// Dismiss specific toast
+const toastId = toast('Processing...');
+toast.dismiss(toastId);
+
+// Dismiss all toasts
+toast.dismiss();
+```
+
+## Custom Toast ID
+
+```tsx
+// Prevent duplicate toasts
+toast('Notification', { id: 'unique-id' });
+```
+
+## Loading Toast
+
+```tsx
+function UploadFile() {
+  const handleUpload = async () => {
+    const toastId = toast.loading('Uploading file...');
+
+    try {
+      await uploadFile();
+      toast.success('File uploaded!', { id: toastId });
+    } catch (error) {
+      toast.error('Upload failed', { id: toastId });
+    }
+  };
+
+  return <Button label="Upload" onClick={handleUpload} />;
+}
+```
+
+## Custom Components
+
+```tsx
+toast.custom((t) => (
+  <div className="bg-card border border-border rounded-lg p-4 shadow-lg">
+    <div className="flex items-center gap-3">
+      <div className="w-10 h-10 rounded-full bg-blue-500" />
+      <div>
+        <p className="font-semibold">John Doe</p>
+        <p className="text-sm text-muted-foreground">Sent you a message</p>
+      </div>
+    </div>
+  </div>
+));
+```
+
+## Positions
+
+Configure position in the `Toaster` component:
+
+```tsx
+<Toaster position="top-left" />
+<Toaster position="top-center" />
+<Toaster position="top-right" />
+<Toaster position="bottom-left" />
+<Toaster position="bottom-center" />
+<Toaster position="bottom-right" />
+```
+
+## Rich Colors
+
+Enable colored backgrounds for variants:
+
+```tsx
+<Toaster richColors />
+```
+
+## Expand by Default
+
+Show multiple toasts expanded:
+
+```tsx
+<Toaster expand />
+```
+
+## Close Button
+
+Add close button to all toasts:
+
+```tsx
+<Toaster closeButton />
+```
+
+## Complete Example
+
+```tsx
+import { Toaster, toast, Button } from '@kivora/react';
+
+function App() {
+  return (
+    <div>
+      <div className="flex gap-2 p-4">
+        <Button
+          label="Save"
+          onClick={() => {
+            toast.promise(
+              fetch('/api/save', { method: 'POST' }),
+              {
+                loading: 'Saving...',
+                success: 'Saved!',
+                error: 'Failed',
+              }
+            );
+          }}
+        />
+        <Button
+          label="Delete"
+          variant="destructive"
+          onClick={() => {
+            toast.error('Delete failed', {
+              description: 'You do not have permission',
+              action: {
+                label: 'Contact admin',
+                onClick: () => console.log('Contact'),
+              },
+            });
+          }}
+        />
+      </div>
+      <Toaster position="bottom-right" richColors closeButton />
+    </div>
+  );
+}
+```
+
+## Toaster Props
+
+<ResponseField name="position" type="string" default="bottom-right">
+  Position of the toast container. Options: `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`
+</ResponseField>
+
+<ResponseField name="richColors" type="boolean" default="false">
+  Enable colored backgrounds for success, error, warning, and info toasts
+</ResponseField>
+
+<ResponseField name="expand" type="boolean" default="false">
+  Show all toasts expanded by default
+</ResponseField>
+
+<ResponseField name="closeButton" type="boolean" default="false">
+  Show close button on all toasts
+</ResponseField>
+
+<ResponseField name="duration" type="number" default="4000">
+  Default duration in milliseconds for all toasts
+</ResponseField>
+
+<ResponseField name="visibleToasts" type="number" default="3">
+  Maximum number of toasts visible at once
+</ResponseField>
+
+## Toast Options
+
+<ResponseField name="description" type="string">
+  Additional description text below the main message
+</ResponseField>
+
+<ResponseField name="duration" type="number" default="4000">
+  How long the toast is shown in milliseconds. Use `Infinity` to keep it until dismissed
+</ResponseField>
+
+<ResponseField name="action" type="{ label: string; onClick: () => void }">
+  Action button with label and click handler
+</ResponseField>
+
+<ResponseField name="id" type="string">
+  Custom ID for the toast. Useful for preventing duplicates or updating existing toasts
+</ResponseField>
+
+<ResponseField name="onDismiss" type="() => void">
+  Callback fired when toast is dismissed
+</ResponseField>
+
+<ResponseField name="onAutoClose" type="() => void">
+  Callback fired when toast auto-closes after duration
+</ResponseField>
+
+## API Methods
+
+```tsx
+// Basic variants
+toast(message: string, options?: ToastOptions)
+toast.success(message: string, options?: ToastOptions)
+toast.error(message: string, options?: ToastOptions)
+toast.warning(message: string, options?: ToastOptions)
+toast.info(message: string, options?: ToastOptions)
+toast.loading(message: string, options?: ToastOptions)
+
+// Promise handling
+toast.promise(promise: Promise, {
+  loading: string,
+  success: string | ((data) => string),
+  error: string | ((error) => string),
+})
+
+// Custom content
+toast.custom((toastId) => ReactNode)
+
+// Dismiss
+toast.dismiss(toastId?: string)
+```
+
+## Best Practices
+
+- Use success toasts for completed actions
+- Use error toasts with actionable recovery options
+- Keep messages concise and clear
+- Use descriptions for additional context
+- Provide actions for important notifications
+- Don't overuse toasts - they should be meaningful
+- Position toasts where they won't block important content
+
+## Accessibility
+
+- Automatically announced by screen readers
+- Keyboard accessible actions
+- Respects `prefers-reduced-motion`
+- Proper ARIA labels
+- Focus management for actions

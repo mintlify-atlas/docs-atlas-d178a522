@@ -1,0 +1,237 @@
+---
+title: useFocusReturn
+description: Restore focus to the previously focused element
+---
+
+Remembers which element had focus before a modal or overlay was opened and automatically restores focus when the overlay closes. Essential for accessibility and a smooth keyboard navigation experience.
+
+## Import
+
+```tsx
+import { useFocusReturn } from 'kivora-react';
+```
+
+## Usage
+
+```tsx
+import { useFocusReturn } from 'kivora-react';
+
+function Modal({ isOpen, onClose }) {
+  useFocusReturn(isOpen);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal">
+      <h2>Modal Title</h2>
+      <button onClick={onClose}>Close</button>
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="enabled" type="boolean" required>
+  Whether the overlay/modal is currently open. When this changes from `true` to `false`, focus is restored to the element that was focused before the overlay opened.
+</ParamField>
+
+## Returns
+
+`void` - This hook does not return a value.
+
+## Behavior
+
+- **Focus capture**: When `enabled` becomes `true`, remembers the currently focused element
+- **Focus restoration**: When `enabled` becomes `false`, returns focus to the remembered element
+- **Automatic cleanup**: Clears the saved reference after restoration
+
+## Examples
+
+### Simple Modal
+
+```tsx
+function SimpleModal({ isOpen, onClose, title, children }) {
+  useFocusReturn(isOpen);
+
+  if (!isOpen) return null;
+
+  return (
+    <>
+      <div className="overlay" onClick={onClose} />
+      <div className="modal">
+        <h2>{title}</h2>
+        <div>{children}</div>
+        <button onClick={onClose}>Close</button>
+      </div>
+    </>
+  );
+}
+
+// Usage
+function App() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>Open Modal</button>
+      <SimpleModal isOpen={open} onClose={() => setOpen(false)} title="Hello">
+        Modal content here
+      </SimpleModal>
+    </>
+  );
+}
+```
+
+### Dialog Component
+
+```tsx
+function Dialog({ open, onClose }) {
+  useFocusReturn(open);
+
+  return (
+    <dialog open={open}>
+      <form method="dialog">
+        <h3>Confirm Action</h3>
+        <p>Are you sure you want to proceed?</p>
+        <button onClick={onClose}>Cancel</button>
+        <button onClick={onClose}>Confirm</button>
+      </form>
+    </dialog>
+  );
+}
+```
+
+### Slide-out Panel
+
+```tsx
+function Panel({ isVisible, onClose }) {
+  useFocusReturn(isVisible);
+
+  return (
+    <div className={`panel ${isVisible ? 'visible' : 'hidden'}`}>
+      <button onClick={onClose}>Close Panel</button>
+      <nav>
+        <a href="/settings">Settings</a>
+        <a href="/profile">Profile</a>
+        <a href="/help">Help</a>
+      </nav>
+    </div>
+  );
+}
+```
+
+### Tooltip with Focus Management
+
+```tsx
+function Tooltip({ children, content }) {
+  const [isOpen, setIsOpen] = useState(false);
+  useFocusReturn(isOpen);
+
+  return (
+    <div className="tooltip-container">
+      <button
+        onClick={() => setIsOpen(true)}
+        aria-describedby={isOpen ? 'tooltip' : undefined}
+      >
+        {children}
+      </button>
+      {isOpen && (
+        <div id="tooltip" role="tooltip">
+          {content}
+          <button onClick={() => setIsOpen(false)}>Close</button>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Combined with Focus Trap
+
+```tsx
+import { useFocusReturn, useFocusTrap } from 'kivora-react';
+
+function FullFeaturedModal({ isOpen, onClose }) {
+  const modalRef = useRef<HTMLDivElement>(null);
+  
+  // Return focus when closing
+  useFocusReturn(isOpen);
+  
+  // Trap focus while open
+  useFocusTrap(modalRef, isOpen);
+
+  if (!isOpen) return null;
+
+  return (
+    <div ref={modalRef} className="modal">
+      <h2>Accessible Modal</h2>
+      <input type="text" placeholder="First input" />
+      <input type="text" placeholder="Second input" />
+      <button onClick={onClose}>Close</button>
+    </div>
+  );
+}
+```
+
+### Drawer Navigation
+
+```tsx
+function DrawerNav() {
+  const [isOpen, setIsOpen] = useState(false);
+  useFocusReturn(isOpen);
+
+  return (
+    <>
+      <button onClick={() => setIsOpen(true)}>Menu</button>
+      
+      {isOpen && (
+        <aside className="drawer">
+          <button onClick={() => setIsOpen(false)}>Close</button>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </aside>
+      )}
+    </>
+  );
+}
+```
+
+## Accessibility
+
+- Implements WCAG 2.1 success criterion 2.4.3 (Focus Order)
+- Ensures keyboard users can navigate predictably when overlays open and close
+- Prevents focus from being lost when modals close
+- Works seamlessly with screen readers
+- Commonly paired with `useFocusTrap` for complete modal focus management
+
+## Common Patterns
+
+### Pattern 1: Simple Modal
+
+For basic modals, use `useFocusReturn` alone:
+
+```tsx
+useFocusReturn(isOpen);
+```
+
+### Pattern 2: Accessible Modal
+
+Combine with focus trap for full accessibility:
+
+```tsx
+useFocusReturn(isOpen);
+useFocusTrap(modalRef, isOpen);
+```
+
+### Pattern 3: Conditional Restoration
+
+Only restore focus in specific scenarios:
+
+```tsx
+const shouldRestore = isOpen && !wasClosedByExternalAction;
+useFocusReturn(shouldRestore);
+```

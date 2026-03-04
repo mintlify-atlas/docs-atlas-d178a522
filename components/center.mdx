@@ -1,0 +1,233 @@
+---
+title: Center
+description: Centers children both horizontally and vertically
+---
+
+## Overview
+
+Center is a simple layout component that centers its children both horizontally and vertically using flexbox. It's perfect for loading states, empty states, modals, and centering single elements.
+
+## Import
+
+```tsx
+import { Center } from '@kivora/react';
+```
+
+## Props
+
+<ResponseField name="inline" type="boolean" default="false">
+  When true, uses `inline-flex` instead of `flex`, allowing the Center to size based on its content rather than taking full width.
+</ResponseField>
+
+## Usage
+
+### Basic centering
+
+```tsx
+<Center className="h-64">
+  <Spinner />
+</Center>
+```
+
+### Loading state
+
+```tsx
+<Center className="h-screen">
+  <Stack gap={4} align="center">
+    <Spinner size="lg" />
+    <Text>Loading your data...</Text>
+  </Stack>
+</Center>
+```
+
+### Empty state
+
+```tsx
+<Center className="h-96">
+  <Stack gap={4} align="center">
+    <Icon name="inbox" size="xl" className="text-gray-400" />
+    <Heading size="lg">No messages yet</Heading>
+    <Text className="text-gray-600">Start a conversation to see messages here</Text>
+    <Button variant="primary">New Message</Button>
+  </Stack>
+</Center>
+```
+
+### Inline centering
+
+```tsx
+<div className="border rounded-lg p-4">
+  <Text>Label:</Text>
+  <Center inline className="ml-2">
+    <Badge>Active</Badge>
+  </Center>
+</div>
+```
+
+### Error state
+
+```tsx
+<Center className="h-screen">
+  <Stack gap={4} align="center" className="max-w-md text-center">
+    <Icon name="alert-triangle" size="xl" className="text-red-500" />
+    <Heading size="xl">Something went wrong</Heading>
+    <Text className="text-gray-600">
+      We couldn't load your data. Please try again later.
+    </Text>
+    <Group gap={2}>
+      <Button variant="secondary">Go Back</Button>
+      <Button variant="primary">Retry</Button>
+    </Group>
+  </Stack>
+</Center>
+```
+
+## Layout Examples
+
+### Full-page splash
+
+```tsx
+<Center className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600">
+  <Stack gap={6} align="center" className="text-white">
+    <Logo size="xl" />
+    <Heading size="3xl">Welcome to Kivora</Heading>
+    <Text size="lg">Building amazing experiences</Text>
+    <Button variant="primary" size="lg">Get Started</Button>
+  </Stack>
+</Center>
+```
+
+### Modal content
+
+```tsx
+<Modal>
+  <Center className="p-12">
+    <Stack gap={6} align="center" className="max-w-sm">
+      <div className="bg-green-100 rounded-full p-4">
+        <Icon name="check" size="xl" className="text-green-600" />
+      </div>
+      <Heading size="xl">Payment Successful!</Heading>
+      <Text className="text-gray-600 text-center">
+        Your payment of $99.00 has been processed successfully.
+      </Text>
+      <Button variant="primary" className="w-full">Continue</Button>
+    </Stack>
+  </Center>
+</Modal>
+```
+
+### Card placeholder
+
+```tsx
+<Card className="h-80">
+  <Center className="h-full">
+    <Stack gap={3} align="center">
+      <Icon name="image" size="lg" className="text-gray-400" />
+      <Text className="text-gray-600">No preview available</Text>
+    </Stack>
+  </Center>
+</Card>
+```
+
+### Avatar placeholder
+
+```tsx
+<Center className="w-16 h-16 bg-gray-200 rounded-full">
+  <Text className="font-bold text-gray-600">JD</Text>
+</Center>
+```
+
+### Grid item center
+
+```tsx
+<SimpleGrid cols={3} spacing={4}>
+  {items.map(item => (
+    <Card key={item.id}>
+      <Center className="h-48">
+        <Stack gap={3} align="center">
+          <Icon name={item.icon} size="xl" />
+          <Heading size="md">{item.title}</Heading>
+        </Stack>
+      </Center>
+    </Card>
+  ))}
+</SimpleGrid>
+```
+
+### Auth layout
+
+```tsx
+<Center className="min-h-screen bg-gray-50">
+  <Card className="w-full max-w-md">
+    <Stack gap={6} className="p-8">
+      <Stack gap={2} align="center">
+        <Logo />
+        <Heading size="xl">Sign in to your account</Heading>
+      </Stack>
+      
+      <Stack gap={4}>
+        <div>
+          <Label>Email</Label>
+          <Input type="email" placeholder="you@example.com" />
+        </div>
+        <div>
+          <Label>Password</Label>
+          <Input type="password" placeholder="••••••••" />
+        </div>
+      </Stack>
+      
+      <Button variant="primary" className="w-full">Sign In</Button>
+      
+      <Text size="sm" className="text-center text-gray-600">
+        Don't have an account? <Button variant="link">Sign up</Button>
+      </Text>
+    </Stack>
+  </Card>
+</Center>
+```
+
+### Feature showcase
+
+```tsx
+<SimpleGrid cols={{ base: 1, md: 3 }} spacing={6}>
+  <Center className="flex-col gap-4 p-8 border rounded-lg">
+    <div className="bg-blue-100 rounded-full p-4">
+      <Icon name="zap" size="xl" className="text-blue-600" />
+    </div>
+    <Heading size="md">Lightning Fast</Heading>
+    <Text className="text-gray-600 text-center">
+      Optimized for maximum performance
+    </Text>
+  </Center>
+  
+  <Center className="flex-col gap-4 p-8 border rounded-lg">
+    <div className="bg-green-100 rounded-full p-4">
+      <Icon name="shield" size="xl" className="text-green-600" />
+    </div>
+    <Heading size="md">Secure</Heading>
+    <Text className="text-gray-600 text-center">
+      Enterprise-grade security built-in
+    </Text>
+  </Center>
+  
+  <Center className="flex-col gap-4 p-8 border rounded-lg">
+    <div className="bg-purple-100 rounded-full p-4">
+      <Icon name="globe" size="xl" className="text-purple-600" />
+    </div>
+    <Heading size="md">Global Scale</Heading>
+    <Text className="text-gray-600 text-center">
+      Available worldwide with low latency
+    </Text>
+  </Center>
+</SimpleGrid>
+```
+
+## Best Practices
+
+- Always set a height on Center or its parent to define the centering space
+- Use Center for single elements or vertically-stacked groups
+- Combine with Stack for multi-element centered layouts
+- Use `inline` when you need the component to size based on content
+- Perfect for loading spinners, empty states, and error messages
+- Add `max-w-*` classes to prevent content from becoming too wide
+- Use with `min-h-screen` for full-page centered layouts

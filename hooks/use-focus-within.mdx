@@ -1,0 +1,253 @@
+---
+title: useFocusWithin
+description: Detect when focus is within a container element
+---
+
+Returns `true` when focus is anywhere within a container element and its descendants. Useful for showing visible focus indicators on parent elements or triggering behavior based on focus containment.
+
+## Import
+
+```tsx
+import { useFocusWithin } from 'kivora-react';
+```
+
+## Usage
+
+```tsx
+import { useFocusWithin } from 'kivora-react';
+
+function Form() {
+  const [ref, focused] = useFocusWithin<HTMLFormElement>();
+
+  return (
+    <form ref={ref} className={focused ? 'ring-2 ring-blue-500' : ''}>
+      <input type="text" placeholder="Name" />
+      <input type="email" placeholder="Email" />
+      <button>Submit</button>
+    </form>
+  );
+}
+```
+
+## Parameters
+
+This hook takes no parameters.
+
+## Returns
+
+Returns a tuple `[ref, focused]`:
+
+<ParamField path="[0]" type="RefObject<T | null>">
+  A ref object to attach to the container element you want to monitor.
+</ParamField>
+
+<ParamField path="[1]" type="boolean">
+  `true` when focus is within the container or any of its descendants, `false` otherwise.
+</ParamField>
+
+## Behavior
+
+- **Focus detection**: Monitors `focusin` and `focusout` events on the container
+- **Descendant tracking**: Returns `true` if any child element is focused, not just direct children
+- **Boundary awareness**: Only returns `false` when focus leaves the container entirely
+- **Event bubbling**: Uses event bubbling to efficiently track focus within the tree
+
+## Examples
+
+### Form with Focus Ring
+
+```tsx
+function ContactForm() {
+  const [formRef, isFocused] = useFocusWithin<HTMLFormElement>();
+
+  return (
+    <form
+      ref={formRef}
+      className={`form ${isFocused ? 'form-focused' : ''}`}
+    >
+      <h2>Contact Us</h2>
+      <input type="text" placeholder="Name" />
+      <input type="email" placeholder="Email" />
+      <textarea placeholder="Message" />
+      <button type="submit">Send</button>
+    </form>
+  );
+}
+```
+
+### Card with Active State
+
+```tsx
+function InteractiveCard() {
+  const [cardRef, isActive] = useFocusWithin<HTMLDivElement>();
+
+  return (
+    <div
+      ref={cardRef}
+      className={`card ${isActive ? 'card-active' : ''}`}
+    >
+      <h3>Card Title</h3>
+      <p>Some content here</p>
+      <button>Edit</button>
+      <button>Delete</button>
+    </div>
+  );
+}
+```
+
+### Toolbar with Highlight
+
+```tsx
+function Toolbar() {
+  const [toolbarRef, hasFocus] = useFocusWithin<HTMLDivElement>();
+
+  return (
+    <div
+      ref={toolbarRef}
+      className="toolbar"
+      style={{
+        borderColor: hasFocus ? '#3b82f6' : '#d1d5db',
+        borderWidth: hasFocus ? 2 : 1,
+      }}
+    >
+      <button>Bold</button>
+      <button>Italic</button>
+      <button>Underline</button>
+      <button>Link</button>
+    </div>
+  );
+}
+```
+
+### Navigation Menu
+
+```tsx
+function NavMenu() {
+  const [menuRef, menuFocused] = useFocusWithin<HTMLElement>();
+
+  return (
+    <nav
+      ref={menuRef}
+      className={menuFocused ? 'nav-expanded' : 'nav-collapsed'}
+    >
+      <a href="/">Home</a>
+      <a href="/products">Products</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  );
+}
+```
+
+### Search Bar with Expanded State
+
+```tsx
+function SearchBar() {
+  const [searchRef, isSearching] = useFocusWithin<HTMLDivElement>();
+
+  return (
+    <div
+      ref={searchRef}
+      className={`search-container ${isSearching ? 'expanded' : 'collapsed'}`}
+    >
+      <input type="search" placeholder="Search..." />
+      {isSearching && (
+        <div className="search-results">
+          <button>Recent: React hooks</button>
+          <button>Recent: TypeScript</button>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Multi-Step Form
+
+```tsx
+function MultiStepForm() {
+  const [step1Ref, step1Focused] = useFocusWithin<HTMLFieldSetElement>();
+  const [step2Ref, step2Focused] = useFocusWithin<HTMLFieldSetElement>();
+
+  return (
+    <form>
+      <fieldset
+        ref={step1Ref}
+        className={step1Focused ? 'fieldset-active' : ''}
+      >
+        <legend>Step 1: Personal Info</legend>
+        <input type="text" placeholder="Name" />
+        <input type="email" placeholder="Email" />
+      </fieldset>
+
+      <fieldset
+        ref={step2Ref}
+        className={step2Focused ? 'fieldset-active' : ''}
+      >
+        <legend>Step 2: Address</legend>
+        <input type="text" placeholder="Street" />
+        <input type="text" placeholder="City" />
+      </fieldset>
+
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+### Button Group
+
+```tsx
+function ButtonGroup() {
+  const [groupRef, groupFocused] = useFocusWithin<HTMLDivElement>();
+
+  return (
+    <div
+      ref={groupRef}
+      role="group"
+      className={groupFocused ? 'button-group-focused' : 'button-group'}
+    >
+      <button>Save</button>
+      <button>Save & Close</button>
+      <button>Cancel</button>
+    </div>
+  );
+}
+```
+
+### Dropdown with Auto-expand
+
+```tsx
+function Dropdown() {
+  const [dropdownRef, isOpen] = useFocusWithin<HTMLDivElement>();
+
+  return (
+    <div ref={dropdownRef} className="dropdown">
+      <button>Options</button>
+      {isOpen && (
+        <ul className="dropdown-menu">
+          <li><button>Edit</button></li>
+          <li><button>Duplicate</button></li>
+          <li><button>Delete</button></li>
+        </ul>
+      )}
+    </div>
+  );
+}
+```
+
+## Use Cases
+
+- **Visual feedback**: Show focus rings or borders on parent containers
+- **Conditional rendering**: Display helper text or actions when a section is focused
+- **State management**: Track which section of a form or UI is currently active
+- **Accessibility**: Provide visual cues for keyboard navigation
+- **Auto-expand**: Open dropdowns or submenus when focus enters
+- **Analytics**: Track user interaction with specific UI regions
+
+## Accessibility
+
+- Helps create visible focus indicators that meet WCAG 2.1 success criterion 2.4.7 (Focus Visible)
+- Provides context to keyboard users about which section is active
+- Works with screen readers by maintaining proper focus management
+- Complements native `:focus-within` CSS pseudo-class with JavaScript state access

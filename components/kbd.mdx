@@ -1,0 +1,204 @@
+---
+title: Kbd
+description: Keyboard key indicator for displaying keyboard shortcuts.
+---
+
+## Usage
+
+```tsx
+import { Kbd } from '@kivora/react';
+
+<Kbd>Ctrl</Kbd>
+```
+
+## Examples
+
+### Single Key
+
+```tsx
+<Kbd>K</Kbd>
+```
+
+### Key Combination
+
+```tsx
+<div className="flex items-center gap-1">
+  <Kbd>Ctrl</Kbd>
+  <span>+</span>
+  <Kbd>K</Kbd>
+</div>
+```
+
+### In Text
+
+```tsx
+<p>
+  Press <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> to open the command palette
+</p>
+```
+
+### Mac Modifiers
+
+```tsx
+<div className="flex items-center gap-1">
+  <Kbd>⌘</Kbd>
+  <span>+</span>
+  <Kbd>K</Kbd>
+</div>
+```
+
+### Common Shortcuts
+
+```tsx
+<div className="space-y-2">
+  <div className="flex justify-between">
+    <span>Search</span>
+    <div className="flex gap-1">
+      <Kbd>Ctrl</Kbd>+<Kbd>K</Kbd>
+    </div>
+  </div>
+  <div className="flex justify-between">
+    <span>Save</span>
+    <div className="flex gap-1">
+      <Kbd>Ctrl</Kbd>+<Kbd>S</Kbd>
+    </div>
+  </div>
+  <div className="flex justify-between">
+    <span>Copy</span>
+    <div className="flex gap-1">
+      <Kbd>Ctrl</Kbd>+<Kbd>C</Kbd>
+    </div>
+  </div>
+  <div className="flex justify-between">
+    <span>Paste</span>
+    <div className="flex gap-1">
+      <Kbd>Ctrl</Kbd>+<Kbd>V</Kbd>
+    </div>
+  </div>
+</div>
+```
+
+### Arrow Keys
+
+```tsx
+<div className="flex gap-1">
+  <Kbd>↑</Kbd>
+  <Kbd>↓</Kbd>
+  <Kbd>←</Kbd>
+  <Kbd>→</Kbd>
+</div>
+```
+
+### Function Keys
+
+```tsx
+<div className="flex gap-1">
+  <Kbd>F1</Kbd>
+  <Kbd>F2</Kbd>
+  <Kbd>F3</Kbd>
+  <Kbd>F12</Kbd>
+</div>
+```
+
+### Special Keys
+
+```tsx
+<div className="flex flex-wrap gap-2">
+  <Kbd>Esc</Kbd>
+  <Kbd>Tab</Kbd>
+  <Kbd>Space</Kbd>
+  <Kbd>Enter</Kbd>
+  <Kbd>Shift</Kbd>
+  <Kbd>Alt</Kbd>
+  <Kbd>Backspace</Kbd>
+  <Kbd>Delete</Kbd>
+</div>
+```
+
+### Keyboard Shortcut List
+
+```tsx
+function KeyboardShortcuts() {
+  const shortcuts = [
+    { action: 'Open command palette', keys: ['⌘', 'K'] },
+    { action: 'Toggle sidebar', keys: ['⌘', 'B'] },
+    { action: 'Quick search', keys: ['⌘', 'P'] },
+    { action: 'New file', keys: ['⌘', 'N'] },
+    { action: 'Save', keys: ['⌘', 'S'] },
+  ];
+
+  return (
+    <div className="space-y-3">
+      {shortcuts.map((shortcut, i) => (
+        <div key={i} className="flex justify-between items-center">
+          <span className="text-sm">{shortcut.action}</span>
+          <div className="flex gap-1">
+            {shortcut.keys.map((key, j) => (
+              <>
+                <Kbd key={j}>{key}</Kbd>
+                {j < shortcut.keys.length - 1 && <span>+</span>}
+              </>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+### In Documentation
+
+```tsx
+<Card>
+  <h3>Keyboard Navigation</h3>
+  <ul className="space-y-2 mt-3">
+    <li>
+      <Kbd>Tab</Kbd> - Navigate forward
+    </li>
+    <li>
+      <Kbd>Shift</Kbd> + <Kbd>Tab</Kbd> - Navigate backward
+    </li>
+    <li>
+      <Kbd>Enter</Kbd> - Activate element
+    </li>
+    <li>
+      <Kbd>Esc</Kbd> - Close dialog
+    </li>
+  </ul>
+</Card>
+```
+
+## Props
+
+<ResponseField name="children" type="React.ReactNode" required>
+  Key label or symbol
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+Kbd also accepts all standard HTML `<kbd>` element attributes.
+
+## Styling
+
+- Uses monospace font for authentic keyboard key appearance
+- Includes subtle inset shadow for 3D effect
+- Minimum width ensures consistent sizing
+- Themed with muted background and border colors
+- Small font size (`text-xs`) for compact display
+
+## Accessibility
+
+- Uses semantic `<kbd>` HTML element
+- Screen readers announce keyboard shortcuts appropriately
+- Clear visual distinction from regular text
+
+## Best Practices
+
+- Use platform-appropriate modifier symbols (⌘ for Mac, Ctrl for Windows/Linux)
+- Keep key labels concise and clear
+- Use `+` or visual spacing to separate key combinations
+- Consider showing platform-specific shortcuts dynamically
+- Group related shortcuts together in documentation

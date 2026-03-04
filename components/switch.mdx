@@ -1,0 +1,149 @@
+---
+title: Switch
+description: Toggle switch built on a visually-hidden checkbox with size variants.
+---
+
+## Usage
+
+```tsx
+import { Switch } from '@kivora/react';
+
+function Demo() {
+  const [isDark, setIsDark] = useState(false);
+  
+  return (
+    <Switch 
+      label="Dark mode" 
+      checked={isDark}
+      onChange={setIsDark}
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="checked" type="boolean">
+  Controlled checked state of the switch.
+</ParamField>
+
+<ParamField path="defaultChecked" type="boolean" default="false">
+  Default checked state for uncontrolled mode.
+</ParamField>
+
+<ParamField path="onChange" type="(checked: boolean) => void">
+  Called when the switch is toggled. Receives the new boolean state.
+</ParamField>
+
+<ParamField path="label" type="string">
+  Label text displayed next to the switch.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables the switch and prevents user interaction.
+</ParamField>
+
+<ParamField path="size" type="'sm' | 'md' | 'lg'" default="'md'">
+  Size variant:
+  - `sm`: w-7, h-4
+  - `md`: w-9, h-5
+  - `lg`: w-11, h-6
+</ParamField>
+
+<ParamField path="className" type="string" default="''">
+  Additional CSS classes to apply to the switch wrapper.
+</ParamField>
+
+<ParamField path="id" type="string">
+  HTML ID attribute. Auto-generated if not provided.
+</ParamField>
+
+## Examples
+
+### Basic Switch
+
+```tsx
+<Switch label="Enable notifications" />
+```
+
+### Controlled Switch
+
+```tsx
+function ControlledDemo() {
+  const [enabled, setEnabled] = useState(false);
+  
+  return (
+    <div>
+      <Switch 
+        label="Feature toggle"
+        checked={enabled}
+        onChange={setEnabled}
+      />
+      <p>Status: {enabled ? 'On' : 'Off'}</p>
+    </div>
+  );
+}
+```
+
+### Different Sizes
+
+```tsx
+<Switch label="Small" size="sm" />
+<Switch label="Medium" size="md" />
+<Switch label="Large" size="lg" />
+```
+
+### Disabled States
+
+```tsx
+<Switch label="Disabled off" disabled />
+<Switch label="Disabled on" disabled defaultChecked />
+```
+
+### Without Label
+
+```tsx
+<Switch />
+```
+
+### Settings Panel Example
+
+```tsx
+function SettingsDemo() {
+  const [settings, setSettings] = useState({
+    notifications: true,
+    autoSave: false,
+    darkMode: false
+  });
+  
+  return (
+    <div className="flex flex-col gap-3">
+      <Switch
+        label="Push notifications"
+        checked={settings.notifications}
+        onChange={(v) => setSettings({ ...settings, notifications: v })}
+      />
+      <Switch
+        label="Auto-save"
+        checked={settings.autoSave}
+        onChange={(v) => setSettings({ ...settings, autoSave: v })}
+      />
+      <Switch
+        label="Dark mode"
+        checked={settings.darkMode}
+        onChange={(v) => setSettings({ ...settings, darkMode: v })}
+      />
+    </div>
+  );
+}
+```
+
+## Notes
+
+- Built on a visually hidden checkbox input for accessibility
+- `onChange` receives a boolean value (unlike native checkbox onChange)
+- Includes smooth transition animations for track and thumb
+- `role="switch"` and proper `aria-checked` for screen readers
+- Focus ring visible for keyboard navigation
+- Thumb animates horizontally when toggled
+- Track color changes from muted to primary when checked

@@ -1,0 +1,251 @@
+---
+title: Tooltip
+description: CSS-only hover tooltip
+---
+
+CSS-only hover tooltip that appears when hovering over an element. No JavaScript required for basic functionality.
+
+## Import
+
+```tsx
+import { Tooltip } from '@kivora/react';
+```
+
+## Usage
+
+```tsx
+import { Tooltip, Button } from '@kivora/react';
+
+function Example() {
+  return (
+    <Tooltip content="Save your changes" side="top">
+      <Button label="Save" />
+    </Tooltip>
+  );
+}
+```
+
+## Positions
+
+Control where the tooltip appears:
+
+```tsx
+<Tooltip content="Appears above" side="top">
+  <Button label="Top" />
+</Tooltip>
+
+<Tooltip content="Appears below" side="bottom">
+  <Button label="Bottom" />
+</Tooltip>
+
+<Tooltip content="Appears on left" side="left">
+  <Button label="Left" />
+</Tooltip>
+
+<Tooltip content="Appears on right" side="right">
+  <Button label="Right" />
+</Tooltip>
+```
+
+## With Icons
+
+```tsx
+import { Info } from 'lucide-react';
+
+<Tooltip content="Additional information about this feature" side="top">
+  <button className="p-1 rounded hover:bg-accent">
+    <Info size={16} className="text-muted-foreground" />
+  </button>
+</Tooltip>
+```
+
+## With Text
+
+```tsx
+<p>
+  This feature is{' '}
+  <Tooltip content="Available in Pro plan" side="top">
+    <span className="underline decoration-dotted cursor-help">
+      premium only
+    </span>
+  </Tooltip>
+</p>
+```
+
+## Action Buttons
+
+```tsx
+import { Copy, Download, Share } from 'lucide-react';
+
+function ActionBar() {
+  return (
+    <div className="flex gap-1">
+      <Tooltip content="Copy link" side="top">
+        <button className="p-2 rounded hover:bg-accent">
+          <Copy size={18} />
+        </button>
+      </Tooltip>
+      <Tooltip content="Download" side="top">
+        <button className="p-2 rounded hover:bg-accent">
+          <Download size={18} />
+        </button>
+      </Tooltip>
+      <Tooltip content="Share" side="top">
+        <button className="p-2 rounded hover:bg-accent">
+          <Share size={18} />
+        </button>
+      </Tooltip>
+    </div>
+  );
+}
+```
+
+## Keyboard Shortcuts
+
+```tsx
+<Tooltip content="⌘+S" side="bottom">
+  <Button label="Save" />
+</Tooltip>
+
+<Tooltip content="⌘+C" side="bottom">
+  <Button label="Copy" />
+</Tooltip>
+```
+
+## Disabled Elements
+
+```tsx
+<Tooltip content="You don't have permission" side="top">
+  <span className="inline-block">
+    <Button label="Delete" disabled />
+  </span>
+</Tooltip>
+```
+
+Note: Wrap disabled elements in a `span` since disabled elements don't trigger hover events.
+
+## Long Content
+
+```tsx
+<Tooltip
+  content="This is a longer tooltip message that provides detailed information"
+  side="top"
+>
+  <Button label="Help" />
+</Tooltip>
+```
+
+Note: Tooltip uses `whitespace-nowrap` by default. For multi-line tooltips, add a custom className:
+
+```tsx
+<Tooltip
+  content="This tooltip can wrap to multiple lines when the content is very long"
+  side="top"
+  className="max-w-xs whitespace-normal"
+>
+  <Button label="Info" />
+</Tooltip>
+```
+
+## Form Fields
+
+```tsx
+function FormField() {
+  return (
+    <div>
+      <label className="flex items-center gap-2 text-sm font-medium mb-2">
+        Email address
+        <Tooltip content="We'll never share your email" side="top">
+          <Info size={14} className="text-muted-foreground" />
+        </Tooltip>
+      </label>
+      <input
+        type="email"
+        className="w-full border rounded p-2"
+        placeholder="you@example.com"
+      />
+    </div>
+  );
+}
+```
+
+## Status Indicators
+
+```tsx
+function StatusBadge() {
+  return (
+    <Tooltip content="All systems operational" side="top">
+      <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-green-100 text-green-800 text-xs font-medium">
+        <span className="w-1.5 h-1.5 rounded-full bg-green-600" />
+        Online
+      </span>
+    </Tooltip>
+  );
+}
+```
+
+## Props
+
+<ResponseField name="children" type="ReactNode" required>
+  Element that triggers the tooltip on hover
+</ResponseField>
+
+<ResponseField name="content" type="ReactNode" required>
+  Tooltip text or content to display
+</ResponseField>
+
+<ResponseField name="side" type="'top' | 'bottom' | 'left' | 'right'" default="top">
+  Which side of the trigger to show the tooltip
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes for the tooltip wrapper
+</ResponseField>
+
+## Styling
+
+The tooltip uses theme-aware colors:
+- Background: `bg-foreground`
+- Text: `text-background`
+- Arrow: matches background color
+
+Customize by overriding with className:
+
+```tsx
+<Tooltip
+  content="Custom styled tooltip"
+  className="[&_[role=tooltip]]:bg-primary [&_[role=tooltip]]:text-primary-foreground"
+>
+  <Button label="Hover me" />
+</Tooltip>
+```
+
+## Accessibility
+
+- Uses `role="tooltip"`
+- Automatically hidden from screen readers when not visible
+- Works with keyboard focus (shows on focus)
+- Arrow indicator for visual direction
+- Sufficient color contrast
+
+## Features
+
+- Pure CSS implementation (no JavaScript)
+- Smooth fade-in animation
+- Automatic positioning
+- Arrow pointer
+- Theme-aware styling
+- Works on hover and focus
+- Lightweight and performant
+
+## Tooltip vs Popover
+
+| Feature | Tooltip | Popover |
+|---------|---------|----------|
+| Trigger | Hover/Focus | Click |
+| Implementation | CSS only | JavaScript |
+| Content | Text only (simple) | Rich content |
+| Interactive | No | Yes |
+| Use case | Help text, labels | Forms, menus, cards |
+
+Use `Tooltip` for simple hover hints. Use `Popover` for interactive content.

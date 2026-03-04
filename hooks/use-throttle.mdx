@@ -1,0 +1,172 @@
+---
+title: useThrottle
+description: Limit how often a value or function can update
+---
+
+## Overview
+
+The `useThrottle` hooks limit how often a value updates or a function executes. Unlike debouncing, throttling guarantees execution at regular intervals, making it ideal for scroll handlers, mouse movements, and other high-frequency events.
+
+## Hooks
+
+### useThrottledValue
+
+Returns a throttled version of a value that updates at most once every specified interval.
+
+```tsx
+function useThrottledValue<T>(value: T, interval: number): T
+```
+
+#### Parameters
+
+<ParamField path="value" type="T" required>
+  The value to throttle
+</ParamField>
+
+<ParamField path="interval" type="number" required>
+  Minimum time in milliseconds between updates
+</ParamField>
+
+#### Returns
+
+<ResponseField name="throttledValue" type="T">
+  The throttled value that updates at most once per interval
+</ResponseField>
+
+### useThrottledCallback
+
+Returns a throttled callback that fires at most once every specified interval.
+
+```tsx
+function useThrottledCallback<T extends (...args: unknown[]) => void>(
+  callback: T,
+  interval: number
+): (...args: Parameters<T>) => void
+```
+
+#### Parameters
+
+<ParamField path="callback" type="T" required>
+  Function to throttle
+</ParamField>
+
+<ParamField path="interval" type="number" required>
+  Minimum time in milliseconds between function calls
+</ParamField>
+
+#### Returns
+
+<ResponseField name="throttledCallback" type="function">
+  A throttled callback that executes at most once per interval
+</ResponseField>
+
+## Examples
+
+### Throttling search updates
+
+```tsx
+import { useState } from 'react';
+import { useThrottledValue } from 'kivora-react';
+
+function SearchComponent() {
+  const [search, setSearch] = useState('');
+  const throttledSearch = useThrottledValue(search, 300);
+
+  // This effect runs at most once every 300ms
+  useEffect(() => {
+    fetchResults(throttledSearch);
+  }, [throttledSearch]);
+
+  return (
+    <input
+      type="text"
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+  );
+}
+```
+
+### Scroll position tracking
+
+```tsx
+import { useEffect, useState } from 'react';
+import { useThrottledCallback } from 'kivora-react';
+
+function ScrollTracker() {
+  const [scrollPos, setScrollPos] = useState(0);
+
+  const handleScroll = useThrottledCallback(() => {
+    setScrollPos(window.scrollY);
+  }, 100);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  return <div>Scroll position: {scrollPos}px</div>;
+}
+```
+
+### Mouse movement tracking
+
+```tsx
+import { useState } from 'react';
+import { useThrottledCallback } from 'kivora-react';
+
+function MouseTracker() {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const updatePosition = useThrottledCallback((e: MouseEvent) => {
+    setPosition({ x: e.clientX, y: e.clientY });
+  }, 50);
+
+  return (
+    <div
+      onMouseMove={updatePosition}
+      style={{ width: '100%', height: '400px', border: '1px solid #ccc' }}
+    >
+      Mouse: ({position.x}, {position.y})
+    </div>
+  );
+}
+```
+
+### Auto-save with throttling
+
+```tsx
+import { useThrottledCallback } from 'kivora-react';
+
+function Editor() {
+  const [content, setContent] = useState('');
+
+  const throttledSave = useThrottledCallback((data: string) => {
+    // Saves at most once per second, even if typing continuously
+    api.saveDocument(data);
+  }, 1000);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newContent = e.target.value;
+    setContent(newContent);
+    throttledSave(newContent);
+  };
+
+  return <textarea value={content} onChange={handleChange} />;
+}
+```
+
+## Use Cases
+
+- **Scroll handlers**: Track scroll position without overwhelming the browser
+- **Mouse/touch tracking**: Monitor user interactions efficiently
+- **Window resize**: Update layout calculations at controlled intervals
+- **Auto-save**: Save changes periodically during continuous editing
+- **API polling**: Limit request frequency for real-time data
+
+## Throttle vs Debounce
+
+- **Throttle**: Guarantees execution at regular intervals (e.g., every 100ms)
+- **Debounce**: Waits for a pause in activity before executing
+
+Use throttle for continuous events where you need regular updates. Use debounce when you only care about the final value after activity stops.

@@ -1,0 +1,203 @@
+---
+title: useInputState
+description: Shorthand for managing a single controlled input's string value
+---
+
+## Usage
+
+```tsx
+import { useInputState } from 'kivora-react';
+
+function SearchForm() {
+  const name = useInputState('');
+  const email = useInputState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log({ name: name.value, email: email.value });
+    name.reset();
+    email.reset();
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        placeholder="Name"
+        value={name.value}
+        onChange={name.onChange}
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={email.value}
+        onChange={email.onChange}
+      />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="initialValue" type="string" default="''">
+  Initial input value
+</ParamField>
+
+## Return Value
+
+Returns an object with the input value and helper methods:
+
+<ResponseField name="value" type="string">
+  Current input value
+</ResponseField>
+
+<ResponseField name="onChange" type="(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void">
+  Change handler for input elements. Automatically extracts `event.currentTarget.value`.
+</ResponseField>
+
+<ResponseField name="setValue" type="React.Dispatch<React.SetStateAction<string>>">
+  Direct setter function (same as `useState` setter)
+</ResponseField>
+
+<ResponseField name="reset" type="() => void">
+  Reset the input to its initial value
+</ResponseField>
+
+## Examples
+
+### Basic Text Input
+
+```tsx
+const username = useInputState('');
+
+return (
+  <input
+    value={username.value}
+    onChange={username.onChange}
+    placeholder="Username"
+  />
+);
+```
+
+### With Spread Operator
+
+```tsx
+const email = useInputState('');
+
+// Spread value and onChange together
+return (
+  <input
+    {...email}
+    type="email"
+    placeholder="Email"
+  />
+);
+```
+
+### Textarea
+
+```tsx
+const comment = useInputState('');
+
+return (
+  <div>
+    <textarea
+      value={comment.value}
+      onChange={comment.onChange}
+      rows={5}
+    />
+    <p>Characters: {comment.value.length}</p>
+    <button onClick={comment.reset}>Clear</button>
+  </div>
+);
+```
+
+### Select Dropdown
+
+```tsx
+const country = useInputState('us');
+
+return (
+  <select value={country.value} onChange={country.onChange}>
+    <option value="us">United States</option>
+    <option value="uk">United Kingdom</option>
+    <option value="ca">Canada</option>
+  </select>
+);
+```
+
+### Search Input with Clear
+
+```tsx
+const search = useInputState('');
+
+return (
+  <div>
+    <input
+      type="search"
+      value={search.value}
+      onChange={search.onChange}
+      placeholder="Search..."
+    />
+    {search.value && (
+      <button onClick={search.reset}>Clear</button>
+    )}
+  </div>
+);
+```
+
+### Controlled Form
+
+```tsx
+function ContactForm() {
+  const name = useInputState('');
+  const email = useInputState('');
+  const message = useInputState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    await sendMessage({
+      name: name.value,
+      email: email.value,
+      message: message.value
+    });
+    
+    // Reset all fields
+    name.reset();
+    email.reset();
+    message.reset();
+  };
+
+  const isValid = name.value && email.value && message.value;
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input value={name.value} onChange={name.onChange} placeholder="Name" />
+      <input value={email.value} onChange={email.onChange} placeholder="Email" />
+      <textarea value={message.value} onChange={message.onChange} placeholder="Message" />
+      <button type="submit" disabled={!isValid}>Send</button>
+    </form>
+  );
+}
+```
+
+### Programmatic Updates
+
+```tsx
+const code = useInputState('');
+
+const generateCode = () => {
+  const randomCode = Math.random().toString(36).substring(7).toUpperCase();
+  code.setValue(randomCode);
+};
+
+return (
+  <div>
+    <input value={code.value} onChange={code.onChange} />
+    <button onClick={generateCode}>Generate</button>
+    <button onClick={code.reset}>Clear</button>
+  </div>
+);
+```

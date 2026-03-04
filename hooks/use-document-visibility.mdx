@@ -1,0 +1,152 @@
+---
+title: useDocumentVisibility
+description: Track document visibility state
+---
+
+Returns the current `document.visibilityState`, updated on tab focus changes.
+
+## Usage
+
+```tsx
+import { useDocumentVisibility } from 'kivora-react';
+
+function VideoPlayer({ src }) {
+  const visibility = useDocumentVisibility();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (visibility === 'hidden') {
+      videoRef.current?.pause();
+    }
+  }, [visibility]);
+
+  return <video ref={videoRef} src={src} />;
+}
+```
+
+## Returns
+
+<ResponseField name="visibility" type="'visible' | 'hidden'">
+  The current document visibility state.
+</ResponseField>
+
+## Examples
+
+### Pause video when tab is hidden
+
+```tsx
+function VideoPlayer() {
+  const visibility = useDocumentVisibility();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (visibility === 'hidden') {
+      videoRef.current?.pause();
+    } else {
+      videoRef.current?.play();
+    }
+  }, [visibility]);
+
+  return <video ref={videoRef} src="video.mp4" />;
+}
+```
+
+### Stop polling when hidden
+
+```tsx
+function LiveData() {
+  const visibility = useDocumentVisibility();
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    if (visibility === 'hidden') return;
+
+    const interval = setInterval(() => {
+      fetchData().then(setData);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [visibility]);
+
+  return <div>{/* Display data */}</div>;
+}
+```
+
+### Track time spent on page
+
+```tsx
+function Analytics() {
+  const visibility = useDocumentVisibility();
+  const [timeSpent, setTimeSpent] = useState(0);
+
+  useEffect(() => {
+    if (visibility === 'hidden') return;
+
+    const start = Date.now();
+    return () => {
+      const duration = Date.now() - start;
+      setTimeSpent((prev) => prev + duration);
+    };
+  }, [visibility]);
+
+  return <div>Time on page: {Math.round(timeSpent / 1000)}s</div>;
+}
+```
+
+### Notification badge
+
+```tsx
+function Chat() {
+  const visibility = useDocumentVisibility();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    const handleMessage = (msg) => {
+      if (visibility === 'hidden') {
+        setUnreadCount((count) => count + 1);
+      }
+    };
+
+    socket.on('message', handleMessage);
+    return () => socket.off('message', handleMessage);
+  }, [visibility]);
+
+  useEffect(() => {
+    if (visibility === 'visible') {
+      setUnreadCount(0);
+    }
+  }, [visibility]);
+
+  return <div>Unread: {unreadCount}</div>;
+}
+```
+
+### Reduce animations when hidden
+
+```tsx
+function AnimatedBackground() {
+  const visibility = useDocumentVisibility();
+
+  return (
+    <div 
+      className={`background ${visibility === 'visible' ? 'animated' : ''}`}
+    >
+      {/* Background content */}
+    </div>
+  );
+}
+```
+
+## Notes
+
+- Updates automatically when the user switches tabs or minimizes the window
+- Uses the `visibilitychange` event
+- Returns `'visible'` by default in non-browser environments
+
+## Type Definitions
+
+```ts
+type DocumentVisibility = 'visible' | 'hidden';
+
+function useDocumentVisibility(): DocumentVisibility;
+```

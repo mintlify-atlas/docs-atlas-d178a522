@@ -1,0 +1,219 @@
+---
+title: 'useControlled'
+description: 'Create components that work in both controlled and uncontrolled modes'
+---
+
+## Overview
+
+The `useControlled` hook manages values that can work in either controlled or uncontrolled mode. This pattern is commonly used in form components like inputs, checkboxes, and switches, allowing them to work with or without external state management.
+
+When a `value` prop is provided, the component operates in controlled mode. When only `defaultValue` is provided, it maintains its own internal state (uncontrolled mode).
+
+## Usage
+
+```tsx
+import { useControlled } from '@kivora/react';
+
+function CustomInput({ value, defaultValue = '', onChange }) {
+  const [currentValue, setValue] = useControlled({
+    value,
+    defaultValue,
+    onChange,
+  });
+
+  return (
+    <input
+      value={currentValue}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
+}
+```
+
+## Parameters
+
+Accepts an object with the following properties:
+
+<ParamField path="value" type="T | undefined">
+  The controlled value. When provided, the component operates in controlled mode
+</ParamField>
+
+<ParamField path="defaultValue" type="T" required>
+  The initial value for uncontrolled mode. Used when `value` is undefined
+</ParamField>
+
+<ParamField path="onChange" type="(value: T) => void | undefined">
+  Callback function invoked when the value changes. Called in both controlled and uncontrolled modes
+</ParamField>
+
+## Returns
+
+Returns a tuple matching React's `useState` API:
+
+<ResponseField name="[0]" type="T">
+  The current value (either controlled or internal state)
+</ResponseField>
+
+<ResponseField name="[1]" type="(next: T) => void">
+  Function to update the value. Calls `onChange` and updates internal state if uncontrolled
+</ResponseField>
+
+## Examples
+
+### Custom Toggle Component
+
+```tsx
+import { useControlled } from '@kivora/react';
+
+interface ToggleProps {
+  value?: boolean;
+  defaultValue?: boolean;
+  onChange?: (checked: boolean) => void;
+}
+
+function Toggle({ value, defaultValue = false, onChange }: ToggleProps) {
+  const [checked, setChecked] = useControlled({
+    value,
+    defaultValue,
+    onChange,
+  });
+
+  return (
+    <button
+      role="switch"
+      aria-checked={checked}
+      onClick={() => setChecked(!checked)}
+      style={{
+        background: checked ? 'green' : 'gray',
+        padding: '8px 16px',
+        borderRadius: '4px',
+      }}
+    >
+      {checked ? 'ON' : 'OFF'}
+    </button>
+  );
+}
+
+// Uncontrolled usage
+<Toggle defaultValue={false} onChange={(checked) => console.log(checked)} />
+
+// Controlled usage
+const [enabled, setEnabled] = useState(false);
+<Toggle value={enabled} onChange={setEnabled} />
+```
+
+### Custom Select Component
+
+```tsx
+import { useControlled } from '@kivora/react';
+
+interface SelectProps<T> {
+  options: T[];
+  value?: T;
+  defaultValue: T;
+  onChange?: (value: T) => void;
+  renderOption: (option: T) => React.ReactNode;
+}
+
+function Select<T>({ 
+  options, 
+  value, 
+  defaultValue, 
+  onChange,
+  renderOption 
+}: SelectProps<T>) {
+  const [selected, setSelected] = useControlled({
+    value,
+    defaultValue,
+    onChange,
+  });
+
+  return (
+    <div>
+      {options.map((option, index) => (
+        <button
+          key={index}
+          onClick={() => setSelected(option)}
+          style={{
+            fontWeight: option === selected ? 'bold' : 'normal',
+          }}
+        >
+          {renderOption(option)}
+        </button>
+      ))}
+    </div>
+  );
+}
+```
+
+### Custom Counter Component
+
+```tsx
+import { useControlled } from '@kivora/react';
+
+interface CounterProps {
+  value?: number;
+  defaultValue?: number;
+  onChange?: (value: number) => void;
+  min?: number;
+  max?: number;
+}
+
+function Counter({ 
+  value, 
+  defaultValue = 0, 
+  onChange,
+  min = -Infinity,
+  max = Infinity,
+}: CounterProps) {
+  const [count, setCount] = useControlled({
+    value,
+    defaultValue,
+    onChange,
+  });
+
+  const increment = () => {
+    if (count < max) setCount(count + 1);
+  };
+
+  const decrement = () => {
+    if (count > min) setCount(count - 1);
+  };
+
+  return (
+    <div>
+      <button onClick={decrement}>-</button>
+      <span>{count}</span>
+      <button onClick={increment}>+</button>
+    </div>
+  );
+}
+
+// Uncontrolled with limits
+<Counter defaultValue={5} min={0} max={10} />
+
+// Controlled
+const [value, setValue] = useState(0);
+<Counter value={value} onChange={setValue} />
+```
+
+## Type Definition
+
+```typescript
+interface UseControlledOptions<T> {
+  value: T | undefined;
+  defaultValue: T;
+  onChange: ((value: T) => void) | undefined;
+}
+
+function useControlled<T>(
+  options: UseControlledOptions<T>
+): [T, (next: T) => void];
+```
+
+## Notes
+
+- This hook is primarily used internally by Kivora form components
+- The hook automatically detects whether the component should be controlled or uncontrolled based on whether `value` is undefined
+- The `onChange` callback is called in both controlled and uncontrolled modes
+- The returned setter function is stable and won't cause unnecessary re-renders

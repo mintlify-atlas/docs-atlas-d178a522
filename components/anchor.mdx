@@ -1,0 +1,140 @@
+---
+title: Anchor
+description: Styled anchor link with configurable underline behavior.
+---
+
+## Overview
+
+The `Anchor` component provides a consistently styled hyperlink with customizable underline behavior and hover effects.
+
+## Import
+
+```tsx
+import { Anchor } from '@kivora/react';
+```
+
+## Basic Usage
+
+```tsx
+<Anchor href="https://example.com">Visit our site</Anchor>
+```
+
+## Underline Styles
+
+Control when the underline appears:
+
+```tsx
+<Anchor href="/docs" underline="hover">
+  Hover to underline (default)
+</Anchor>
+
+<Anchor href="/docs" underline="always">
+  Always underlined
+</Anchor>
+
+<Anchor href="/docs" underline="never">
+  Never underlined
+</Anchor>
+```
+
+### Underline Options
+
+- `hover` (default) - Underline appears on hover
+- `always` - Underline is always visible
+- `never` - No underline
+
+## Examples
+
+### External Link
+
+```tsx
+<Anchor href="https://example.com" target="_blank" rel="noopener noreferrer">
+  External Documentation
+</Anchor>
+```
+
+### Navigation Link
+
+```tsx
+<Anchor href="/documentation" underline="always">
+  Read the Docs
+</Anchor>
+```
+
+### Inline Text Link
+
+```tsx
+<p>
+  Check out our <Anchor href="/guide">getting started guide</Anchor> to learn more.
+</p>
+```
+
+### No Underline Link
+
+```tsx
+<Anchor href="/settings" underline="never">
+  Settings
+</Anchor>
+```
+
+### With Custom Styling
+
+```tsx
+<Anchor href="/premium" className="text-lg font-bold">
+  Upgrade to Premium
+</Anchor>
+```
+
+## Accessibility
+
+The component automatically inherits all standard anchor attributes:
+
+```tsx
+<Anchor 
+  href="/docs" 
+  aria-label="Documentation homepage"
+  title="View documentation"
+>
+  Docs
+</Anchor>
+```
+
+## Styling
+
+Default styles include:
+- Primary color text (`text-primary`)
+- Medium font weight (`font-medium`)
+- Underline offset of 4px when underlined
+- Opacity transition on hover (80% opacity)
+
+## Props
+
+<ResponseField name="underline" type="'always' | 'hover' | 'never'" default="'hover'">
+  Controls when the underline is visible
+</ResponseField>
+
+<ResponseField name="href" type="string" required>
+  The URL to link to
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Link text or content
+</ResponseField>
+
+<ResponseField name="...props" type="React.ComponentPropsWithoutRef<'a'>">
+  All standard HTML anchor props (target, rel, download, etc.)
+</ResponseField>
+
+## Type Definition
+
+Source: `/home/daytona/workspace/source/src/components/typography/Anchor.tsx:5`
+
+```tsx
+export interface AnchorProps extends React.ComponentPropsWithoutRef<'a'> {
+  underline?: 'always' | 'hover' | 'never';
+}
+```

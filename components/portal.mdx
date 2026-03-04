@@ -1,0 +1,139 @@
+---
+title: Portal
+description: Render children into a DOM node outside the component hierarchy
+---
+
+## Usage
+
+Portal renders its children into a DOM node that exists outside the component's parent hierarchy. By default, it renders into `document.body`, but you can specify a custom target.
+
+```tsx
+import { Portal } from '@kivora/react';
+
+<Portal>
+  <div>Rendered in document.body</div>
+</Portal>
+```
+
+## Examples
+
+### Basic Portal
+
+```tsx
+<Portal>
+  <div className="fixed top-0 left-0 w-full h-full bg-black/50">
+    Overlay rendered at body level
+  </div>
+</Portal>
+```
+
+### Modal with Portal
+
+```tsx
+function Modal({ isOpen, onClose, children }) {
+  if (!isOpen) return null;
+
+  return (
+    <Portal>
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div 
+          className="fixed inset-0 bg-black/50" 
+          onClick={onClose}
+        />
+        <div className="relative bg-white rounded-lg p-6 max-w-md">
+          {children}
+        </div>
+      </div>
+    </Portal>
+  );
+}
+```
+
+### Custom Target
+
+```tsx
+function App() {
+  const modalRoot = document.getElementById('modal-root');
+
+  return (
+    <Portal target={modalRoot}>
+      <div>Rendered in #modal-root</div>
+    </Portal>
+  );
+}
+```
+
+### Tooltip with Portal
+
+```tsx
+function Tooltip({ children, content }) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  return (
+    <>
+      <span
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+      >
+        {children}
+      </span>
+      {isVisible && (
+        <Portal>
+          <div className="fixed bg-gray-900 text-white px-2 py-1 rounded text-sm">
+            {content}
+          </div>
+        </Portal>
+      )}
+    </>
+  );
+}
+```
+
+### Notification System
+
+```tsx
+function NotificationContainer({ notifications }) {
+  return (
+    <Portal>
+      <div className="fixed top-4 right-4 z-50 flex flex-col gap-2">
+        {notifications.map(notification => (
+          <div 
+            key={notification.id} 
+            className="bg-white shadow-lg rounded-lg p-4"
+          >
+            {notification.message}
+          </div>
+        ))}
+      </div>
+    </Portal>
+  );
+}
+```
+
+## Props
+
+<ParamField path="children" type="ReactNode" required>
+  The content to render through the portal.
+</ParamField>
+
+<ParamField path="target" type="HTMLElement | null">
+  The DOM node to render into. If not provided, defaults to `document.body`.
+</ParamField>
+
+## Behavior
+
+- Portal uses React's `createPortal` API under the hood
+- The component waits for the DOM to be mounted before rendering (SSR-safe)
+- If the target element doesn't exist or isn't mounted, the portal renders nothing
+- Event bubbling works naturally through portals
+
+## Use Cases
+
+- **Modals and Dialogs**: Render overlays at the body level to avoid z-index issues
+- **Tooltips and Popovers**: Position floating elements without overflow constraints
+- **Notifications**: Display toast messages in a fixed position
+- **Dropdowns**: Render dropdown menus outside of overflow-hidden containers
+
+## Client-Side Only
+
+Portal is marked with `'use client'` directive and only works in the browser. During SSR, it will not render anything until the component is hydrated on the client.

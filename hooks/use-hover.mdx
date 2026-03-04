@@ -1,0 +1,262 @@
+---
+title: useHover
+description: Returns a boolean indicating whether the mouse is hovering over an element
+---
+
+## Usage
+
+Returns `true` when the mouse is hovered over the element attached to the returned ref.
+
+```tsx
+import { useHover } from 'kivora-react';
+
+function HoverableButton() {
+  const [ref, hovered] = useHover<HTMLButtonElement>();
+
+  return (
+    <button
+      ref={ref}
+      style={{
+        background: hovered ? 'blue' : 'grey',
+        color: 'white',
+        padding: '10px 20px',
+        border: 'none',
+        borderRadius: '4px',
+      }}
+    >
+      {hovered ? 'Hovered!' : 'Hover me'}
+    </button>
+  );
+}
+```
+
+## Parameters
+
+This hook does not accept any parameters.
+
+## Returns
+
+Returns a tuple `[ref, hovered]`:
+
+<ResponseField name="[0]" type="RefObject<T | null>">
+  React ref to attach to the element you want to track hover state for
+</ResponseField>
+
+<ResponseField name="[1]" type="boolean">
+  `true` when the mouse is hovering over the element, `false` otherwise
+</ResponseField>
+
+## Examples
+
+### Hover card
+
+```tsx
+import { useHover } from 'kivora-react';
+
+function HoverCard() {
+  const [ref, hovered] = useHover<HTMLDivElement>();
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        padding: '20px',
+        border: '1px solid #ddd',
+        borderRadius: '8px',
+        transform: hovered ? 'scale(1.05)' : 'scale(1)',
+        boxShadow: hovered ? '0 8px 16px rgba(0,0,0,0.2)' : '0 2px 4px rgba(0,0,0,0.1)',
+        transition: 'all 0.2s ease',
+        cursor: 'pointer',
+      }}
+    >
+      <h3>Hover Card</h3>
+      <p>Hover over me to see the effect</p>
+    </div>
+  );
+}
+```
+
+### Conditional content
+
+```tsx
+import { useHover } from 'kivora-react';
+
+function ImageWithOverlay({ src, title }: { src: string; title: string }) {
+  const [ref, hovered] = useHover<HTMLDivElement>();
+
+  return (
+    <div ref={ref} style={{ position: 'relative', width: '300px' }}>
+      <img
+        src={src}
+        alt={title}
+        style={{ width: '100%', display: 'block', borderRadius: '8px' }}
+      />
+      {hovered && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            background: 'rgba(0,0,0,0.8)',
+            color: 'white',
+            padding: '10px',
+            borderRadius: '0 0 8px 8px',
+          }}
+        >
+          <h4>{title}</h4>
+          <p>Click to view details</p>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Tooltip
+
+```tsx
+import { useHover } from 'kivora-react';
+
+function TooltipButton({ tooltip }: { tooltip: string }) {
+  const [ref, hovered] = useHover<HTMLButtonElement>();
+
+  return (
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      <button ref={ref} style={{ padding: '8px 16px' }}>
+        Hover for tooltip
+      </button>
+      {hovered && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '100%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            marginBottom: '8px',
+            padding: '8px 12px',
+            background: '#333',
+            color: 'white',
+            borderRadius: '4px',
+            fontSize: '14px',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {tooltip}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Interactive list item
+
+```tsx
+import { useHover } from 'kivora-react';
+
+function ListItem({ title, description }: { title: string; description: string }) {
+  const [ref, hovered] = useHover<HTMLLIElement>();
+
+  return (
+    <li
+      ref={ref}
+      style={{
+        padding: '16px',
+        background: hovered ? '#f0f0f0' : 'white',
+        borderLeft: hovered ? '4px solid #3b82f6' : '4px solid transparent',
+        transition: 'all 0.2s',
+        cursor: 'pointer',
+      }}
+    >
+      <h4 style={{ margin: 0, color: hovered ? '#3b82f6' : '#333' }}>{title}</h4>
+      <p style={{ margin: '4px 0 0', color: '#666' }}>{description}</p>
+    </li>
+  );
+}
+```
+
+### Color preview
+
+```tsx
+import { useHover } from 'kivora-react';
+
+function ColorSwatch({ color, name }: { color: string; name: string }) {
+  const [ref, hovered] = useHover<HTMLDivElement>();
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        width: '100px',
+        height: '100px',
+        background: color,
+        borderRadius: '8px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        cursor: 'pointer',
+        border: hovered ? '3px solid #333' : '3px solid transparent',
+      }}
+    >
+      {hovered && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '-30px',
+            background: '#333',
+            color: 'white',
+            padding: '4px 8px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {name}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Action buttons on hover
+
+```tsx
+import { useHover } from 'kivora-react';
+
+function Card({ title, content }: { title: string; content: string }) {
+  const [ref, hovered] = useHover<HTMLDivElement>();
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        position: 'relative',
+        padding: '20px',
+        border: '1px solid #ddd',
+        borderRadius: '8px',
+      }}
+    >
+      <h3>{title}</h3>
+      <p>{content}</p>
+      
+      {hovered && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            display: 'flex',
+            gap: '8px',
+          }}
+        >
+          <button style={{ padding: '4px 8px' }}>Edit</button>
+          <button style={{ padding: '4px 8px' }}>Delete</button>
+        </div>
+      )}
+    </div>
+  );
+}
+```

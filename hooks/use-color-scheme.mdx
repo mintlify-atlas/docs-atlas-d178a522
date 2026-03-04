@@ -1,0 +1,89 @@
+---
+title: useColorScheme
+description: Detect system color scheme preference
+---
+
+Detects and subscribes to the user's system color-scheme preference.
+
+## Usage
+
+```tsx
+import { useColorScheme } from 'kivora-react';
+
+function ThemedComponent() {
+  const scheme = useColorScheme();
+
+  return (
+    <div className={scheme === 'dark' ? 'dark-theme' : 'light-theme'}>
+      Current theme: {scheme}
+    </div>
+  );
+}
+```
+
+## Returns
+
+<ResponseField name="scheme" type="'light' | 'dark'">
+  The current system color scheme preference.
+</ResponseField>
+
+## Examples
+
+### Apply theme classes
+
+```tsx
+const scheme = useColorScheme();
+
+return (
+  <div className={scheme === 'dark' ? 'bg-gray-900' : 'bg-white'}>
+    {/* Content */}
+  </div>
+);
+```
+
+### Conditional rendering
+
+```tsx
+const scheme = useColorScheme();
+
+return (
+  <>
+    {scheme === 'dark' ? (
+      <img src="logo-dark.png" alt="Logo" />
+    ) : (
+      <img src="logo-light.png" alt="Logo" />
+    )}
+  </>
+);
+```
+
+### Sync with localStorage
+
+```tsx
+function App() {
+  const systemScheme = useColorScheme();
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || systemScheme;
+  });
+
+  useEffect(() => {
+    if (!localStorage.getItem('theme')) {
+      setTheme(systemScheme);
+    }
+  }, [systemScheme]);
+
+  return <div data-theme={theme}>{/* App content */}</div>;
+}
+```
+
+## Notes
+
+- Automatically updates when the user changes their system preference
+- Uses `window.matchMedia('(prefers-color-scheme: dark)')`
+- Returns `'light'` by default when system preference cannot be determined
+
+## Type Definitions
+
+```ts
+function useColorScheme(): 'light' | 'dark';
+```

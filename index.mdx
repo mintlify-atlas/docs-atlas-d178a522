@@ -1,97 +1,212 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Kivora React Documentation"
+description: "A fully-typed React component library with 50+ components, 18+ hooks, and full dark-mode support"
+mode: "custom"
 ---
 
-## Setting up
+<div className="relative overflow-hidden bg-gradient-to-br from-[#3B82F6] via-[#2563EB] to-[#1E40AF] dark:from-[#1E3A8A] dark:via-[#1E40AF] dark:to-[#1E3A8A] py-20">
+  <div className="max-w-6xl mx-auto px-6 sm:px-8">
+    <div className="text-center">
+      <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
+        Build beautiful React apps faster
+      </h1>
+      <p className="text-lg sm:text-xl text-blue-100 max-w-3xl mx-auto mb-8">
+        A fully-typed component library with 50+ components, 35+ hooks, and built-in dark mode support. Everything you need to build modern React applications.
+      </p>
+      <div className="flex flex-wrap gap-4 justify-center">
+        <a 
+          href="/quickstart" 
+          className="inline-flex items-center px-6 py-3 rounded-lg bg-white text-[#3B82F6] font-semibold hover:bg-blue-50 transition-colors no-underline"
+        >
+          Get Started
+        </a>
+        <a 
+          href="/components/button" 
+          className="inline-flex items-center px-6 py-3 rounded-lg border-2 border-white/30 bg-white/10 text-white font-semibold hover:bg-white/20 transition-colors no-underline"
+        >
+          Browse Components
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 
-Get your documentation site up and running in minutes.
+<div className="mt-16 mb-16 max-w-5xl mx-auto px-6">
+  <div className="text-center mb-12">
+    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+      Quick Start
+    </h2>
+    <p className="text-lg text-gray-600 dark:text-gray-400">
+      Get up and running in minutes
+    </p>
+  </div>
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+  <Steps>
+    <Step title="Install the package">
+      Install Kivora React using your preferred package manager:
+      
+      <CodeGroup>
+      ```bash npm
+      npm install @kivora/react
+      ```
+      ```bash yarn
+      yarn add @kivora/react
+      ```
+      ```bash pnpm
+      pnpm add @kivora/react
+      ```
+      </CodeGroup>
+    </Step>
 
-## Make it yours
+    <Step title="Import the styles">
+      Import the global stylesheet at the root of your app:
+      
+      ```tsx
+      import '@kivora/react/styles';
+      ```
+    </Step>
 
-Design a docs site that looks great and empowers your users.
+    <Step title="Start building">
+      Import and use components in your application:
+      
+      ```tsx
+      import { Button, Badge, Input } from '@kivora/react';
 
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
-  </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
-  </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
+      export default function App() {
+        return (
+          <div>
+            <Button variant="primary" size="md">
+              Save changes
+            </Button>
+            <Badge variant="success">New</Badge>
+            <Input 
+              label="Email" 
+              type="email" 
+              placeholder="you@example.com" 
+            />
+          </div>
+        );
+      }
+      ```
+    </Step>
+  </Steps>
+</div>
 
-## Create beautiful pages
+<div className="mt-16 mb-16 max-w-5xl mx-auto px-6">
+  <div className="text-center mb-12">
+    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+      Explore by Category
+    </h2>
+    <p className="text-lg text-gray-600 dark:text-gray-400">
+      Browse our comprehensive component library
+    </p>
+  </div>
 
-Everything you need to create world-class documentation.
+  <CardGroup cols={3}>
+    <Card title="Buttons" icon="hand-pointer" href="/components/button">
+      Interactive buttons, action icons, and close buttons
+    </Card>
+    <Card title="Inputs" icon="keyboard" href="/components/input">
+      Text inputs, checkboxes, selects, sliders, and more
+    </Card>
+    <Card title="Layout" icon="grid" href="/components/container">
+      Containers, grids, stacks, and flexbox utilities
+    </Card>
+    <Card title="Typography" icon="text" href="/components/text">
+      Text, titles, code blocks, and formatting components
+    </Card>
+    <Card title="Feedback" icon="bell" href="/components/alert">
+      Alerts, notifications, spinners, and progress indicators
+    </Card>
+    <Card title="Navigation" icon="compass" href="/components/tabs">
+      Tabs, breadcrumbs, pagination, and navigation links
+    </Card>
+    <Card title="Overlays" icon="window-maximize" href="/components/modal">
+      Modals, drawers, tooltips, and popovers
+    </Card>
+    <Card title="Data Display" icon="table" href="/components/badge">
+      Badges, avatars, cards, tables, and data components
+    </Card>
+    <Card title="Hooks" icon="code" href="/hooks/use-counter">
+      35+ custom hooks for state, async, DOM, and browser APIs
+    </Card>
+  </CardGroup>
+</div>
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+<div className="mt-16 mb-16 max-w-5xl mx-auto px-6">
+  <div className="text-center mb-12">
+    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+      Key Features
+    </h2>
+    <p className="text-lg text-gray-600 dark:text-gray-400">
+      Everything you need for modern React development
+    </p>
+  </div>
 
-## Need inspiration?
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="p-6 rounded-xl border border-gray-200 dark:border-[#27272a] bg-white dark:bg-[#1a1d27]">
+      <div className="text-[#3B82F6] mb-3">
+        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Fully Typed</h3>
+      <p className="text-gray-600 dark:text-gray-400">
+        Complete TypeScript support with comprehensive type definitions for every component and hook
+      </p>
+    </div>
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+    <div className="p-6 rounded-xl border border-gray-200 dark:border-[#27272a] bg-white dark:bg-[#1a1d27]">
+      <div className="text-[#3B82F6] mb-3">
+        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </div>
+      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Dark Mode</h3>
+      <p className="text-gray-600 dark:text-gray-400">
+        Built-in dark mode support via CSS design tokens with seamless theme switching
+      </p>
+    </div>
+
+    <div className="p-6 rounded-xl border border-gray-200 dark:border-[#27272a] bg-white dark:bg-[#1a1d27]">
+      <div className="text-[#3B82F6] mb-3">
+        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      </div>
+      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Tree Shakeable</h3>
+      <p className="text-gray-600 dark:text-gray-400">
+        Optimized bundle size with tree-shakeable exports — only import what you need
+      </p>
+    </div>
+
+    <div className="p-6 rounded-xl border border-gray-200 dark:border-[#27272a] bg-white dark:bg-[#1a1d27]">
+      <div className="text-[#3B82F6] mb-3">
+        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+        </svg>
+      </div>
+      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Customizable</h3>
+      <p className="text-gray-600 dark:text-gray-400">
+        Built on @kivora/core design system with extensive theming and customization options
+      </p>
+    </div>
+  </div>
+</div>
+
+<div className="mt-16 mb-16 max-w-5xl mx-auto px-6">
+  <div className="p-8 rounded-2xl bg-gradient-to-r from-[#3B82F6] to-[#2563EB] dark:from-[#1E40AF] dark:to-[#1E3A8A] text-center">
+    <h2 className="text-3xl font-bold text-white mb-4">
+      Ready to get started?
+    </h2>
+    <p className="text-lg text-blue-100 mb-6 max-w-2xl mx-auto">
+      Install Kivora React and start building beautiful applications today
+    </p>
+    <a 
+      href="/installation" 
+      className="inline-flex items-center px-6 py-3 rounded-lg bg-white text-[#3B82F6] font-semibold hover:bg-blue-50 transition-colors no-underline"
+    >
+      View Installation Guide
+    </a>
+  </div>
+</div>

@@ -1,0 +1,234 @@
+---
+title: Ring Progress
+description: Circular SVG progress ring for displaying completion percentage.
+---
+
+Circular SVG progress ring. Displays progress in a circular format, ideal for dashboards and statistics.
+
+## Import
+
+```tsx
+import { RingProgress } from '@kivora/react';
+```
+
+## Usage
+
+```tsx
+import { Text } from '@kivora/react';
+
+<RingProgress value={72} label={<Text size="sm">72%</Text>} />
+```
+
+## With Label
+
+Display text in the center of the ring:
+
+```tsx
+import { RingProgress, Text } from '@kivora/react';
+
+<RingProgress 
+  value={85} 
+  label={
+    <div className="text-center">
+      <Text size="lg" weight="semibold">85%</Text>
+      <Text size="xs" variant="muted">Complete</Text>
+    </div>
+  } 
+/>
+```
+
+## Custom Size
+
+Control the size and thickness:
+
+```tsx
+<RingProgress value={60} size={120} thickness={12} />
+<RingProgress value={60} size={80} thickness={8} />
+<RingProgress value={60} size={60} thickness={6} />
+```
+
+## Custom Colors
+
+Customize progress and track colors:
+
+```tsx
+<RingProgress 
+  value={75} 
+  color="var(--color-success)" 
+  trackColor="var(--color-muted)"
+/>
+
+<RingProgress 
+  value={45} 
+  color="#3b82f6" 
+  trackColor="#e5e7eb"
+/>
+```
+
+## Without Round Caps
+
+Disable rounded line caps:
+
+```tsx
+<RingProgress value={70} roundCaps={false} />
+```
+
+## Dashboard Example
+
+Multiple ring progress indicators:
+
+```tsx
+import { RingProgress, Text } from '@kivora/react';
+
+function Dashboard() {
+  return (
+    <div className="flex gap-8">
+      <RingProgress
+        value={92}
+        color="var(--color-success)"
+        label={
+          <div className="text-center">
+            <Text size="xl" weight="bold">92%</Text>
+            <Text size="xs" variant="muted">Tasks</Text>
+          </div>
+        }
+      />
+      
+      <RingProgress
+        value={68}
+        color="var(--color-primary)"
+        label={
+          <div className="text-center">
+            <Text size="xl" weight="bold">68%</Text>
+            <Text size="xs" variant="muted">Goals</Text>
+          </div>
+        }
+      />
+      
+      <RingProgress
+        value={45}
+        color="var(--color-warning)"
+        label={
+          <div className="text-center">
+            <Text size="xl" weight="bold">45%</Text>
+            <Text size="xs" variant="muted">Budget</Text>
+          </div>
+        }
+      />
+    </div>
+  );
+}
+```
+
+## Animated Update
+
+Progress updates are smoothly animated:
+
+```tsx
+import { useState, useEffect } from 'react';
+import { RingProgress, Text, Button } from '@kivora/react';
+
+function AnimatedProgress() {
+  const [progress, setProgress] = useState(0);
+  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress(prev => (prev >= 100 ? 0 : prev + 1));
+    }, 50);
+    
+    return () => clearInterval(timer);
+  }, []);
+  
+  return (
+    <RingProgress
+      value={progress}
+      label={<Text size="lg" weight="semibold">{progress}%</Text>}
+    />
+  );
+}
+```
+
+## Completion Status
+
+Change color based on completion:
+
+```tsx
+function CompletionRing({ value }: { value: number }) {
+  const getColor = (val: number) => {
+    if (val >= 80) return 'var(--color-success)';
+    if (val >= 50) return 'var(--color-warning)';
+    return 'var(--color-error)';
+  };
+  
+  return (
+    <RingProgress
+      value={value}
+      color={getColor(value)}
+      label={
+        <div className="text-center">
+          <Text size="xl" weight="bold">{value}%</Text>
+          <Text size="xs" variant="muted">
+            {value >= 80 ? 'Great!' : value >= 50 ? 'Good' : 'Need Improvement'}
+          </Text>
+        </div>
+      }
+    />
+  );
+}
+```
+
+## Props
+
+<ResponseField name="value" type="number" required>
+  Progress value from 0 to 100. Values are automatically clamped to the 0-100 range.
+</ResponseField>
+
+<ResponseField name="size" type="number" default="80">
+  Diameter of the ring in pixels.
+</ResponseField>
+
+<ResponseField name="thickness" type="number" default="8">
+  Width of the ring stroke in pixels.
+</ResponseField>
+
+<ResponseField name="color" type="string" default="'var(--color-primary)'">
+  CSS color value or CSS variable for the progress ring.
+</ResponseField>
+
+<ResponseField name="trackColor" type="string" default="'var(--color-muted)'">
+  CSS color value for the background track ring.
+</ResponseField>
+
+<ResponseField name="label" type="React.ReactNode">
+  Content to display in the center of the ring (typically percentage or status text).
+</ResponseField>
+
+<ResponseField name="roundCaps" type="boolean" default="true">
+  Whether to use rounded line caps for the progress ring.
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes to apply to the ring container.
+</ResponseField>
+
+## Accessibility
+
+- Uses `role="progressbar"` for proper semantics
+- Includes `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` attributes
+- Smooth CSS transitions provide visual feedback
+- Label content should include descriptive text for screen readers
+
+## Best Practices
+
+- Include a label showing the percentage or status
+- Use appropriate colors to indicate status (green for success, red for low values)
+- Ensure sufficient size for readability (minimum 60px recommended)
+- Keep thickness proportional to size (typically 8-12px for standard sizes)
+- Consider accessibility when choosing colors (ensure contrast)
+
+## Customization
+
+- Thickness should be less than half the size to ensure proper ring appearance
+- The component automatically calculates the circumference and offset
+- Transitions are smooth with a 0.4s ease timing function
+- Ring rotates -90 degrees to start at the top position

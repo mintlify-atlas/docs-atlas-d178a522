@@ -1,0 +1,162 @@
+---
+title: useMergedRef
+description: Merge multiple refs into a single ref callback
+---
+
+`useMergedRef` merges multiple refs (callback refs or ref objects) into one. Pass the returned ref to an element to keep all refs in sync.
+
+## Usage
+
+```tsx
+import { useMergedRef } from '@kivora/react';
+import { useRef, forwardRef } from 'react';
+
+const MyComponent = forwardRef<HTMLDivElement, Props>((props, forwardedRef) => {
+  const localRef = useRef<HTMLDivElement>(null);
+  const mergedRef = useMergedRef(localRef, forwardedRef);
+
+  return <div ref={mergedRef}>Content</div>;
+});
+```
+
+## Parameters
+
+<ParamField path="...refs" type="Array<React.Ref<T> | undefined | null>" required>
+  Variable number of refs to merge. Can be ref objects (`React.RefObject`), callback refs, or `undefined`/`null` (which are ignored).
+</ParamField>
+
+## Returns
+
+`React.RefCallback<T>` - A memoized callback ref that updates all provided refs.
+
+## Examples
+
+### Forwarding Refs with Local Ref
+
+```tsx
+const FancyInput = forwardRef<HTMLInputElement, InputProps>(
+  (props, forwardedRef) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+    const mergedRef = useMergedRef(inputRef, forwardedRef);
+
+    const focus = () => {
+      inputRef.current?.focus();
+    };
+
+    return (
+      <div>
+        <input ref={mergedRef} {...props} />
+        <button onClick={focus}>Focus</button>
+      </div>
+    );
+  }
+);
+```
+
+### Multiple Callback Refs
+
+```tsx
+function TrackedElement() {
+  const observerRef = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      const observer = new IntersectionObserver(handleIntersection);
+      observer.observe(node);
+    }
+  }, []);
+
+  const resizeRef = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      const observer = new ResizeObserver(handleResize);
+      observer.observe(node);
+    }
+  }, []);
+
+  const mergedRef = useMergedRef(observerRef, resizeRef);
+
+  return <div ref={mergedRef}>Tracked content</div>;
+}
+```
+
+### Combining with Third-Party Libraries
+
+```tsx
+import { useFloating } from '@floating-ui/react';
+
+const Tooltip = forwardRef<HTMLButtonElement, TooltipProps>(
+  ({ children }, forwardedRef) => {
+    const { refs } = useFloating();
+    const mergedRef = useMergedRef(refs.setReference, forwardedRef);
+
+    return <button ref={mergedRef}>{children}</button>;
+  }
+);
+```
+
+### Multiple Ref Objects
+
+```tsx
+function MeasuredComponent() {
+  const ref1 = useRef<HTMLDivElement>(null);
+  const ref2 = useRef<HTMLDivElement>(null);
+  const ref3 = useRef<HTMLDivElement>(null);
+
+  const mergedRef = useMergedRef(ref1, ref2, ref3);
+
+  useEffect(() => {
+    // All refs point to the same element
+    console.log(ref1.current === ref2.current); // true
+    console.log(ref2.current === ref3.current); // true
+  }, []);
+
+  return <div ref={mergedRef}>Content</div>;
+}
+```
+
+### With Optional Refs
+
+```tsx
+const FlexibleComponent = forwardRef<HTMLDivElement, Props>(
+  ({ enableTracking }, forwardedRef) => {
+    const localRef = useRef<HTMLDivElement>(null);
+    const trackingRef = enableTracking ? useTrackingRef() : null;
+
+    // useMergedRef handles null/undefined refs gracefully
+    const mergedRef = useMergedRef(localRef, forwardedRef, trackingRef);
+
+    return <div ref={mergedRef}>Content</div>;
+  }
+);
+```
+
+### Complex Forwarding Pattern
+
+```tsx
+const Form = forwardRef<HTMLFormElement, FormProps>(
+  ({ onSubmit }, forwardedRef) => {
+    const formRef = useRef<HTMLFormElement>(null);
+
+    const callbackRef = useCallback((node: HTMLFormElement | null) => {
+      if (node) {
+        // Attach custom validation
+        node.addEventListener('invalid', handleInvalid, true);
+      }
+    }, []);
+
+    const mergedRef = useMergedRef(formRef, forwardedRef, callbackRef);
+
+    return (
+      <form ref={mergedRef} onSubmit={onSubmit}>
+        {/* form fields */}
+      </form>
+    );
+  }
+);
+```
+
+## Notes
+
+- The returned callback ref is memoized and updates when the provided refs change
+- Handles both ref objects (`{ current: T }`) and callback refs automatically
+- Ignores `undefined` and `null` refs, making it safe to use with optional refs
+- Particularly useful when building reusable components that need to forward refs while maintaining internal refs
+- All provided refs will point to the same element instance

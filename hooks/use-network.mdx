@@ -1,0 +1,135 @@
+---
+title: useNetwork
+description: Monitor network connectivity status
+---
+
+Returns the browser's current network connectivity status. Subscribes to `online`/`offline` events for real-time updates.
+
+## Usage
+
+```tsx
+import { useNetwork } from 'kivora-react';
+
+function App() {
+  const { online } = useNetwork();
+
+  if (!online) {
+    return <Banner>No internet connection</Banner>;
+  }
+
+  return <div>{/* App content */}</div>;
+}
+```
+
+## Returns
+
+<ResponseField name="online" type="boolean">
+  `true` when the browser is online.
+</ResponseField>
+
+<ResponseField name="downlink" type="number | undefined">
+  Effective bandwidth estimate in Mbps (when available).
+</ResponseField>
+
+<ResponseField name="effectiveType" type="string | undefined">
+  Effective connection type: `'slow-2g'`, `'2g'`, `'3g'`, or `'4g'` (when available).
+</ResponseField>
+
+<ResponseField name="rtt" type="number | undefined">
+  Estimated round-trip time in milliseconds (when available).
+</ResponseField>
+
+<ResponseField name="saveData" type="boolean | undefined">
+  `true` if the user has requested reduced data usage (when available).
+</ResponseField>
+
+## Examples
+
+### Offline banner
+
+```tsx
+const { online } = useNetwork();
+
+return (
+  <>
+    {!online && (
+      <div className="offline-banner">
+        You are currently offline. Some features may be unavailable.
+      </div>
+    )}
+    <main>{/* App content */}</main>
+  </>
+);
+```
+
+### Connection quality indicator
+
+```tsx
+const { online, effectiveType, saveData } = useNetwork();
+
+return (
+  <div className="connection-status">
+    <span>Status: {online ? 'Online' : 'Offline'}</span>
+    {effectiveType && <span>Speed: {effectiveType}</span>}
+    {saveData && <span>Data saver mode enabled</span>}
+  </div>
+);
+```
+
+### Adaptive content loading
+
+```tsx
+const { online, effectiveType } = useNetwork();
+
+const shouldLoadHD = online && 
+  (effectiveType === '4g' || effectiveType === undefined);
+
+return (
+  <img 
+    src={shouldLoadHD ? 'image-hd.jpg' : 'image-sd.jpg'} 
+    alt="Adaptive quality"
+  />
+);
+```
+
+### Pause sync when offline
+
+```tsx
+function DataSync() {
+  const { online } = useNetwork();
+
+  useEffect(() => {
+    if (!online) {
+      console.log('Pausing sync - offline');
+      return;
+    }
+
+    const interval = setInterval(() => {
+      syncData();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [online]);
+
+  return <div>Sync status: {online ? 'Active' : 'Paused'}</div>;
+}
+```
+
+## Notes
+
+- The `downlink`, `effectiveType`, `rtt`, and `saveData` properties depend on the [Network Information API](https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API), which may not be available in all browsers
+- Falls back to `{ online: true }` in non-browser environments
+
+## Type Definitions
+
+```ts
+interface NetworkStatus {
+  online: boolean;
+  downlink?: number;
+  effectiveType?: string;
+  rtt?: number;
+  saveData?: boolean;
+}
+
+function useNetwork(): NetworkStatus;
+```

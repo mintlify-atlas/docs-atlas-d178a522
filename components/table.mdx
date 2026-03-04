@@ -1,0 +1,274 @@
+---
+title: Table
+description: Full-featured table with stripe, hover, border and sticky-header options.
+---
+
+## Usage
+
+```tsx
+import { Table } from '@kivora/react';
+
+<Table>
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th>Name</Table.Th>
+      <Table.Th>Email</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
+  <Table.Tbody>
+    <Table.Tr>
+      <Table.Td>Alice</Table.Td>
+      <Table.Td>alice@example.com</Table.Td>
+    </Table.Tr>
+  </Table.Tbody>
+</Table>
+```
+
+## Examples
+
+### Basic Table
+
+```tsx
+<Table>
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th>Name</Table.Th>
+      <Table.Th>Email</Table.Th>
+      <Table.Th>Role</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
+  <Table.Tbody>
+    <Table.Tr>
+      <Table.Td>Alice Johnson</Table.Td>
+      <Table.Td>alice@example.com</Table.Td>
+      <Table.Td>Developer</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>Bob Smith</Table.Td>
+      <Table.Td>bob@example.com</Table.Td>
+      <Table.Td>Designer</Table.Td>
+    </Table.Tr>
+  </Table.Tbody>
+</Table>
+```
+
+### Striped Rows
+
+```tsx
+<Table striped>
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th>Product</Table.Th>
+      <Table.Th>Price</Table.Th>
+      <Table.Th>Stock</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
+  <Table.Tbody>
+    <Table.Tr>
+      <Table.Td>Widget A</Table.Td>
+      <Table.Td>$29.99</Table.Td>
+      <Table.Td>120</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>Widget B</Table.Td>
+      <Table.Td>$49.99</Table.Td>
+      <Table.Td>85</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>Widget C</Table.Td>
+      <Table.Td>$19.99</Table.Td>
+      <Table.Td>200</Table.Td>
+    </Table.Tr>
+  </Table.Tbody>
+</Table>
+```
+
+### Hover Effect
+
+```tsx
+<Table highlightOnHover>
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th>Name</Table.Th>
+      <Table.Th>Status</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
+  <Table.Tbody>
+    <Table.Tr>
+      <Table.Td>Project Alpha</Table.Td>
+      <Table.Td><Badge variant="success">Active</Badge></Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>Project Beta</Table.Td>
+      <Table.Td><Badge variant="warning">Pending</Badge></Table.Td>
+    </Table.Tr>
+  </Table.Tbody>
+</Table>
+```
+
+### With Border
+
+```tsx
+<Table withBorder>
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th>Column 1</Table.Th>
+      <Table.Th>Column 2</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
+  <Table.Tbody>
+    <Table.Tr>
+      <Table.Td>Data 1</Table.Td>
+      <Table.Td>Data 2</Table.Td>
+    </Table.Tr>
+  </Table.Tbody>
+</Table>
+```
+
+### Compact
+
+```tsx
+<Table compact striped>
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th>Item</Table.Th>
+      <Table.Th>Qty</Table.Th>
+      <Table.Th>Price</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
+  <Table.Tbody>
+    <Table.Tr>
+      <Table.Td>Item 1</Table.Td>
+      <Table.Td>5</Table.Td>
+      <Table.Td>$50</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>Item 2</Table.Td>
+      <Table.Td>3</Table.Td>
+      <Table.Td>$30</Table.Td>
+    </Table.Tr>
+  </Table.Tbody>
+</Table>
+```
+
+Use `compact` for tighter row spacing.
+
+### Sticky Header
+
+```tsx
+<div className="h-64">
+  <Table stickyHeader withBorder>
+    <Table.Thead>
+      <Table.Tr>
+        <Table.Th>Name</Table.Th>
+        <Table.Th>Email</Table.Th>
+      </Table.Tr>
+    </Table.Thead>
+    <Table.Tbody>
+      {users.map(user => (
+        <Table.Tr key={user.id}>
+          <Table.Td>{user.name}</Table.Td>
+          <Table.Td>{user.email}</Table.Td>
+        </Table.Tr>
+      ))}
+    </Table.Tbody>
+  </Table>
+</div>
+```
+
+Header stays visible when scrolling.
+
+### With Footer
+
+```tsx
+<Table striped withBorder>
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th>Item</Table.Th>
+      <Table.Th>Price</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
+  <Table.Tbody>
+    <Table.Tr>
+      <Table.Td>Product A</Table.Td>
+      <Table.Td>$100</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>Product B</Table.Td>
+      <Table.Td>$150</Table.Td>
+    </Table.Tr>
+  </Table.Tbody>
+  <Table.Tfoot>
+    <Table.Tr>
+      <Table.Td>Total</Table.Td>
+      <Table.Td>$250</Table.Td>
+    </Table.Tr>
+  </Table.Tfoot>
+</Table>
+```
+
+### With Caption
+
+```tsx
+<Table caption="User list as of March 2026">
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th>Name</Table.Th>
+      <Table.Th>Role</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
+  <Table.Tbody>
+    <Table.Tr>
+      <Table.Td>Alice</Table.Td>
+      <Table.Td>Admin</Table.Td>
+    </Table.Tr>
+  </Table.Tbody>
+</Table>
+```
+
+## Props
+
+### Table
+
+<ResponseField name="children" type="React.ReactNode" required>
+  Table content (Thead, Tbody, Tfoot)
+</ResponseField>
+
+<ResponseField name="striped" type="boolean" default={false}>
+  Alternating row background colors
+</ResponseField>
+
+<ResponseField name="highlightOnHover" type="boolean" default={false}>
+  Highlight rows on hover
+</ResponseField>
+
+<ResponseField name="withBorder" type="boolean" default={false}>
+  Add border around the table
+</ResponseField>
+
+<ResponseField name="compact" type="boolean" default={false}>
+  Reduce row height for compact display
+</ResponseField>
+
+<ResponseField name="stickyHeader" type="boolean" default={false}>
+  Make header sticky when scrolling
+</ResponseField>
+
+<ResponseField name="caption" type="string">
+  Optional table caption
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+### Sub-components
+
+All sub-components (`Table.Thead`, `Table.Tbody`, `Table.Tfoot`, `Table.Tr`, `Table.Th`, `Table.Td`) accept standard HTML attributes plus `className`.
+
+## Accessibility
+
+- Uses semantic HTML table elements
+- Header cells use `<th>` for proper association
+- Caption provides table description for screen readers
+- Responsive wrapper with horizontal scroll for narrow viewports

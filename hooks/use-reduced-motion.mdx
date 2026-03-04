@@ -1,0 +1,135 @@
+---
+title: useReducedMotion
+description: Detect user's reduced motion preference
+---
+
+Returns `true` when the user has indicated a preference for reduced motion via `prefers-reduced-motion: reduce`.
+
+## Usage
+
+```tsx
+import { useReducedMotion } from 'kivora-react';
+
+function AnimatedCard() {
+  const reduced = useReducedMotion();
+  const duration = reduced ? 0 : 300;
+
+  return (
+    <motion.div
+      animate={{ opacity: 1 }}
+      transition={{ duration: duration / 1000 }}
+    >
+      Content
+    </motion.div>
+  );
+}
+```
+
+## Returns
+
+<ResponseField name="reduced" type="boolean">
+  `true` when the user prefers reduced motion.
+</ResponseField>
+
+## Examples
+
+### Disable animations
+
+```tsx
+const reduced = useReducedMotion();
+
+return (
+  <div 
+    className={`card ${reduced ? '' : 'animate-fade-in'}`}
+  >
+    {/* Content */}
+  </div>
+);
+```
+
+### Adjust animation duration
+
+```tsx
+const reduced = useReducedMotion();
+const duration = reduced ? 0 : 300;
+
+return (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: duration / 1000 }}
+  >
+    Content
+  </motion.div>
+);
+```
+
+### Conditional spring physics
+
+```tsx
+const reduced = useReducedMotion();
+
+const springConfig = reduced 
+  ? { duration: 0 }
+  : { type: 'spring', stiffness: 300, damping: 30 };
+
+return (
+  <motion.div
+    animate={{ scale: isActive ? 1.1 : 1 }}
+    transition={springConfig}
+  >
+    Interactive element
+  </motion.div>
+);
+```
+
+### Auto-play video
+
+```tsx
+const reduced = useReducedMotion();
+
+return (
+  <video 
+    autoPlay={!reduced}
+    loop={!reduced}
+    muted
+    playsInline
+  >
+    <source src="background.mp4" type="video/mp4" />
+  </video>
+);
+```
+
+### Carousel auto-advance
+
+```tsx
+function Carousel() {
+  const reduced = useReducedMotion();
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (reduced) return; // Don't auto-advance
+
+    const interval = setInterval(() => {
+      setIndex((i) => (i + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [reduced]);
+
+  return <CarouselView index={index} />;
+}
+```
+
+## Notes
+
+- Automatically updates when the user changes their system preference
+- Uses `window.matchMedia('(prefers-reduced-motion: reduce)')`
+- Respects accessibility preferences set at the OS level
+- Returns `false` in non-browser environments
+
+## Type Definitions
+
+```ts
+function useReducedMotion(): boolean;
+```

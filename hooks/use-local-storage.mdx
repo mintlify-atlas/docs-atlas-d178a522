@@ -1,0 +1,182 @@
+---
+title: useLocalStorage
+description: Persist state to localStorage with automatic synchronization across browser tabs
+---
+
+## Overview
+
+The `useLocalStorage` hook reads and writes values to `localStorage`, keeping React state in sync. It automatically synchronizes changes across browser tabs and handles JSON serialization/deserialization. Falls back to the default value when the key doesn't exist or JSON parsing fails.
+
+## Usage
+
+```tsx
+import { useLocalStorage } from 'kivora-react';
+
+function ThemeToggle() {
+  const [theme, setTheme, removeTheme] = useLocalStorage('theme', 'light');
+
+  return (
+    <div>
+      <p>Current theme: {theme}</p>
+      <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+        Toggle Theme
+      </button>
+      <button onClick={removeTheme}>Reset Theme</button>
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="key" type="string" required>
+  The localStorage key to use for storing the value.
+</ParamField>
+
+<ParamField path="defaultValue" type="T" required>
+  The fallback value to use when the key doesn't exist in localStorage or when JSON parsing fails.
+</ParamField>
+
+## Returns
+
+Returns a tuple with three elements:
+
+<ResponseField name="storedValue" type="T">
+  The current value stored in localStorage, or the default value if not found.
+</ResponseField>
+
+<ResponseField name="setValue" type="(value: T | ((prev: T) => T)) => void">
+  Function to update the stored value. Accepts either a new value or an updater function that receives the previous value.
+</ResponseField>
+
+<ResponseField name="removeValue" type="() => void">
+  Function to remove the value from localStorage and reset to the default value.
+</ResponseField>
+
+## Examples
+
+### Basic String Storage
+
+```tsx
+function UserNameInput() {
+  const [username, setUsername, clearUsername] = useLocalStorage('username', '');
+
+  return (
+    <div>
+      <input
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="Enter username"
+      />
+      <button onClick={clearUsername}>Clear</button>
+    </div>
+  );
+}
+```
+
+### Storing Objects
+
+```tsx
+interface UserPreferences {
+  theme: string;
+  language: string;
+  notifications: boolean;
+}
+
+function SettingsPanel() {
+  const [preferences, setPreferences] = useLocalStorage<UserPreferences>(
+    'user-preferences',
+    {
+      theme: 'light',
+      language: 'en',
+      notifications: true,
+    }
+  );
+
+  const toggleNotifications = () => {
+    setPreferences((prev) => ({
+      ...prev,
+      notifications: !prev.notifications,
+    }));
+  };
+
+  return (
+    <div>
+      <p>Theme: {preferences.theme}</p>
+      <p>Language: {preferences.language}</p>
+      <label>
+        <input
+          type="checkbox"
+          checked={preferences.notifications}
+          onChange={toggleNotifications}
+        />
+        Enable notifications
+      </label>
+    </div>
+  );
+}
+```
+
+### Array Storage
+
+```tsx
+function TodoList() {
+  const [todos, setTodos, clearTodos] = useLocalStorage<string[]>('todos', []);
+
+  const addTodo = (todo: string) => {
+    setTodos((prev) => [...prev, todo]);
+  };
+
+  const removeTodo = (index: number) => {
+    setTodos((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div>
+      <ul>
+        {todos.map((todo, index) => (
+          <li key={index}>
+            {todo}
+            <button onClick={() => removeTodo(index)}>Remove</button>
+          </li>
+        ))}
+      </ul>
+      <button onClick={clearTodos}>Clear All</button>
+    </div>
+  );
+}
+```
+
+### Cross-Tab Synchronization
+
+```tsx
+function SyncedCounter() {
+  const [count, setCount] = useLocalStorage('counter', 0);
+
+  // Changes made in one tab will automatically sync to other tabs
+  return (
+    <div>
+      <p>Count: {count} (Try opening this in multiple tabs!)</p>
+      <button onClick={() => setCount((prev) => prev + 1)}>Increment</button>
+      <button onClick={() => setCount((prev) => prev - 1)}>Decrement</button>
+    </div>
+  );
+}
+```
+
+## Features
+
+- **Automatic Serialization**: Automatically handles JSON serialization and deserialization
+- **Cross-Tab Sync**: Changes in one browser tab automatically sync to other tabs via the `storage` event
+- **SSR Safe**: Returns the default value during server-side rendering
+- **Error Handling**: Gracefully handles JSON parsing errors and storage quota exceeded errors
+- **Updater Functions**: Supports functional updates for safe concurrent modifications
+- **TypeScript**: Full type safety with generic type parameter
+
+## Notes
+
+- Values are stored as JSON strings in localStorage, so only JSON-serializable values are supported
+- The hook automatically listens to the `storage` event to sync changes across browser tabs
+- In private browsing mode or when storage quota is exceeded, write operations fail silently
+- The hook returns the default value when running in a non-browser environment (SSR)
+- Changes made via `setValue` do not trigger the `storage` event in the same tab

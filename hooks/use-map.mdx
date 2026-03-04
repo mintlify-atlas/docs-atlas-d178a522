@@ -1,0 +1,155 @@
+---
+title: useMap
+description: State management for a Map object with helpers to mutate entries
+---
+
+## Usage
+
+```tsx
+import { useMap } from 'kivora-react';
+
+function KeyValueEditor() {
+  const [map, { set, delete: remove, clear }] = useMap([
+    ['name', 'Alice'],
+    ['role', 'Admin']
+  ]);
+
+  return (
+    <div>
+      {Array.from(map.entries()).map(([key, value]) => (
+        <div key={key}>
+          <span>{key}: {value}</span>
+          <button onClick={() => remove(key)}>Remove</button>
+        </div>
+      ))}
+      <button onClick={() => set('newKey', 'newValue')}>Add Entry</button>
+      <button onClick={clear}>Clear All</button>
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="initialValue" type="Iterable<readonly [K, V]>" default="[]">
+  Initial map entries as an iterable of `[key, value]` pairs
+</ParamField>
+
+## Return Value
+
+Returns a tuple with the Map instance and mutation handlers:
+
+<ResponseField name="[0]" type="Map<K, V>">
+  Current Map instance
+</ResponseField>
+
+<ResponseField name="[1]" type="object">
+  Mutation handlers
+
+  <Expandable title="properties">
+    <ResponseField name="set" type="(key: K, value: V) => void">
+      Set or update a key-value pair
+    </ResponseField>
+
+    <ResponseField name="delete" type="(key: K) => void">
+      Remove an entry by key
+    </ResponseField>
+
+    <ResponseField name="reset" type="() => void">
+      Reset the map to its initial value
+    </ResponseField>
+
+    <ResponseField name="clear" type="() => void">
+      Remove all entries from the map
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Examples
+
+### Cache Management
+
+```tsx
+const [cache, { set, delete: remove }] = useMap<string, any>();
+
+const fetchData = async (id: string) => {
+  if (cache.has(id)) {
+    return cache.get(id);
+  }
+  
+  const data = await fetch(`/api/items/${id}`).then(r => r.json());
+  set(id, data);
+  return data;
+};
+
+const invalidate = (id: string) => {
+  remove(id);
+};
+```
+
+### User Preferences
+
+```tsx
+const [preferences, { set }] = useMap([
+  ['theme', 'dark'],
+  ['fontSize', '16px'],
+  ['language', 'en']
+]);
+
+return (
+  <div>
+    <select
+      value={preferences.get('theme')}
+      onChange={(e) => set('theme', e.target.value)}
+    >
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+  </div>
+);
+```
+
+### Form Field Errors
+
+```tsx
+const [errors, { set, delete: clearError, clear }] = useMap<string, string>();
+
+const validateField = (field: string, value: string) => {
+  if (!value) {
+    set(field, 'This field is required');
+  } else {
+    clearError(field);
+  }
+};
+
+const handleSubmit = () => {
+  if (errors.size === 0) {
+    // Submit form
+    clear();
+  }
+};
+```
+
+### Dynamic Configuration
+
+```tsx
+const [config, { set, reset }] = useMap([
+  ['apiUrl', 'https://api.example.com'],
+  ['timeout', '5000'],
+  ['retries', '3']
+]);
+
+return (
+  <div>
+    {Array.from(config.entries()).map(([key, value]) => (
+      <input
+        key={key}
+        placeholder={key}
+        value={value}
+        onChange={(e) => set(key, e.target.value)}
+      />
+    ))}
+    <button onClick={reset}>Reset to Defaults</button>
+  </div>
+);
+```

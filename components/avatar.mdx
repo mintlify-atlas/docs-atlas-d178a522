@@ -1,0 +1,83 @@
+---
+title: Avatar
+description: Displays a user avatar image with automatic initials fallback.
+---
+
+## Usage
+
+```tsx
+import { Avatar } from '@kivora/react';
+
+<Avatar src="/user.jpg" alt="Alice Johnson" />
+```
+
+## Examples
+
+### With Image
+
+```tsx
+<Avatar src="/user.jpg" alt="Alice Johnson" size="md" />
+```
+
+### Initials Fallback
+
+```tsx
+<Avatar alt="Bob Smith" size="lg" />
+```
+
+When no image is provided or the image fails to load, Avatar automatically displays initials derived from the `alt` prop (first letters of first two words).
+
+### Custom Initials
+
+```tsx
+<Avatar alt="Alice Johnson" initials="AJ" size="md" />
+```
+
+### Sizes
+
+<CodeGroup>
+```tsx Small
+<Avatar alt="User" size="sm" />
+```
+
+```tsx Medium
+<Avatar alt="User" size="md" />
+```
+
+```tsx Large
+<Avatar alt="User" size="lg" />
+```
+
+```tsx Extra Large
+<Avatar alt="User" size="xl" />
+```
+</CodeGroup>
+
+## Props
+
+<ResponseField name="src" type="string">
+  Avatar image URL
+</ResponseField>
+
+<ResponseField name="alt" type="string" required>
+  Alt text for the image, also used to derive initials
+</ResponseField>
+
+<ResponseField name="initials" type="string">
+  Custom initials to display (overrides automatic derivation from alt)
+</ResponseField>
+
+<ResponseField name="size" type="'sm' | 'md' | 'lg' | 'xl'" default="md">
+  Avatar size
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+## Accessibility
+
+- Avatar uses `role="img"` and `aria-label` for screen readers
+- The `alt` prop is required and used for accessibility
+- Images include proper alt text
+- Initials provide a meaningful fallback when images fail

@@ -1,0 +1,274 @@
+---
+title: Theming
+description: Customize the Kivora React design system with CSS variables and design tokens.
+---
+
+Kivora React uses CSS design tokens for theming, making it easy to customize colors, spacing, and other design properties across your entire application.
+
+## How Theming Works
+
+All Kivora components use CSS custom properties (CSS variables) defined in the global stylesheet. These variables follow a semantic naming convention:
+
+- `--primary` — Primary brand color
+- `--secondary` — Secondary accent color
+- `--background` — Page background
+- `--foreground` — Primary text color
+- `--muted` — Muted/secondary text
+- `--border` — Border colors
+- `--ring` — Focus ring color
+- `--destructive` — Error/danger states
+- `--success` — Success states
+- `--warning` — Warning states
+- `--info` — Informational states
+
+## Default Theme
+
+When you import `@kivora/react/styles`, you get a default theme that works out of the box:
+
+```tsx
+import '@kivora/react/styles';
+```
+
+This provides a clean, modern design with light and dark mode support.
+
+## Customizing Colors
+
+To customize the theme, override the CSS variables in your own stylesheet. Create a CSS file and import it **after** the Kivora styles:
+
+<Steps>
+
+<Step title="Create a custom theme file">
+  Create `theme.css` in your project:
+
+  ```css theme.css
+  :root {
+    /* Override primary color */
+    --primary: 220 90% 56%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Override secondary color */
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 6% 10%;
+
+    /* Override background and foreground */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 4%;
+
+    /* Override border and input colors */
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 220 90% 56%;
+
+    /* Override status colors */
+    --destructive: 0 84% 60%;
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --info: 199 89% 48%;
+  }
+  ```
+</Step>
+
+<Step title="Import your theme after Kivora styles">
+  ```tsx app/layout.tsx
+  import '@kivora/react/styles';
+  import './theme.css'; // Your custom theme
+  ```
+</Step>
+
+</Steps>
+
+<Note>
+  CSS variables use the HSL color space without the `hsl()` function wrapper. For example, `220 90% 56%` instead of `hsl(220, 90%, 56%)`.
+</Note>
+
+## Dark Mode Variables
+
+Define dark mode overrides using the `.dark` class or `[data-theme="dark"]` selector:
+
+```css theme.css
+:root {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 4%;
+}
+
+.dark {
+  --background: 240 10% 4%;
+  --foreground: 0 0% 98%;
+  --border: 240 4% 16%;
+  --ring: 220 90% 56%;
+}
+```
+
+See the [Dark Mode guide](/guides/dark-mode) for implementation details.
+
+## Using Tailwind CSS
+
+If you're using Tailwind CSS in your project, you can reference Kivora's CSS variables in your Tailwind config:
+
+```js tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: 'hsl(var(--primary))',
+        secondary: 'hsl(var(--secondary))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        destructive: 'hsl(var(--destructive))',
+        success: 'hsl(var(--success))',
+        border: 'hsl(var(--border))',
+      },
+    },
+  },
+};
+```
+
+Now you can use Kivora's theme colors in your Tailwind classes:
+
+```tsx
+<div className="bg-primary text-primary-foreground">
+  This uses Kivora's primary color
+</div>
+```
+
+## Component-Specific Styling
+
+Every Kivora component accepts a `className` prop for custom styling:
+
+```tsx
+import { Button } from '@kivora/react';
+
+<Button 
+  label="Custom Button" 
+  variant="primary"
+  className="shadow-lg hover:scale-105 transition-transform"
+/>
+```
+
+<Warning>
+  When adding custom classes, be aware that they may conflict with Kivora's internal styles. Use specific selectors or increase specificity when needed.
+</Warning>
+
+## Typography Scale
+
+Kivora doesn't enforce a specific font family. Set your preferred fonts in your global CSS:
+
+```css globals.css
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+code {
+  font-family: 'Fira Code', 'Courier New', monospace;
+}
+```
+
+## Spacing and Sizing
+
+Kivora uses Tailwind's spacing scale internally. If you need consistent spacing, use Tailwind classes or define your own spacing variables:
+
+```css theme.css
+:root {
+  --spacing-xs: 0.25rem;  /* 4px */
+  --spacing-sm: 0.5rem;   /* 8px */
+  --spacing-md: 1rem;     /* 16px */
+  --spacing-lg: 1.5rem;   /* 24px */
+  --spacing-xl: 2rem;     /* 32px */
+}
+```
+
+## Border Radius
+
+Customize border radius globally:
+
+```css theme.css
+:root {
+  --radius-sm: 0.25rem;  /* 4px */
+  --radius-md: 0.5rem;   /* 8px */
+  --radius-lg: 0.75rem;  /* 12px */
+  --radius-xl: 1rem;     /* 16px */
+}
+```
+
+## Preset Themes
+
+While Kivora doesn't ship with preset themes, you can create your own by defining CSS variable sets:
+
+<CodeGroup>
+
+```css ocean-theme.css
+:root {
+  --primary: 199 89% 48%;          /* Ocean blue */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 187 71% 45%;        /* Teal */
+  --secondary-foreground: 0 0% 100%;
+  --success: 142 71% 45%;          /* Green */
+  --destructive: 0 84% 60%;        /* Red */
+}
+```
+
+```css sunset-theme.css
+:root {
+  --primary: 14 90% 56%;           /* Orange */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 340 82% 52%;        /* Pink */
+  --secondary-foreground: 0 0% 100%;
+  --success: 142 71% 45%;          /* Green */
+  --destructive: 0 84% 60%;        /* Red */
+}
+```
+
+```css forest-theme.css
+:root {
+  --primary: 142 71% 45%;          /* Forest green */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 85 62% 45%;         /* Lime */
+  --secondary-foreground: 0 0% 100%;
+  --success: 120 65% 50%;          /* Green */
+  --destructive: 0 84% 60%;        /* Red */
+}
+```
+
+</CodeGroup>
+
+Import the theme you want:
+
+```tsx
+import '@kivora/react/styles';
+import './ocean-theme.css'; // or sunset-theme.css, forest-theme.css
+```
+
+## Runtime Theme Switching
+
+To switch themes at runtime, dynamically update CSS variables with JavaScript:
+
+```tsx
+const applyTheme = (theme: 'ocean' | 'sunset' | 'forest') => {
+  const root = document.documentElement;
+  
+  const themes = {
+    ocean: { primary: '199 89% 48%', secondary: '187 71% 45%' },
+    sunset: { primary: '14 90% 56%', secondary: '340 82% 52%' },
+    forest: { primary: '142 71% 45%', secondary: '85 62% 45%' },
+  };
+
+  root.style.setProperty('--primary', themes[theme].primary);
+  root.style.setProperty('--secondary', themes[theme].secondary);
+};
+```
+
+<Tip>
+  Store the selected theme in localStorage to persist the user's preference across sessions.
+</Tip>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Dark Mode" icon="moon" href="/guides/dark-mode">
+    Implement light and dark theme switching
+  </Card>
+  
+  <Card title="Components" icon="square" href="/components/button">
+    See theming in action across components
+  </Card>
+</CardGroup>

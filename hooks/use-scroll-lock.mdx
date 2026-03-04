@@ -1,0 +1,103 @@
+---
+title: useScrollLock
+description: Lock and unlock document body scrolling
+---
+
+Prevents `document.body` from scrolling while `locked` is true. Compensates for the scrollbar width so the layout doesn't shift.
+
+## Usage
+
+```tsx
+import { useScrollLock } from 'kivora-react';
+
+function Modal({ isOpen, onClose }) {
+  useScrollLock(isOpen);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal">
+        <button onClick={onClose}>Close</button>
+        {/* Modal content */}
+      </div>
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="locked" type="boolean" required>
+  When `true`, prevents scrolling on the document body.
+</ParamField>
+
+## Examples
+
+### Modal with scroll lock
+
+```tsx
+function ModalDialog({ open, children }) {
+  useScrollLock(open);
+
+  return open ? (
+    <div className="fixed inset-0 overflow-y-auto">
+      <div className="modal-content">{children}</div>
+    </div>
+  ) : null;
+}
+```
+
+### Conditional lock with state
+
+```tsx
+function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  
+  useScrollLock(menuOpen);
+
+  return (
+    <>
+      <button onClick={() => setMenuOpen(true)}>Open Menu</button>
+      {menuOpen && (
+        <nav className="sidebar">
+          <button onClick={() => setMenuOpen(false)}>Close</button>
+          {/* Navigation items */}
+        </nav>
+      )}
+    </>
+  );
+}
+```
+
+### Multiple overlays
+
+```tsx
+function App() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  
+  // Lock scroll when either is open
+  useScrollLock(modalOpen || drawerOpen);
+
+  return (
+    <>
+      <button onClick={() => setModalOpen(true)}>Open Modal</button>
+      <button onClick={() => setDrawerOpen(true)}>Open Drawer</button>
+      {/* Modal and drawer components */}
+    </>
+  );
+}
+```
+
+## Notes
+
+- Automatically compensates for scrollbar width to prevent layout shift
+- Restores original `overflow` and `paddingRight` styles on unlock
+- Safe to use with multiple instances—cleanup happens automatically
+
+## Type Definitions
+
+```ts
+function useScrollLock(locked: boolean): void;
+```

@@ -1,0 +1,104 @@
+---
+title: useToggle
+description: Simple boolean toggle with explicit on/off helpers
+---
+
+## Usage
+
+```tsx
+import { useToggle } from 'kivora-react';
+
+function Demo() {
+  const [isOpen, { toggle, setTrue, setFalse }] = useToggle();
+
+  return (
+    <div>
+      <p>Status: {isOpen ? 'Open' : 'Closed'}</p>
+      <button onClick={toggle}>Toggle</button>
+      <button onClick={setTrue}>Open</button>
+      <button onClick={setFalse}>Close</button>
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="initialValue" type="boolean" default="false">
+  Initial toggle state
+</ParamField>
+
+## Return Value
+
+Returns a tuple with the current boolean value and an object of helper functions:
+
+<ResponseField name="[0]" type="boolean">
+  Current boolean state
+</ResponseField>
+
+<ResponseField name="[1]" type="object">
+  Helper functions
+
+  <Expandable title="properties">
+    <ResponseField name="toggle" type="() => void">
+      Toggle the boolean value
+    </ResponseField>
+
+    <ResponseField name="setTrue" type="() => void">
+      Set the value to `true`
+    </ResponseField>
+
+    <ResponseField name="setFalse" type="() => void">
+      Set the value to `false`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Examples
+
+### Modal Visibility
+
+```tsx
+const [isModalOpen, { toggle, setFalse }] = useToggle();
+
+return (
+  <>
+    <button onClick={toggle}>Open Modal</button>
+    {isModalOpen && (
+      <Modal onClose={setFalse}>
+        <h2>Modal Content</h2>
+      </Modal>
+    )}
+  </>
+);
+```
+
+### Theme Switcher
+
+```tsx
+const [isDark, { toggle }] = useToggle(false);
+
+return (
+  <div className={isDark ? 'dark' : 'light'}>
+    <button onClick={toggle}>
+      Switch to {isDark ? 'Light' : 'Dark'} Mode
+    </button>
+  </div>
+);
+```
+
+### Menu State
+
+```tsx
+const [isExpanded, { setTrue, setFalse }] = useToggle();
+
+return (
+  <div
+    onMouseEnter={setTrue}
+    onMouseLeave={setFalse}
+  >
+    <button>Hover me</button>
+    {isExpanded && <DropdownMenu />}
+  </div>
+);
+```

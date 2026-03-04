@@ -1,0 +1,200 @@
+---
+title: Progress
+description: Linear progress bar with determinate and indeterminate states.
+---
+
+Linear progress bar. Shows completion progress for tasks and operations. Supports both determinate (with value) and indeterminate (loading) states.
+
+## Import
+
+```tsx
+import { Progress } from '@kivora/react';
+```
+
+## Usage
+
+```tsx
+<Progress value={72} color="primary" />
+```
+
+## Colors
+
+Progress bars support different colors:
+
+```tsx
+<Progress value={75} color="primary" />
+<Progress value={100} color="success" />
+<Progress value={60} color="warning" />
+<Progress value={30} color="error" />
+<Progress value={50} color="info" />
+```
+
+## Sizes
+
+Control the height of the progress bar:
+
+```tsx
+<Progress value={70} size="xs" />
+<Progress value={70} size="sm" />
+<Progress value={70} size="md" />
+<Progress value={70} size="lg" />
+<Progress value={70} size="xl" />
+```
+
+## Border Radius
+
+Customize the border radius:
+
+```tsx
+<Progress value={70} radius="none" />
+<Progress value={70} radius="sm" />
+<Progress value={70} radius="md" />
+<Progress value={70} radius="full" />
+```
+
+## Indeterminate State
+
+Omit the `value` prop for an indeterminate loading state:
+
+```tsx
+<Progress animated />
+```
+
+## With Label
+
+Provide accessible label for screen readers:
+
+```tsx
+<Progress value={65} label="Upload progress" />
+```
+
+## Dynamic Progress
+
+Example with changing progress value:
+
+```tsx
+import { useState, useEffect } from 'react';
+
+function UploadProgress() {
+  const [progress, setProgress] = useState(0);
+  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(timer);
+          return 100;
+        }
+        return prev + 10;
+      });
+    }, 500);
+    
+    return () => clearInterval(timer);
+  }, []);
+  
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between text-sm">
+        <span>Uploading...</span>
+        <span>{progress}%</span>
+      </div>
+      <Progress 
+        value={progress} 
+        color={progress === 100 ? 'success' : 'primary'}
+        label="File upload progress"
+      />
+    </div>
+  );
+}
+```
+
+## With Percentage Display
+
+Show percentage alongside the progress bar:
+
+```tsx
+function Example() {
+  const progress = 65;
+  
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between text-sm text-muted-foreground">
+        <span>Progress</span>
+        <span>{progress}%</span>
+      </div>
+      <Progress value={progress} color="primary" />
+    </div>
+  );
+}
+```
+
+## Loading State
+
+Use indeterminate progress for unknown duration:
+
+```tsx
+function LoadingExample() {
+  const [loading, setLoading] = useState(true);
+  
+  return (
+    <div className="space-y-2">
+      <p className="text-sm">Processing...</p>
+      <Progress animated />
+    </div>
+  );
+}
+```
+
+## Props
+
+<ResponseField name="value" type="number">
+  Progress value from 0 to 100. Omit for indeterminate state. Values are automatically clamped to the 0-100 range.
+</ResponseField>
+
+<ResponseField name="color" type="'primary' | 'success' | 'warning' | 'error' | 'info'" default="'primary'">
+  Color of the progress bar.
+</ResponseField>
+
+<ResponseField name="size" type="'xs' | 'sm' | 'md' | 'lg' | 'xl'" default="'md'">
+  Height of the progress bar:
+  - `xs`: 4px
+  - `sm`: 6px
+  - `md`: 8px
+  - `lg`: 12px
+  - `xl`: 16px
+</ResponseField>
+
+<ResponseField name="radius" type="'none' | 'sm' | 'md' | 'full'" default="'full'">
+  Border radius of the progress bar:
+  - `none`: No border radius
+  - `sm`: Small rounded corners
+  - `md`: Medium rounded corners
+  - `full`: Fully rounded ends
+</ResponseField>
+
+<ResponseField name="animated" type="boolean" default="false">
+  Show indeterminate animation when value is undefined.
+</ResponseField>
+
+<ResponseField name="label" type="string">
+  Accessible label for screen readers.
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes to apply to the progress container.
+</ResponseField>
+
+## Accessibility
+
+- Uses `role="progressbar"` for proper semantics
+- Includes `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` attributes
+- Supports `aria-label` via the `label` prop
+- Smooth transitions provide visual feedback
+
+## Best Practices
+
+- Use determinate progress when you know the completion percentage
+- Use indeterminate progress for unknown durations
+- Pair with text to show current status or percentage
+- Choose colors that match the context (success for complete, error for failed)
+- Ensure sufficient contrast for accessibility

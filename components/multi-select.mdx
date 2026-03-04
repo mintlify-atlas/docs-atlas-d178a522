@@ -1,0 +1,208 @@
+---
+title: MultiSelect
+description: Multi-value select with search, chip display, and keyboard navigation.
+---
+
+## Usage
+
+```tsx
+import { MultiSelect } from '@kivora/react';
+
+function Demo() {
+  const [frameworks, setFrameworks] = useState<string[]>([]);
+  
+  return (
+    <MultiSelect 
+      data={['React', 'Vue', 'Svelte', 'Solid']}
+      label="Frameworks"
+      value={frameworks}
+      onChange={setFrameworks}
+      placeholder="Pick frameworks"
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="data" type="MultiSelectOption[] | string[]" required>
+  Options data. Can be an array of strings or objects with `{ value, label, disabled?, group? }`.
+</ParamField>
+
+<ParamField path="value" type="string[]">
+  Controlled selected values array.
+</ParamField>
+
+<ParamField path="defaultValue" type="string[]" default="[]">
+  Default selected values for uncontrolled mode.
+</ParamField>
+
+<ParamField path="onChange" type="(values: string[]) => void">
+  Called when selection changes. Receives array of selected values.
+</ParamField>
+
+<ParamField path="label" type="string">
+  Label text displayed above the select.
+</ParamField>
+
+<ParamField path="placeholder" type="string" default="'Select…'">
+  Placeholder text shown when no options are selected.
+</ParamField>
+
+<ParamField path="error" type="string">
+  Error message to display. When set, applies error styling.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables the select and prevents user interaction.
+</ParamField>
+
+<ParamField path="searchable" type="boolean" default="false">
+  Enables search/filter functionality in the dropdown.
+</ParamField>
+
+<ParamField path="clearable" type="boolean" default="false">
+  Shows a clear button to deselect all values.
+</ParamField>
+
+<ParamField path="maxValues" type="number">
+  Maximum number of values that can be selected.
+</ParamField>
+
+<ParamField path="size" type="'sm' | 'md' | 'lg'" default="'md'">
+  Size variant affecting input height and chip sizing.
+</ParamField>
+
+<ParamField path="className" type="string" default="''">
+  Additional CSS classes to apply to the select container.
+</ParamField>
+
+<ParamField path="id" type="string">
+  HTML ID attribute. Auto-generated if not provided.
+</ParamField>
+
+## Type Definitions
+
+```tsx
+interface MultiSelectOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+  group?: string;
+}
+```
+
+## Examples
+
+### Basic Multi-Select
+
+```tsx
+<MultiSelect
+  data={['React', 'Vue', 'Svelte', 'Solid']}
+  label="Frameworks"
+  placeholder="Pick frameworks"
+/>
+```
+
+### Searchable Multi-Select
+
+```tsx
+<MultiSelect
+  data={[
+    { value: 'ts', label: 'TypeScript' },
+    { value: 'js', label: 'JavaScript' },
+    { value: 'py', label: 'Python' },
+    { value: 'go', label: 'Go' },
+    { value: 'rust', label: 'Rust' }
+  ]}
+  label="Languages"
+  searchable
+  placeholder="Search languages..."
+/>
+```
+
+### With Max Values
+
+```tsx
+<MultiSelect
+  data={skills}
+  label="Top 3 Skills"
+  maxValues={3}
+  value={selectedSkills}
+  onChange={setSelectedSkills}
+/>
+```
+
+### Clearable Multi-Select
+
+```tsx
+<MultiSelect
+  data={tags}
+  label="Tags"
+  clearable
+  searchable
+  placeholder="Select tags"
+/>
+```
+
+### With Disabled Options
+
+```tsx
+<MultiSelect
+  data={[
+    { value: 'read', label: 'Read' },
+    { value: 'write', label: 'Write' },
+    { value: 'admin', label: 'Admin', disabled: true }
+  ]}
+  label="Permissions"
+/>
+```
+
+### Form Example
+
+```tsx
+function SkillsForm() {
+  const [skills, setSkills] = useState<string[]>([]);
+  
+  const allSkills = [
+    'React', 'Vue', 'Angular', 'Svelte',
+    'Node.js', 'Python', 'Go', 'Rust',
+    'TypeScript', 'GraphQL', 'REST'
+  ];
+  
+  return (
+    <MultiSelect
+      data={allSkills}
+      label="Your Skills"
+      value={skills}
+      onChange={setSkills}
+      searchable
+      clearable
+      maxValues={5}
+      error={skills.length === 0 ? 'Select at least one skill' : undefined}
+      placeholder="Search and select skills..."
+    />
+  );
+}
+```
+
+### Different Sizes
+
+```tsx
+<MultiSelect data={options} size="sm" />
+<MultiSelect data={options} size="md" />
+<MultiSelect data={options} size="lg" />
+```
+
+## Notes
+
+- Selected values display as removable chips/tags
+- Click chip × button to remove individual selection
+- Click container to open dropdown and add more values
+- Dropdown closes when clicking outside
+- Search functionality filters options by label
+- When `maxValues` is reached, selection is disabled
+- Options show checkbox-style indicators
+- Clear button removes all selections at once
+- Uses `aria-multiselectable` for accessibility
+- Chip size adjusts based on `size` prop

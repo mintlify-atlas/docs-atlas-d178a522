@@ -1,0 +1,149 @@
+---
+title: RadioGroup
+description: Accessible radio group for rendering mutually exclusive options.
+---
+
+## Usage
+
+```tsx
+import { RadioGroup } from '@kivora/react';
+
+function Demo() {
+  const [selected, setSelected] = useState('a');
+  
+  return (
+    <RadioGroup
+      options={[
+        { value: 'a', label: 'Option A' },
+        { value: 'b', label: 'Option B' },
+        { value: 'c', label: 'Option C' }
+      ]}
+      value={selected}
+      onChange={setSelected}
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="options" type="Array<{ value: string; label: string; disabled?: boolean }>" required>
+  Array of radio button options. Each option must have a `value` and `label`.
+</ParamField>
+
+<ParamField path="value" type="string">
+  Controlled selected value.
+</ParamField>
+
+<ParamField path="defaultValue" type="string" default="''">
+  Default selected value for uncontrolled mode.
+</ParamField>
+
+<ParamField path="onChange" type="(value: string) => void">
+  Called when selection changes. Receives the selected option's value.
+</ParamField>
+
+<ParamField path="name" type="string">
+  Name attribute for the radio group. Auto-generated if not provided.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables all radio buttons in the group.
+</ParamField>
+
+<ParamField path="orientation" type="'vertical' | 'horizontal'" default="'vertical'">
+  Layout direction of the radio buttons.
+</ParamField>
+
+<ParamField path="className" type="string" default="''">
+  Additional CSS classes to apply to the radio group container.
+</ParamField>
+
+## Examples
+
+### Basic Radio Group
+
+```tsx
+<RadioGroup
+  options={[
+    { value: 'react', label: 'React' },
+    { value: 'vue', label: 'Vue' },
+    { value: 'svelte', label: 'Svelte' }
+  ]}
+  defaultValue="react"
+/>
+```
+
+### Horizontal Layout
+
+```tsx
+<RadioGroup
+  options={[
+    { value: 'xs', label: 'XS' },
+    { value: 's', label: 'S' },
+    { value: 'm', label: 'M' },
+    { value: 'l', label: 'L' },
+    { value: 'xl', label: 'XL' }
+  ]}
+  orientation="horizontal"
+/>
+```
+
+### With Disabled Options
+
+```tsx
+<RadioGroup
+  options={[
+    { value: 'free', label: 'Free' },
+    { value: 'pro', label: 'Pro' },
+    { value: 'enterprise', label: 'Enterprise', disabled: true }
+  ]}
+  value={plan}
+  onChange={setPlan}
+/>
+```
+
+### Fully Disabled
+
+```tsx
+<RadioGroup
+  options={[
+    { value: 'a', label: 'Option A' },
+    { value: 'b', label: 'Option B' }
+  ]}
+  disabled
+  defaultValue="a"
+/>
+```
+
+### Controlled with Form
+
+```tsx
+function FormDemo() {
+  const [formData, setFormData] = useState({ plan: 'basic' });
+  
+  return (
+    <form>
+      <RadioGroup
+        options={[
+          { value: 'basic', label: 'Basic - $10/month' },
+          { value: 'pro', label: 'Pro - $25/month' },
+          { value: 'enterprise', label: 'Enterprise - Custom' }
+        ]}
+        value={formData.plan}
+        onChange={(plan) => setFormData({ ...formData, plan })}
+      />
+    </form>
+  );
+}
+```
+
+## Notes
+
+- All options in a group are mutually exclusive (only one can be selected)
+- Uses native radio inputs for accessibility and keyboard navigation
+- Custom visual indicators with smooth animations
+- Each option can be individually disabled via the `disabled` property
+- Group-level `disabled` prop disables all options
+- Focus ring visible on keyboard navigation
+- Horizontal orientation uses flexbox with wrapping support

@@ -1,0 +1,265 @@
+---
+title: List
+description: Semantic ordered or unordered list with optional icon support and configurable spacing.
+---
+
+## Overview
+
+The `List` component renders semantic `<ul>` or `<ol>` elements with consistent styling and spacing. It supports custom icons and includes a `List.Item` subcomponent for individual list items.
+
+## Import
+
+```tsx
+import { List } from '@kivora/react';
+```
+
+## Basic Usage
+
+```tsx
+<List>
+  <List.Item>First item</List.Item>
+  <List.Item>Second item</List.Item>
+  <List.Item>Third item</List.Item>
+</List>
+```
+
+## List Types
+
+### Unordered List (Default)
+
+```tsx
+<List type="unordered">
+  <List.Item>JavaScript</List.Item>
+  <List.Item>TypeScript</List.Item>
+  <List.Item>React</List.Item>
+</List>
+```
+
+### Ordered List
+
+```tsx
+<List type="ordered">
+  <List.Item>Clone the repository</List.Item>
+  <List.Item>Install dependencies</List.Item>
+  <List.Item>Run the development server</List.Item>
+</List>
+```
+
+## Spacing
+
+Control the vertical spacing between items:
+
+```tsx
+<List spacing={0}>
+  <List.Item>Compact list</List.Item>
+  <List.Item>No spacing</List.Item>
+</List>
+
+<List spacing={2}>
+  <List.Item>Default spacing</List.Item>
+  <List.Item>Comfortable reading</List.Item>
+</List>
+
+<List spacing={4}>
+  <List.Item>Large spacing</List.Item>
+  <List.Item>Widely spaced</List.Item>
+</List>
+```
+
+### Spacing Values
+
+| Value | Class | Spacing |
+|-------|-------|----------|
+| `0` | `space-y-0` | No spacing |
+| `1` | `space-y-1` | 0.25rem |
+| `2` | `space-y-2` | 0.5rem (default) |
+| `3` | `space-y-3` | 0.75rem |
+| `4` | `space-y-4` | 1rem |
+
+## Custom Icons
+
+### List-level Icon
+
+Apply the same icon to all items:
+
+```tsx
+import { Check } from 'lucide-react';
+
+<List icon={<Check size={16} />}>
+  <List.Item>Feature enabled</List.Item>
+  <List.Item>Security verified</List.Item>
+  <List.Item>Tests passing</List.Item>
+</List>
+```
+
+### Item-level Icon
+
+Customize icons per item:
+
+```tsx
+import { Check, X, AlertCircle } from 'lucide-react';
+
+<List>
+  <List.Item icon={<Check size={16} />}>Task completed</List.Item>
+  <List.Item icon={<AlertCircle size={16} />}>In progress</List.Item>
+  <List.Item icon={<X size={16} />}>Blocked</List.Item>
+</List>
+```
+
+## Examples
+
+### Features List
+
+```tsx
+import { Zap } from 'lucide-react';
+
+<List icon={<Zap className="text-yellow-500" size={18} />} spacing={3}>
+  <List.Item>Lightning fast performance</List.Item>
+  <List.Item>Type-safe by default</List.Item>
+  <List.Item>Fully customizable</List.Item>
+  <List.Item>Accessible components</List.Item>
+</List>
+```
+
+### Installation Steps
+
+```tsx
+<List type="ordered" spacing={3}>
+  <List.Item>Run <code>npm install @kivora/react</code></List.Item>
+  <List.Item>Import components from <code>@kivora/react</code></List.Item>
+  <List.Item>Start building your UI</List.Item>
+</List>
+```
+
+### Status List
+
+```tsx
+import { CheckCircle, Circle } from 'lucide-react';
+
+<List spacing={2}>
+  <List.Item icon={<CheckCircle className="text-success" />}>
+    Setup complete
+  </List.Item>
+  <List.Item icon={<CheckCircle className="text-success" />}>
+    Dependencies installed
+  </List.Item>
+  <List.Item icon={<Circle className="text-muted-foreground" />}>
+    Configuration pending
+  </List.Item>
+</List>
+```
+
+### Nested Lists
+
+```tsx
+<List type="ordered">
+  <List.Item>
+    Frontend
+    <List spacing={1} className="mt-2">
+      <List.Item>React</List.Item>
+      <List.Item>TypeScript</List.Item>
+    </List>
+  </List.Item>
+  <List.Item>
+    Backend
+    <List spacing={1} className="mt-2">
+      <List.Item>Node.js</List.Item>
+      <List.Item>Express</List.Item>
+    </List>
+  </List.Item>
+</List>
+```
+
+### Documentation Links
+
+```tsx
+import { FileText } from 'lucide-react';
+
+<List icon={<FileText size={16} />} spacing={2}>
+  <List.Item>
+    <a href="/guide">Getting Started Guide</a>
+  </List.Item>
+  <List.Item>
+    <a href="/components">Component Reference</a>
+  </List.Item>
+  <List.Item>
+    <a href="/examples">Examples & Templates</a>
+  </List.Item>
+</List>
+```
+
+## Props
+
+### List Props
+
+<ResponseField name="type" type="'unordered' | 'ordered'" default="'unordered'">
+  List type (renders `<ul>` or `<ol>`)
+</ResponseField>
+
+<ResponseField name="spacing" type="0 | 1 | 2 | 3 | 4" default="2">
+  Vertical spacing between list items
+</ResponseField>
+
+<ResponseField name="icon" type="ReactNode">
+  Icon to display for all list items (can be overridden per item)
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  List items (typically `List.Item` components)
+</ResponseField>
+
+<ResponseField name="...props" type="React.ComponentPropsWithoutRef<'ul'>">
+  All standard HTML list props
+</ResponseField>
+
+### List.Item Props
+
+<ResponseField name="icon" type="ReactNode">
+  Icon to display for this specific item (overrides list-level icon)
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Item content
+</ResponseField>
+
+<ResponseField name="...props" type="React.ComponentPropsWithoutRef<'li'>">
+  All standard HTML list item props
+</ResponseField>
+
+## Type Definition
+
+Source: `/home/daytona/workspace/source/src/components/typography/List.tsx:5`
+
+```tsx
+export interface ListProps extends React.ComponentPropsWithoutRef<'ul'> {
+  type?: 'unordered' | 'ordered';
+  spacing?: 0 | 1 | 2 | 3 | 4;
+  icon?: React.ReactNode;
+}
+
+export interface ListItemProps extends React.ComponentPropsWithoutRef<'li'> {
+  icon?: React.ReactNode;
+}
+```
+
+## Styling Details
+
+### List
+- Ordered: `list-decimal list-inside`
+- Unordered (no icon): `list-disc list-inside`
+- With icon: `list-none`
+- Text: `text-sm text-foreground`
+
+### List.Item
+- Flex layout with start alignment
+- Gap between icon and content: 0.5rem
+- Icon: muted foreground color with top margin for alignment
+- Leading: relaxed

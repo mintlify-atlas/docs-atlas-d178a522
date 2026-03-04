@@ -1,0 +1,235 @@
+---
+title: Color Swatch
+description: Clickable or display color swatch for color selection and display.
+---
+
+## Usage
+
+```tsx
+import { ColorSwatch } from '@kivora/react';
+
+<ColorSwatch color="#3b82f6" aria-label="Blue" />
+```
+
+## Examples
+
+### Basic Swatch
+
+```tsx
+<ColorSwatch color="#3b82f6" aria-label="Blue" />
+```
+
+### Clickable Swatch
+
+```tsx
+function ColorPicker() {
+  const [selected, setSelected] = useState('#3b82f6');
+
+  return (
+    <ColorSwatch 
+      color="#3b82f6" 
+      onClick={() => setSelected('#3b82f6')}
+      aria-label="Select blue"
+    />
+  );
+}
+```
+
+### Sizes
+
+<CodeGroup>
+```tsx Extra Small
+<ColorSwatch color="#ef4444" size="xs" aria-label="Red" />
+```
+
+```tsx Small
+<ColorSwatch color="#f59e0b" size="sm" aria-label="Orange" />
+```
+
+```tsx Medium
+<ColorSwatch color="#10b981" size="md" aria-label="Green" />
+```
+
+```tsx Large
+<ColorSwatch color="#3b82f6" size="lg" aria-label="Blue" />
+```
+</CodeGroup>
+
+### Read-Only
+
+```tsx
+<ColorSwatch color="#8b5cf6" size="md" readOnly />
+```
+
+Renders as a `<span>` with no interaction states.
+
+### Color Palette
+
+```tsx
+function ColorPalette() {
+  const [selected, setSelected] = useState('#3b82f6');
+  
+  const colors = [
+    { value: '#ef4444', name: 'Red' },
+    { value: '#f59e0b', name: 'Orange' },
+    { value: '#10b981', name: 'Green' },
+    { value: '#3b82f6', name: 'Blue' },
+    { value: '#8b5cf6', name: 'Purple' },
+    { value: '#ec4899', name: 'Pink' },
+  ];
+
+  return (
+    <div className="flex gap-2">
+      {colors.map(color => (
+        <ColorSwatch
+          key={color.value}
+          color={color.value}
+          size="md"
+          onClick={() => setSelected(color.value)}
+          aria-label={color.name}
+          className={selected === color.value ? 'ring-2 ring-offset-2' : ''}
+        />
+      ))}
+    </div>
+  );
+}
+```
+
+### Theme Color Grid
+
+```tsx
+const themeColors = {
+  primary: ['#eff6ff', '#dbeafe', '#bfdbfe', '#93c5fd', '#60a5fa', '#3b82f6'],
+  success: ['#f0fdf4', '#dcfce7', '#bbf7d0', '#86efac', '#4ade80', '#22c55e'],
+  warning: ['#fef3c7', '#fde68a', '#fcd34d', '#fbbf24', '#f59e0b', '#d97706'],
+  error: ['#fee2e2', '#fecaca', '#fca5a5', '#f87171', '#ef4444', '#dc2626'],
+};
+
+function ThemeColorGrid() {
+  return (
+    <div className="space-y-4">
+      {Object.entries(themeColors).map(([name, shades]) => (
+        <div key={name}>
+          <h4 className="text-sm font-medium mb-2 capitalize">{name}</h4>
+          <div className="flex gap-2">
+            {shades.map((color, i) => (
+              <ColorSwatch
+                key={color}
+                color={color}
+                size="lg"
+                aria-label={`${name} ${i + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+### Color Picker with Preview
+
+```tsx
+function ColorPickerWithPreview() {
+  const [color, setColor] = useState('#3b82f6');
+
+  const presetColors = [
+    '#ef4444', '#f59e0b', '#10b981', '#3b82f6', 
+    '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6',
+  ];
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <ColorSwatch color={color} size="lg" readOnly />
+        <div>
+          <p className="text-sm font-medium">Selected Color</p>
+          <p className="text-xs text-muted-foreground">{color}</p>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-8 gap-2">
+        {presetColors.map(c => (
+          <ColorSwatch
+            key={c}
+            color={c}
+            size="md"
+            onClick={() => setColor(c)}
+            aria-label={c}
+            className={color === c ? 'ring-2 ring-primary' : ''}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+### Gradient Swatches
+
+```tsx
+<div className="flex gap-2">
+  <ColorSwatch 
+    color="transparent"
+    style={{ 
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    }}
+    size="lg"
+    aria-label="Purple gradient"
+  />
+  <ColorSwatch 
+    color="transparent"
+    style={{ 
+      background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+    }}
+    size="lg"
+    aria-label="Pink gradient"
+  />
+</div>
+```
+
+## Props
+
+<ResponseField name="color" type="string" required>
+  CSS color value (hex, rgb, hsl, named color, etc.)
+</ResponseField>
+
+<ResponseField name="size" type="'xs' | 'sm' | 'md' | 'lg'" default="md">
+  Swatch size
+</ResponseField>
+
+<ResponseField name="readOnly" type="boolean" default={false}>
+  Render as non-interactive span (no hover/focus effects)
+</ResponseField>
+
+<ResponseField name="onClick" type="() => void">
+  Click handler (only works when readOnly is false)
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+<ResponseField name="style" type="React.CSSProperties">
+  Inline styles (useful for gradients)
+</ResponseField>
+
+ColorSwatch also accepts all standard HTML `<button>` attributes (when interactive) or `<span>` attributes (when read-only).
+
+## Accessibility
+
+- Interactive swatches use semantic `<button>` element
+- Requires `aria-label` to describe the color for screen readers
+- Keyboard accessible with focus ring
+- Focus ring offset for clear visual indication
+- Read-only swatches render as `<span>` for non-interactive display
+
+## Best Practices
+
+- Always provide descriptive `aria-label` for accessibility
+- Use appropriate size based on context (smaller for palettes, larger for pickers)
+- Consider adding visual selection indicator (ring, checkmark, etc.)
+- Group related colors together
+- Ensure sufficient contrast between swatch and background
+- Use read-only mode for display-only scenarios

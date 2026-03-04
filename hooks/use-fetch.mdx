@@ -1,0 +1,275 @@
+---
+title: useFetch
+description: Simple fetch wrapper with loading, error, and data state management
+---
+
+## Overview
+
+The `useFetch` hook provides a simple wrapper around the native `fetch` API with built-in state management for loading, error, and data states. It automatically re-runs when the URL changes and supports manual refetching.
+
+## Signature
+
+```tsx
+function useFetch<T = unknown>(
+  url: string,
+  options?: RequestInit & UseFetchOptions
+): UseFetchReturn<T>
+```
+
+## Parameters
+
+<ParamField path="url" type="string" required>
+  The URL to fetch from
+</ParamField>
+
+<ParamField path="options" type="RequestInit & UseFetchOptions">
+  Fetch options and hook configuration. Includes all standard `fetch` options plus:
+  - `immediate`: Whether to fetch immediately on mount (default: `true`)
+</ParamField>
+
+## Returns
+
+<ResponseField name="data" type="T | null">
+  The fetched data, or `null` if not yet loaded
+</ResponseField>
+
+<ResponseField name="status" type="FetchStatus">
+  Current status: `'idle'`, `'loading'`, `'success'`, or `'error'`
+</ResponseField>
+
+<ResponseField name="error" type="Error | null">
+  Error object if the request failed, otherwise `null`
+</ResponseField>
+
+<ResponseField name="loading" type="boolean">
+  Convenience boolean - `true` when status is `'loading'`
+</ResponseField>
+
+<ResponseField name="refetch" type="() => void">
+  Function to manually trigger a new fetch request
+</ResponseField>
+
+## Type Definitions
+
+```tsx
+type FetchStatus = 'idle' | 'loading' | 'success' | 'error';
+
+interface UseFetchReturn<T> {
+  data: T | null;
+  status: FetchStatus;
+  error: Error | null;
+  loading: boolean;
+  refetch: () => void;
+}
+
+interface UseFetchOptions {
+  /** Run the fetch immediately on mount. Default `true`. */
+  immediate?: boolean;
+}
+```
+
+## Examples
+
+### Basic data fetching
+
+```tsx
+import { useFetch } from 'kivora-react';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+function UserList() {
+  const { data, loading, error } = useFetch<User[]>('/api/users');
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
+  return (
+    <ul>
+      {data?.map(user => (
+        <li key={user.id}>
+          {user.name} - {user.email}
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+### With custom headers
+
+```tsx
+import { useFetch } from 'kivora-react';
+
+function AuthenticatedData() {
+  const { data, loading, error } = useFetch('/api/protected', {
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Unauthorized</div>;
+
+  return <pre>{JSON.stringify(data, null, 2)}</pre>;
+}
+```
+
+### Manual fetch with immediate: false
+
+```tsx
+import { useFetch } from 'kivora-react';
+
+function ManualFetch() {
+  const { data, loading, refetch } = useFetch('/api/data', {
+    immediate: false
+  });
+
+  return (
+    <div>
+      <button onClick={refetch} disabled={loading}>
+        {loading ? 'Loading...' : 'Load Data'}
+      </button>
+      {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
+    </div>
+  );
+}
+```
+
+### Refetch on demand
+
+```tsx
+import { useFetch } from 'kivora-react';
+
+function RefreshableData() {
+  const { data, loading, error, refetch } = useFetch('/api/stats');
+
+  return (
+    <div>
+      <button onClick={refetch} disabled={loading}>
+        Refresh
+      </button>
+      {loading && <div>Loading...</div>}
+      {error && <div>Error: {error.message}</div>}
+      {data && <div>Current stats: {data.count}</div>}
+    </div>
+  );
+}
+```
+
+### Status-based rendering
+
+```tsx
+import { useFetch } from 'kivora-react';
+
+function StatusDemo() {
+  const { data, status, error, refetch } = useFetch('/api/data');
+
+  return (
+    <div>
+      {status === 'idle' && <div>Ready to fetch</div>}
+      {status === 'loading' && <div>Loading...</div>}
+      {status === 'error' && (
+        <div>
+          <p>Error: {error?.message}</p>
+          <button onClick={refetch}>Retry</button>
+        </div>
+      )}
+      {status === 'success' && (
+        <pre>{JSON.stringify(data, null, 2)}</pre>
+      )}
+    </div>
+  );
+}
+```
+
+### POST request
+
+```tsx
+import { useFetch } from 'kivora-react';
+
+function CreateUser() {
+  const [formData, setFormData] = useState({ name: '', email: '' });
+  
+  const { data, loading, error, refetch } = useFetch('/api/users', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formData),
+    immediate: false
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    refetch();
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        value={formData.name}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        placeholder="Name"
+      />
+      <input
+        value={formData.email}
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        placeholder="Email"
+      />
+      <button type="submit" disabled={loading}>
+        {loading ? 'Creating...' : 'Create User'}
+      </button>
+      {error && <div>Error: {error.message}</div>}
+      {data && <div>User created: {data.id}</div>}
+    </form>
+  );
+}
+```
+
+### Dynamic URL
+
+```tsx
+import { useState } from 'react';
+import { useFetch } from 'kivora-react';
+
+function UserProfile() {
+  const [userId, setUserId] = useState(1);
+  const { data, loading } = useFetch(`/api/users/${userId}`);
+
+  return (
+    <div>
+      <select value={userId} onChange={(e) => setUserId(Number(e.target.value))}>
+        <option value={1}>User 1</option>
+        <option value={2}>User 2</option>
+        <option value={3}>User 3</option>
+      </select>
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <div>{data?.name}</div>
+      )}
+    </div>
+  );
+}
+```
+
+## Use Cases
+
+- **API data fetching**: Load data from REST APIs
+- **User profiles**: Fetch and display user information
+- **Dashboard data**: Load statistics and metrics
+- **Search results**: Fetch results based on query parameters
+- **Form submissions**: POST data to APIs
+- **Real-time updates**: Manually refetch to get latest data
+
+## Notes
+
+- Requests are automatically aborted when the component unmounts or when a new request starts
+- The hook automatically re-runs when the URL changes
+- All standard `fetch` options are supported (method, headers, body, etc.)
+- HTTP error responses (4xx, 5xx) are treated as errors and populate the `error` state
+- The response is automatically parsed as JSON
+- Pass `immediate: false` to defer fetching and trigger it manually with `refetch()`

@@ -1,0 +1,234 @@
+---
+title: PinInput
+description: PIN/OTP code input with individual character cells and paste support.
+---
+
+## Usage
+
+```tsx
+import { PinInput } from '@kivora/react';
+
+function Demo() {
+  const [pin, setPin] = useState('');
+  
+  return (
+    <PinInput 
+      length={6} 
+      value={pin}
+      onChange={setPin}
+      onComplete={(code) => console.log('Complete:', code)}
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="length" type="number" default="4">
+  Number of character input cells to display.
+</ParamField>
+
+<ParamField path="value" type="string">
+  Controlled value of the PIN (all characters combined).
+</ParamField>
+
+<ParamField path="defaultValue" type="string" default="''">
+  Default value for uncontrolled mode.
+</ParamField>
+
+<ParamField path="onChange" type="(value: string) => void">
+  Called when any character changes. Receives the current PIN string.
+</ParamField>
+
+<ParamField path="onComplete" type="(value: string) => void">
+  Called when all cells are filled. Receives the complete PIN string.
+</ParamField>
+
+<ParamField path="type" type="'alphanumeric' | 'number'" default="'alphanumeric'">
+  Input type validation:
+  - `number`: Only digits 0-9
+  - `alphanumeric`: Letters and numbers
+</ParamField>
+
+<ParamField path="mask" type="boolean" default="false">
+  Masks input as password (shows dots instead of characters).
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables all input cells.
+</ParamField>
+
+<ParamField path="error" type="boolean" default="false">
+  Applies error styling to all cells.
+</ParamField>
+
+<ParamField path="size" type="'sm' | 'md' | 'lg'" default="'md'">
+  Size variant:
+  - `sm`: size-8, text-sm
+  - `md`: size-10, text-base
+  - `lg`: size-12, text-lg
+</ParamField>
+
+<ParamField path="placeholder" type="string" default="'○'">
+  Character displayed in empty cells.
+</ParamField>
+
+<ParamField path="oneTimeCode" type="boolean" default="true">
+  Enables autocomplete for SMS one-time codes.
+</ParamField>
+
+<ParamField path="className" type="string" default="''">
+  Additional CSS classes to apply to the container.
+</ParamField>
+
+<ParamField path="id" type="string">
+  HTML ID attribute. Auto-generated if not provided.
+</ParamField>
+
+## Examples
+
+### Basic PIN Input
+
+```tsx
+<PinInput length={4} type="number" />
+```
+
+### 6-Digit OTP
+
+```tsx
+function OTPDemo() {
+  const [otp, setOtp] = useState('');
+  
+  const handleComplete = async (code: string) => {
+    // Verify OTP
+    await verifyOTP(code);
+  };
+  
+  return (
+    <PinInput
+      length={6}
+      type="number"
+      value={otp}
+      onChange={setOtp}
+      onComplete={handleComplete}
+      oneTimeCode
+    />
+  );
+}
+```
+
+### Masked PIN Entry
+
+```tsx
+<PinInput 
+  length={4} 
+  type="number"
+  mask
+  placeholder="•"
+/>
+```
+
+### Different Sizes
+
+```tsx
+<PinInput length={4} size="sm" />
+<PinInput length={4} size="md" />
+<PinInput length={4} size="lg" />
+```
+
+### With Error State
+
+```tsx
+function ValidatedPIN() {
+  const [pin, setPin] = useState('');
+  const [error, setError] = useState(false);
+  
+  const handleComplete = (code: string) => {
+    if (code !== '1234') {
+      setError(true);
+      setTimeout(() => {
+        setPin('');
+        setError(false);
+      }, 1000);
+    }
+  };
+  
+  return (
+    <PinInput
+      length={4}
+      type="number"
+      value={pin}
+      onChange={(v) => { setPin(v); setError(false); }}
+      onComplete={handleComplete}
+      error={error}
+    />
+  );
+}
+```
+
+### Alphanumeric Code
+
+```tsx
+<PinInput 
+  length={8} 
+  type="alphanumeric"
+  placeholder="_"
+/>
+```
+
+### Verification Code Form
+
+```tsx
+function VerificationForm() {
+  const [code, setCode] = useState('');
+  const [loading, setLoading] = useState(false);
+  
+  const handleSubmit = async (verificationCode: string) => {
+    setLoading(true);
+    try {
+      await api.verify(verificationCode);
+      // Success
+    } catch (error) {
+      setCode(''); // Clear on error
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  return (
+    <div>
+      <label className="text-sm font-medium mb-2 block">
+        Enter verification code
+      </label>
+      <PinInput
+        length={6}
+        type="number"
+        value={code}
+        onChange={setCode}
+        onComplete={handleSubmit}
+        disabled={loading}
+      />
+    </div>
+  );
+}
+```
+
+## Keyboard Behavior
+
+- **Type character**: Fills current cell and auto-focuses next
+- **Backspace**: Clears current cell, or moves to previous if empty
+- **Arrow Left/Right**: Navigate between cells
+- **Paste**: Distributes pasted content across all cells
+- **Select**: Auto-selects content on focus
+
+## Notes
+
+- Each cell is a separate input for better UX
+- Paste support on first cell distributes characters across all cells
+- Auto-focus moves to next cell on input
+- Backspace behavior: delete current or move to previous
+- Font uses monospace for consistent character width
+- `oneTimeCode` autocomplete helps with SMS verification codes
+- Type validation prevents invalid characters
+- `onComplete` fires only when all cells are filled
+- Error state applies red border to all cells

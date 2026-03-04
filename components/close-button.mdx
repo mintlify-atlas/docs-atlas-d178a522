@@ -1,0 +1,253 @@
+---
+title: CloseButton
+description: Convenience wrapper around ActionIcon that renders a close (✕) icon
+---
+
+## Import
+
+```tsx
+import { CloseButton } from '@kivora/react';
+```
+
+## Usage
+
+<CodeGroup>
+
+```tsx Basic
+<CloseButton onClick={() => console.log('Closed')} />
+```
+
+```tsx Variants
+<div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+  <CloseButton variant="primary" />
+  <CloseButton variant="secondary" />
+  <CloseButton variant="ghost" />
+  <CloseButton variant="outline" />
+  <CloseButton variant="destructive" />
+</div>
+```
+
+```tsx Sizes
+<div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+  <CloseButton size="xs" />
+  <CloseButton size="sm" />
+  <CloseButton size="md" />
+  <CloseButton size="lg" />
+  <CloseButton size="xl" />
+</div>
+```
+
+```tsx Custom Label
+<CloseButton aria-label="Dismiss notification" />
+```
+
+```tsx Loading State
+<CloseButton loading />
+```
+
+```tsx Disabled
+<CloseButton disabled />
+```
+
+</CodeGroup>
+
+## Props
+
+<ParamField path="aria-label" type="string" default="'Close'">
+  Accessible label for the button. Defaults to "Close" but can be customized for specific contexts
+  (e.g., "Dismiss notification", "Close dialog", "Remove item").
+</ParamField>
+
+<ParamField path="variant" type="'primary' | 'secondary' | 'ghost' | 'destructive' | 'outline'" default="'ghost'">
+  The visual style variant of the button (inherited from ActionIcon):
+  - `primary` - Filled with primary color and shadow
+  - `secondary` - Filled with secondary color
+  - `ghost` - Transparent background (default)
+  - `destructive` - Filled with destructive/danger color and shadow
+  - `outline` - Transparent with border outline
+</ParamField>
+
+<ParamField path="size" type="'xs' | 'sm' | 'md' | 'lg' | 'xl'" default="'md'">
+  The size of the square button:
+  - `xs` - 28×28px (size-7)
+  - `sm` - 32×32px (size-8)
+  - `md` - 36×36px (size-9)
+  - `lg` - 40×40px (size-10)
+  - `xl` - 44×44px (size-11)
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Whether the button is disabled. Disabled buttons have reduced opacity and cannot be clicked.
+</ParamField>
+
+<ParamField path="loading" type="boolean" default="false">
+  Whether the button is in a loading state. Replaces the close icon with a spinner and disables interaction.
+</ParamField>
+
+<ParamField path="onClick" type="() => void">
+  Callback function triggered when the button is clicked. Ignored when disabled or loading.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes to apply to the button element.
+</ParamField>
+
+<ParamField path="ref" type="React.Ref<HTMLButtonElement>">
+  Forward ref to the underlying button element.
+</ParamField>
+
+## Description
+
+CloseButton is a convenience component that wraps [ActionIcon](/components/action-icon) with a pre-configured close (✕) icon. It's commonly used in:
+
+- Modal headers
+- Drawer headers
+- Toast notifications
+- Alert/banner dismissal
+- Tag removal
+- Any dismissible UI element
+
+The close icon is rendered as an inline SVG with:
+- 24×24 viewBox scaled to 16px (size-4)
+- 2px stroke width
+- Round line caps and joins
+- Current color inheritance
+
+## Accessibility
+
+- Defaults to `aria-label="Close"` which can be overridden for specific contexts
+- Uses semantic `<button>` element with `type="button"`
+- Sets `disabled` and `aria-disabled` attributes when disabled or loading
+- Includes focus-visible ring for keyboard navigation
+- The ✕ icon is purely decorative; the `aria-label` provides the accessible text
+
+## Examples
+
+### Modal Header
+
+```tsx
+<div style={{ 
+  display: 'flex', 
+  justifyContent: 'space-between', 
+  alignItems: 'center',
+  padding: '1rem',
+  borderBottom: '1px solid #e5e7eb'
+}}>
+  <h2>Modal Title</h2>
+  <CloseButton 
+    aria-label="Close modal" 
+    onClick={onClose}
+  />
+</div>
+```
+
+### Toast Notification
+
+```tsx
+<div style={{ 
+  display: 'flex', 
+  gap: '0.75rem', 
+  alignItems: 'start',
+  padding: '1rem',
+  background: '#f9fafb',
+  borderRadius: '0.5rem'
+}}>
+  <div style={{ flex: 1 }}>
+    <p><strong>Success!</strong></p>
+    <p>Your changes have been saved.</p>
+  </div>
+  <CloseButton 
+    aria-label="Dismiss notification"
+    size="sm"
+    onClick={dismissToast}
+  />
+</div>
+```
+
+### Alert Banner
+
+```tsx
+<div style={{ 
+  display: 'flex', 
+  justifyContent: 'space-between', 
+  alignItems: 'center',
+  padding: '0.75rem 1rem',
+  background: '#fef2f2',
+  borderLeft: '4px solid #ef4444'
+}}>
+  <p>Your session will expire in 5 minutes.</p>
+  <CloseButton 
+    aria-label="Dismiss alert"
+    size="sm"
+    variant="ghost"
+    onClick={dismissAlert}
+  />
+</div>
+```
+
+### Removable Tag
+
+```tsx
+<div style={{ 
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '0.25rem',
+  padding: '0.25rem 0.5rem',
+  background: '#e5e7eb',
+  borderRadius: '0.375rem'
+}}>
+  <span>Design</span>
+  <CloseButton 
+    aria-label="Remove tag"
+    size="xs"
+    variant="ghost"
+    onClick={removeTag}
+  />
+</div>
+```
+
+### Drawer Header
+
+```tsx
+<div style={{ 
+  display: 'flex', 
+  justifyContent: 'space-between', 
+  alignItems: 'center',
+  padding: '1.5rem',
+  borderBottom: '1px solid #e5e7eb'
+}}>
+  <div>
+    <h2>Settings</h2>
+    <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>
+      Manage your account preferences
+    </p>
+  </div>
+  <CloseButton 
+    aria-label="Close settings"
+    onClick={closeDrawer}
+  />
+</div>
+```
+
+## Comparison with ActionIcon
+
+Use **CloseButton** when:
+- You need a standard close/dismiss button
+- You want consistent close icon styling
+- You're building modals, drawers, toasts, or alerts
+
+Use **ActionIcon** when:
+- You need a custom icon
+- You want more control over the icon appearance
+- The action is not a close/dismiss action
+
+```tsx
+// These are equivalent:
+<CloseButton onClick={onClose} />
+
+<ActionIcon aria-label="Close" onClick={onClose}>
+  <svg viewBox="0 0 24 24" className="size-4" /* ... */>
+    {/* X icon paths */}
+  </svg>
+</ActionIcon>
+```

@@ -1,0 +1,230 @@
+---
+title: ActionIcon
+description: Square icon-only button with semantic variants and sizes
+---
+
+## Import
+
+```tsx
+import { ActionIcon } from '@kivora/react';
+```
+
+## Usage
+
+<CodeGroup>
+
+```tsx Basic
+import { TrashIcon } from 'lucide-react';
+
+<ActionIcon aria-label="Delete" onClick={() => console.log('Delete')}>
+  <TrashIcon size={16} />
+</ActionIcon>
+```
+
+```tsx Variants
+import { HeartIcon, StarIcon, ShareIcon, TrashIcon, EditIcon } from 'lucide-react';
+
+<div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+  <ActionIcon aria-label="Like" variant="primary">
+    <HeartIcon size={16} />
+  </ActionIcon>
+  <ActionIcon aria-label="Favorite" variant="secondary">
+    <StarIcon size={16} />
+  </ActionIcon>
+  <ActionIcon aria-label="Share" variant="ghost">
+    <ShareIcon size={16} />
+  </ActionIcon>
+  <ActionIcon aria-label="Edit" variant="outline">
+    <EditIcon size={16} />
+  </ActionIcon>
+  <ActionIcon aria-label="Delete" variant="destructive">
+    <TrashIcon size={16} />
+  </ActionIcon>
+</div>
+```
+
+```tsx Sizes
+import { PlusIcon } from 'lucide-react';
+
+<div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+  <ActionIcon aria-label="Add" size="xs">
+    <PlusIcon size={12} />
+  </ActionIcon>
+  <ActionIcon aria-label="Add" size="sm">
+    <PlusIcon size={14} />
+  </ActionIcon>
+  <ActionIcon aria-label="Add" size="md">
+    <PlusIcon size={16} />
+  </ActionIcon>
+  <ActionIcon aria-label="Add" size="lg">
+    <PlusIcon size={18} />
+  </ActionIcon>
+  <ActionIcon aria-label="Add" size="xl">
+    <PlusIcon size={20} />
+  </ActionIcon>
+</div>
+```
+
+```tsx Loading State
+import { SaveIcon, TrashIcon } from 'lucide-react';
+
+<div style={{ display: 'flex', gap: '0.5rem' }}>
+  <ActionIcon aria-label="Save" variant="primary" loading>
+    <SaveIcon size={16} />
+  </ActionIcon>
+  <ActionIcon aria-label="Delete" variant="destructive" loading>
+    <TrashIcon size={16} />
+  </ActionIcon>
+</div>
+```
+
+```tsx Disabled
+import { SettingsIcon } from 'lucide-react';
+
+<ActionIcon aria-label="Settings" disabled>
+  <SettingsIcon size={16} />
+</ActionIcon>
+```
+
+</CodeGroup>
+
+## Props
+
+<ParamField path="aria-label" type="string" required>
+  Accessible label for the button. Required for screen readers since the button contains only an icon.
+</ParamField>
+
+<ParamField path="children" type="React.ReactNode" required>
+  The icon or content to display inside the button. Typically an icon component.
+  Hidden when `loading` is true (replaced with a spinner).
+</ParamField>
+
+<ParamField path="variant" type="'primary' | 'secondary' | 'ghost' | 'destructive' | 'outline'" default="'ghost'">
+  The visual style variant of the button:
+  - `primary` - Filled with primary color and shadow
+  - `secondary` - Filled with secondary color
+  - `ghost` - Transparent background (default for icon buttons)
+  - `destructive` - Filled with destructive/danger color and shadow
+  - `outline` - Transparent with border outline
+</ParamField>
+
+<ParamField path="size" type="'xs' | 'sm' | 'md' | 'lg' | 'xl'" default="'md'">
+  The size of the square button:
+  - `xs` - 28×28px (size-7), rounded-md
+  - `sm` - 32×32px (size-8), rounded-md
+  - `md` - 36×36px (size-9), rounded-lg
+  - `lg` - 40×40px (size-10), rounded-lg
+  - `xl` - 44×44px (size-11), rounded-xl
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Whether the button is disabled. Disabled buttons have reduced opacity and cannot be clicked.
+</ParamField>
+
+<ParamField path="loading" type="boolean" default="false">
+  Whether the button is in a loading state. Replaces the icon with a spinner and disables interaction.
+</ParamField>
+
+<ParamField path="onClick" type="() => void">
+  Callback function triggered when the button is clicked. Ignored when disabled or loading.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes to apply to the button element.
+</ParamField>
+
+<ParamField path="ref" type="React.Ref<HTMLButtonElement>">
+  Forward ref to the underlying button element.
+</ParamField>
+
+## Accessibility
+
+- **Required `aria-label`**: Since ActionIcon contains only an icon, the `aria-label` prop is required to provide accessible text for screen readers
+- Uses semantic `<button>` element with `type="button"`
+- Sets `disabled` and `aria-disabled` attributes when disabled or loading
+- Includes focus-visible ring for keyboard navigation
+- Click handlers are properly disabled when button is disabled or loading
+
+## Styling
+
+The ActionIcon component:
+
+- Is always square (width equals height)
+- Uses `shrink-0` to prevent flexbox shrinking
+- Centers content with `inline-flex items-center justify-center`
+- Has smooth transitions (150ms ease-out)
+- Includes focus ring with offset for keyboard navigation
+- Shows hover and active states for all variants
+- Has reduced opacity (50%) when disabled
+
+### Size-to-Icon Ratio
+
+Recommended icon sizes for each button size:
+
+- `xs` (28px): 12-14px icon
+- `sm` (32px): 14-16px icon
+- `md` (36px): 16-18px icon
+- `lg` (40px): 18-20px icon
+- `xl` (44px): 20-24px icon
+
+## Examples
+
+### Toolbar Actions
+
+```tsx
+import { EditIcon, CopyIcon, TrashIcon } from 'lucide-react';
+
+<div style={{ display: 'flex', gap: '0.25rem' }}>
+  <ActionIcon aria-label="Edit" variant="ghost" onClick={handleEdit}>
+    <EditIcon size={16} />
+  </ActionIcon>
+  <ActionIcon aria-label="Copy" variant="ghost" onClick={handleCopy}>
+    <CopyIcon size={16} />
+  </ActionIcon>
+  <ActionIcon aria-label="Delete" variant="ghost" onClick={handleDelete}>
+    <TrashIcon size={16} />
+  </ActionIcon>
+</div>
+```
+
+### Card Header Action
+
+```tsx
+import { MoreVerticalIcon } from 'lucide-react';
+
+<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+  <h3>Card Title</h3>
+  <ActionIcon aria-label="More options" variant="ghost" size="sm">
+    <MoreVerticalIcon size={16} />
+  </ActionIcon>
+</div>
+```
+
+### Destructive Action with Confirmation
+
+```tsx
+import { TrashIcon } from 'lucide-react';
+
+<ActionIcon 
+  aria-label="Delete item"
+  variant="destructive"
+  onClick={handleDelete}
+  loading={isDeleting}
+>
+  <TrashIcon size={16} />
+</ActionIcon>
+```
+
+### Custom Icon Component
+
+```tsx
+const CustomIcon = () => (
+  <svg viewBox="0 0 24 24" className="size-4" fill="currentColor">
+    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
+  </svg>
+);
+
+<ActionIcon aria-label="Security settings" variant="outline">
+  <CustomIcon />
+</ActionIcon>
+```

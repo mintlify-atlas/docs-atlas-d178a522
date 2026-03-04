@@ -1,80 +1,330 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quick Start
+description: Get up and running with Kivora React in 5 minutes.
 ---
 
-## Get started in three steps
+This guide will help you build your first UI with Kivora React components. We'll create a simple contact form using Button, Input, and Badge components.
 
-Get your documentation site running locally and make your first customization.
+## Prerequisites
 
-### Step 1: Set up your local environment
+Before you begin, make sure you've:
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+1. [Installed Kivora React](/installation)
+2. Imported the global stylesheet
+3. Set up your React project (Next.js, Vite, CRA, etc.)
 
-### Step 2: Deploy your changes
+## Your First Component
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+Let's start with a simple button:
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+```tsx
+import { Button } from '@kivora/react';
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+export default function App() {
+  return (
+    <Button 
+      label="Save changes" 
+      variant="primary" 
+      size="md"
+      onClick={() => alert('Saved!')}
+    />
+  );
+}
+```
 
-### Step 3: Go live
+This renders a primary button with medium size. The `onClick` handler is called when the button is clicked.
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+<Tip>
+  Hover over the `Button` component in your editor to see all available props and their documentation.
+</Tip>
 
-## Next steps
+## Button Variants
 
-Now that you have your docs running, explore these key features:
+Kivora provides several semantic variants:
 
-<CardGroup cols={2}>
+```tsx
+import { Button } from '@kivora/react';
 
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
+export default function ButtonVariants() {
+  return (
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <Button label="Primary" variant="primary" />
+      <Button label="Secondary" variant="secondary" />
+      <Button label="Ghost" variant="ghost" />
+      <Button label="Destructive" variant="destructive" />
+      <Button label="Outline" variant="outline" />
+    </div>
+  );
+}
+```
 
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
+## Working with Input
 
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
+The `Input` component supports labels, error states, and different sizes:
 
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
+```tsx
+import { Input } from '@kivora/react';
+import { useState } from 'react';
 
-</CardGroup>
+export default function InputExample() {
+  const [email, setEmail] = useState('');
+
+  return (
+    <Input
+      label="Email"
+      type="email"
+      placeholder="you@example.com"
+      value={email}
+      onChange={setEmail}
+      size="md"
+    />
+  );
+}
+```
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+  The `onChange` prop receives the **string value** directly, not the DOM event. This makes it easier to work with controlled inputs.
 </Note>
+
+## Adding Validation
+
+Show error states with the `error` prop:
+
+```tsx
+import { Input } from '@kivora/react';
+import { useState } from 'react';
+
+export default function ValidatedInput() {
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState<string>();
+
+  const validateEmail = (value: string) => {
+    if (!value.includes('@')) {
+      setError('Please enter a valid email');
+    } else {
+      setError(undefined);
+    }
+  };
+
+  return (
+    <Input
+      label="Email"
+      type="email"
+      placeholder="you@example.com"
+      value={email}
+      onChange={(value) => {
+        setEmail(value);
+        validateEmail(value);
+      }}
+      error={error}
+    />
+  );
+}
+```
+
+## Using Badges
+
+Badges are perfect for status indicators:
+
+```tsx
+import { Badge } from '@kivora/react';
+
+export default function StatusBadges() {
+  return (
+    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+      <Badge variant="success">Active</Badge>
+      <Badge variant="warning">Pending</Badge>
+      <Badge variant="error">Failed</Badge>
+      <Badge variant="info">Info</Badge>
+      <Badge variant="default">Default</Badge>
+    </div>
+  );
+}
+```
+
+## Building a Contact Form
+
+Now let's combine everything into a complete contact form:
+
+```tsx
+import { Button, Input, Badge } from '@kivora/react';
+import { useState } from 'react';
+
+export default function ContactForm() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setStatus('idle');
+
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setStatus('success');
+      setName('');
+      setEmail('');
+    } catch (error) {
+      setStatus('error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={{ maxWidth: '400px', padding: '2rem' }}>
+      <h2>Contact Us</h2>
+      
+      <div style={{ marginBottom: '1rem' }}>
+        <Input
+          label="Name"
+          placeholder="Your name"
+          value={name}
+          onChange={setName}
+        />
+      </div>
+
+      <div style={{ marginBottom: '1rem' }}>
+        <Input
+          label="Email"
+          type="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={setEmail}
+        />
+      </div>
+
+      <Button
+        label="Submit"
+        variant="primary"
+        loading={loading}
+        onClick={handleSubmit}
+      />
+
+      {status === 'success' && (
+        <div style={{ marginTop: '1rem' }}>
+          <Badge variant="success">Message sent successfully!</Badge>
+        </div>
+      )}
+
+      {status === 'error' && (
+        <div style={{ marginTop: '1rem' }}>
+          <Badge variant="error">Failed to send message</Badge>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+## Using Hooks
+
+Kivora React includes powerful hooks. Let's enhance our form with `useDisclosure` to show a success modal:
+
+```tsx
+import { Button, Input, Modal, useDisclosure } from '@kivora/react';
+import { useState } from 'react';
+
+export default function FormWithModal() {
+  const [email, setEmail] = useState('');
+  const { isOpen, open, close } = useDisclosure();
+
+  const handleSubmit = async () => {
+    // Submit form...
+    open(); // Show success modal
+  };
+
+  return (
+    <>
+      <div style={{ padding: '2rem' }}>
+        <Input
+          label="Email"
+          type="email"
+          value={email}
+          onChange={setEmail}
+        />
+        <Button label="Subscribe" onClick={handleSubmit} />
+      </div>
+
+      <Modal open={isOpen} onClose={close} title="Success!">
+        <p>Thank you for subscribing!</p>
+      </Modal>
+    </>
+  );
+}
+```
+
+## Debouncing User Input
+
+Use `useDebounce` to delay expensive operations like API calls:
+
+```tsx
+import { Input, useDebounce } from '@kivora/react';
+import { useState, useEffect } from 'react';
+
+export default function SearchInput() {
+  const [query, setQuery] = useState('');
+  const debouncedQuery = useDebounce(query, 300);
+
+  useEffect(() => {
+    if (debouncedQuery) {
+      // Only runs 300ms after user stops typing
+      console.log('Searching for:', debouncedQuery);
+      // fetchResults(debouncedQuery);
+    }
+  }, [debouncedQuery]);
+
+  return (
+    <Input
+      label="Search"
+      placeholder="Type to search..."
+      value={query}
+      onChange={setQuery}
+    />
+  );
+}
+```
+
+## Copying to Clipboard
+
+The `useClipboard` hook makes it easy to add copy functionality:
+
+```tsx
+import { Button, useClipboard } from '@kivora/react';
+
+export default function CopyButton() {
+  const { copy, copied } = useClipboard();
+
+  return (
+    <Button
+      label={copied ? 'Copied!' : 'Copy to clipboard'}
+      variant={copied ? 'success' : 'secondary'}
+      onClick={() => copy('Hello, world!')}
+    />
+  );
+}
+```
+
+## Next Steps
+
+You now know the basics of Kivora React! Here's what to explore next:
+
+<CardGroup cols={2}>
+  <Card title="Theming" icon="palette" href="/guides/theming">
+    Customize colors and design tokens
+  </Card>
+  
+  <Card title="Dark Mode" icon="moon" href="/guides/dark-mode">
+    Implement theme switching
+  </Card>
+  
+  <Card title="TypeScript" icon="code" href="/guides/typescript">
+    Learn about TypeScript support
+  </Card>
+  
+  <Card title="All Components" icon="square" href="/components/button">
+    Explore the full component library
+  </Card>
+</CardGroup>

@@ -1,0 +1,260 @@
+---
+title: Popover
+description: Floating content panel with configurable trigger
+---
+
+Popover with configurable trigger and floating content panel. Perfect for displaying additional information or interactive content.
+
+## Import
+
+```tsx
+import { Popover } from '@kivora/react';
+```
+
+## Usage
+
+```tsx
+import { Popover, Button } from '@kivora/react';
+
+function Example() {
+  return (
+    <Popover content={<div>Additional information here</div>}>
+      <Button label="Show Info" />
+    </Popover>
+  );
+}
+```
+
+## Positions
+
+Control where the popover appears relative to the trigger:
+
+```tsx
+<Popover content={<p>Appears below</p>} position="bottom">
+  <Button label="Bottom" />
+</Popover>
+
+<Popover content={<p>Appears above</p>} position="top">
+  <Button label="Top" />
+</Popover>
+
+<Popover content={<p>Appears on left</p>} position="left">
+  <Button label="Left" />
+</Popover>
+
+<Popover content={<p>Appears on right</p>} position="right">
+  <Button label="Right" />
+</Popover>
+```
+
+## Custom Width
+
+Control the width of the popover:
+
+```tsx
+{/* Fixed width in pixels */}
+<Popover content={<p>Wide content area</p>} width={400}>
+  <Button label="Wide Popover" />
+</Popover>
+
+{/* Match trigger width */}
+<Popover content={<p>Same width as button</p>} width="target">
+  <Button label="Matching Width" />
+</Popover>
+```
+
+## Rich Content
+
+```tsx
+<Popover
+  content={
+    <div className="space-y-2">
+      <h4 className="font-semibold">Quick Actions</h4>
+      <div className="flex flex-col gap-1">
+        <button className="text-left p-2 hover:bg-accent rounded">Edit</button>
+        <button className="text-left p-2 hover:bg-accent rounded">Share</button>
+        <button className="text-left p-2 hover:bg-accent rounded text-destructive">
+          Delete
+        </button>
+      </div>
+    </div>
+  }
+  width={200}
+>
+  <Button label="Actions" />
+</Popover>
+```
+
+## Custom Offset
+
+Adjust spacing between trigger and popover:
+
+```tsx
+<Popover
+  content={<p>Further away from trigger</p>}
+  offset={16}
+>
+  <Button label="More Space" />
+</Popover>
+```
+
+## Controlled
+
+Manage open state externally:
+
+```tsx
+function ControlledPopover() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div>
+      <Popover
+        content={
+          <div>
+            <p>Controlled popover</p>
+            <button onClick={() => setIsOpen(false)}>Close</button>
+          </div>
+        }
+        opened={isOpen}
+        onOpen={() => setIsOpen(true)}
+        onClose={() => setIsOpen(false)}
+      >
+        <Button label="Toggle" />
+      </Popover>
+      <Button
+        label="External Close"
+        onClick={() => setIsOpen(false)}
+        className="ml-2"
+      />
+    </div>
+  );
+}
+```
+
+## Uncontrolled with Callbacks
+
+```tsx
+<Popover
+  content={<p>Popover content</p>}
+  defaultOpened={false}
+  onOpen={() => console.log('Opened')}
+  onClose={() => console.log('Closed')}
+>
+  <Button label="With Callbacks" />
+</Popover>
+```
+
+## Disable Click Outside
+
+Prevent closing when clicking outside:
+
+```tsx
+<Popover
+  content={
+    <form>
+      <input type="text" placeholder="Enter value" className="border p-2" />
+      <Button label="Submit" className="mt-2" />
+    </form>
+  }
+  closeOnClickOutside={false}
+>
+  <Button label="Form Popover" />
+</Popover>
+```
+
+## User Profile Card
+
+```tsx
+function UserPopover() {
+  return (
+    <Popover
+      content={
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500" />
+            <div>
+              <p className="font-semibold">John Doe</p>
+              <p className="text-xs text-muted-foreground">@johndoe</p>
+            </div>
+          </div>
+          <p className="text-sm">Product designer and developer based in San Francisco.</p>
+          <div className="flex gap-2">
+            <Button label="Follow" size="sm" />
+            <Button label="Message" size="sm" variant="outline" />
+          </div>
+        </div>
+      }
+      width={280}
+      position="bottom"
+    >
+      <button className="flex items-center gap-2 hover:bg-accent p-2 rounded">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500" />
+        <span className="text-sm font-medium">John Doe</span>
+      </button>
+    </Popover>
+  );
+}
+```
+
+## Props
+
+<ResponseField name="children" type="ReactNode" required>
+  Trigger element that opens the popover when clicked
+</ResponseField>
+
+<ResponseField name="content" type="ReactNode" required>
+  Content to display in the floating panel
+</ResponseField>
+
+<ResponseField name="position" type="'top' | 'bottom' | 'left' | 'right'" default="bottom">
+  Where the popover appears relative to the trigger
+</ResponseField>
+
+<ResponseField name="opened" type="boolean">
+  Controlled open state. When provided, popover becomes controlled
+</ResponseField>
+
+<ResponseField name="defaultOpened" type="boolean" default="false">
+  Initial open state for uncontrolled usage
+</ResponseField>
+
+<ResponseField name="onOpen" type="() => void">
+  Callback fired when popover opens
+</ResponseField>
+
+<ResponseField name="onClose" type="() => void">
+  Callback fired when popover closes
+</ResponseField>
+
+<ResponseField name="closeOnClickOutside" type="boolean" default="true">
+  Whether clicking outside closes the popover
+</ResponseField>
+
+<ResponseField name="width" type="number | 'target'" default="200">
+  Width in pixels or 'target' to match trigger width
+</ResponseField>
+
+<ResponseField name="offset" type="number" default="8">
+  Distance in pixels between trigger and popover
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes for the popover panel
+</ResponseField>
+
+## Accessibility
+
+- Uses `role="dialog"`
+- Click outside detection with `useClickOutside` hook
+- Keyboard accessible trigger
+- Smooth fade and zoom animations
+
+## Features
+
+- Click to toggle open/close
+- Configurable positioning (top, bottom, left, right)
+- Flexible width options
+- Click outside to close (configurable)
+- Controlled and uncontrolled modes
+- Smooth animations
+- Custom offset spacing

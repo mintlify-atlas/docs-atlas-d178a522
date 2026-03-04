@@ -1,0 +1,133 @@
+---
+title: useMediaQuery
+description: Tracks whether a CSS media query matches with automatic updates
+---
+
+## Usage
+
+Tracks whether a CSS media query matches, re-rendering when the match state changes.
+
+```tsx
+import { useMediaQuery } from 'kivora-react';
+
+function ResponsiveComponent() {
+  const isMobile = useMediaQuery('(max-width: 767px)');
+
+  return (
+    <div>
+      {isMobile ? <MobileNav /> : <DesktopNav />}
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="query" type="string" required>
+  A valid CSS media query string (e.g., `'(max-width: 768px)'`, `'(prefers-color-scheme: dark)'`)
+</ParamField>
+
+## Returns
+
+`boolean` - Returns `true` when the media query matches, `false` otherwise.
+
+## Examples
+
+### Responsive breakpoints
+
+```tsx
+import { useMediaQuery } from 'kivora-react';
+
+function Layout() {
+  const isMobile = useMediaQuery('(max-width: 767px)');
+  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+
+  return (
+    <div className="layout">
+      {isMobile && <span>Mobile View</span>}
+      {isTablet && <span>Tablet View</span>}
+      {isDesktop && <span>Desktop View</span>}
+    </div>
+  );
+}
+```
+
+### Dark mode detection
+
+```tsx
+import { useMediaQuery } from 'kivora-react';
+
+function ThemedComponent() {
+  const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
+
+  return (
+    <div
+      style={{
+        background: prefersDark ? '#1a1a1a' : '#ffffff',
+        color: prefersDark ? '#ffffff' : '#000000',
+      }}
+    >
+      Current theme: {prefersDark ? 'Dark' : 'Light'}
+    </div>
+  );
+}
+```
+
+### Print styles
+
+```tsx
+import { useMediaQuery } from 'kivora-react';
+
+function Document() {
+  const isPrinting = useMediaQuery('print');
+
+  return (
+    <div>
+      <header style={{ display: isPrinting ? 'none' : 'block' }}>
+        <nav>Navigation</nav>
+      </header>
+      <main>
+        <h1>Document Content</h1>
+      </main>
+    </div>
+  );
+}
+```
+
+### Reduced motion preference
+
+```tsx
+import { useMediaQuery } from 'kivora-react';
+
+function AnimatedComponent() {
+  const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
+
+  return (
+    <div
+      className="box"
+      style={{
+        transition: prefersReducedMotion ? 'none' : 'transform 0.3s ease',
+      }}
+    >
+      Animated content
+    </div>
+  );
+}
+```
+
+### Orientation detection
+
+```tsx
+import { useMediaQuery } from 'kivora-react';
+
+function OrientationAware() {
+  const isPortrait = useMediaQuery('(orientation: portrait)');
+
+  return (
+    <div>
+      Device is in {isPortrait ? 'portrait' : 'landscape'} mode
+    </div>
+  );
+}
+```

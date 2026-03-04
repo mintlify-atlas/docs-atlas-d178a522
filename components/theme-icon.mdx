@@ -1,0 +1,349 @@
+---
+title: Theme Icon
+description: Colored icon container with theme variants and sizes.
+---
+
+## Usage
+
+```tsx
+import { ThemeIcon } from '@kivora/react';
+import { Bell } from 'lucide-react';
+
+<ThemeIcon color="primary" variant="light">
+  <Bell size={20} />
+</ThemeIcon>
+```
+
+## Examples
+
+### Basic Icon
+
+```tsx
+import { Bell } from 'lucide-react';
+
+<ThemeIcon>
+  <Bell size={20} />
+</ThemeIcon>
+```
+
+### Colors
+
+<CodeGroup>
+```tsx Primary
+<ThemeIcon color="primary">
+  <Bell size={20} />
+</ThemeIcon>
+```
+
+```tsx Secondary
+<ThemeIcon color="secondary">
+  <Settings size={20} />
+</ThemeIcon>
+```
+
+```tsx Success
+<ThemeIcon color="success">
+  <Check size={20} />
+</ThemeIcon>
+```
+
+```tsx Warning
+<ThemeIcon color="warning">
+  <AlertTriangle size={20} />
+</ThemeIcon>
+```
+
+```tsx Error
+<ThemeIcon color="error">
+  <X size={20} />
+</ThemeIcon>
+```
+
+```tsx Info
+<ThemeIcon color="info">
+  <Info size={20} />
+</ThemeIcon>
+```
+
+```tsx Muted
+<ThemeIcon color="muted">
+  <HelpCircle size={20} />
+</ThemeIcon>
+```
+</CodeGroup>
+
+### Variants
+
+<CodeGroup>
+```tsx Filled
+<ThemeIcon color="primary" variant="filled">
+  <Bell size={20} />
+</ThemeIcon>
+```
+
+```tsx Light
+<ThemeIcon color="primary" variant="light">
+  <Bell size={20} />
+</ThemeIcon>
+```
+
+```tsx Outline
+<ThemeIcon color="primary" variant="outline">
+  <Bell size={20} />
+</ThemeIcon>
+```
+</CodeGroup>
+
+### Sizes
+
+<CodeGroup>
+```tsx Extra Small
+<ThemeIcon size="xs">
+  <Bell size={12} />
+</ThemeIcon>
+```
+
+```tsx Small
+<ThemeIcon size="sm">
+  <Bell size={16} />
+</ThemeIcon>
+```
+
+```tsx Medium
+<ThemeIcon size="md">
+  <Bell size={20} />
+</ThemeIcon>
+```
+
+```tsx Large
+<ThemeIcon size="lg">
+  <Bell size={24} />
+</ThemeIcon>
+```
+
+```tsx Extra Large
+<ThemeIcon size="xl">
+  <Bell size={32} />
+</ThemeIcon>
+```
+</CodeGroup>
+
+### Border Radius
+
+<CodeGroup>
+```tsx Small Radius
+<ThemeIcon radius="sm">
+  <Bell size={20} />
+</ThemeIcon>
+```
+
+```tsx Medium Radius
+<ThemeIcon radius="md">
+  <Bell size={20} />
+</ThemeIcon>
+```
+
+```tsx Large Radius
+<ThemeIcon radius="lg">
+  <Bell size={20} />
+</ThemeIcon>
+```
+
+```tsx Full (Circle)
+<ThemeIcon radius="full">
+  <Bell size={20} />
+</ThemeIcon>
+```
+</CodeGroup>
+
+### Status Indicators
+
+```tsx
+<div className="flex gap-3">
+  <ThemeIcon color="success" variant="light" size="lg">
+    <Check size={24} />
+  </ThemeIcon>
+  <ThemeIcon color="warning" variant="light" size="lg">
+    <AlertTriangle size={24} />
+  </ThemeIcon>
+  <ThemeIcon color="error" variant="light" size="lg">
+    <X size={24} />
+  </ThemeIcon>
+  <ThemeIcon color="info" variant="light" size="lg">
+    <Info size={24} />
+  </ThemeIcon>
+</div>
+```
+
+### Feature Cards
+
+```tsx
+import { Zap, Shield, Globe } from 'lucide-react';
+
+function FeatureCards() {
+  const features = [
+    {
+      icon: Zap,
+      color: 'warning',
+      title: 'Fast Performance',
+      description: 'Lightning-fast load times',
+    },
+    {
+      icon: Shield,
+      color: 'success',
+      title: 'Secure',
+      description: 'Enterprise-grade security',
+    },
+    {
+      icon: Globe,
+      color: 'info',
+      title: 'Global',
+      description: 'Available worldwide',
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      {features.map((feature, i) => (
+        <Card key={i}>
+          <ThemeIcon 
+            color={feature.color} 
+            variant="light" 
+            size="lg"
+            className="mb-3"
+          >
+            <feature.icon size={24} />
+          </ThemeIcon>
+          <h3 className="font-semibold mb-1">{feature.title}</h3>
+          <p className="text-sm text-muted-foreground">
+            {feature.description}
+          </p>
+        </Card>
+      ))}
+    </div>
+  );
+}
+```
+
+### Action Buttons
+
+```tsx
+import { Edit, Trash, Share } from 'lucide-react';
+
+<div className="flex gap-2">
+  <button className="hover:scale-110 transition-transform">
+    <ThemeIcon color="info" variant="light" size="md">
+      <Edit size={16} />
+    </ThemeIcon>
+  </button>
+  <button className="hover:scale-110 transition-transform">
+    <ThemeIcon color="error" variant="light" size="md">
+      <Trash size={16} />
+    </ThemeIcon>
+  </button>
+  <button className="hover:scale-110 transition-transform">
+    <ThemeIcon color="success" variant="light" size="md">
+      <Share size={16} />
+    </ThemeIcon>
+  </button>
+</div>
+```
+
+### Notification Badge
+
+```tsx
+import { Bell } from 'lucide-react';
+
+<div className="relative inline-block">
+  <ThemeIcon color="primary" variant="light" size="lg">
+    <Bell size={24} />
+  </ThemeIcon>
+  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-error text-white text-xs font-semibold">
+    3
+  </span>
+</div>
+```
+
+### All Combinations
+
+```tsx
+const colors = ['primary', 'success', 'warning', 'error', 'info'];
+const variants = ['filled', 'light', 'outline'];
+
+<div className="space-y-4">
+  {variants.map(variant => (
+    <div key={variant}>
+      <h4 className="text-sm font-medium mb-2 capitalize">{variant}</h4>
+      <div className="flex gap-2">
+        {colors.map(color => (
+          <ThemeIcon key={color} color={color} variant={variant}>
+            <Bell size={20} />
+          </ThemeIcon>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+```
+
+## Props
+
+<ResponseField name="children" type="React.ReactNode" required>
+  Icon element (typically an SVG icon from lucide-react or similar)
+</ResponseField>
+
+<ResponseField name="color" type="'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info' | 'muted'" default="primary">
+  Theme color
+</ResponseField>
+
+<ResponseField name="variant" type="'filled' | 'light' | 'outline'" default="light">
+  Style variant:
+  - `filled`: Solid background with contrasting text
+  - `light`: Subtle translucent background
+  - `outline`: Border with transparent background
+</ResponseField>
+
+<ResponseField name="size" type="'xs' | 'sm' | 'md' | 'lg' | 'xl'" default="md">
+  Container size (automatically sizes icon inside)
+</ResponseField>
+
+<ResponseField name="radius" type="'sm' | 'md' | 'lg' | 'full'" default="md">
+  Border radius:
+  - `sm`: Small rounded corners
+  - `md`: Medium rounded corners
+  - `lg`: Large rounded corners
+  - `full`: Circular
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+## Icon Sizing
+
+ThemeIcon automatically constrains child icon size based on the `size` prop:
+
+- `xs`: Icon should be ~12-14px
+- `sm`: Icon should be ~16px
+- `md`: Icon should be ~20px
+- `lg`: Icon should be ~24px
+- `xl`: Icon should be ~32px
+
+The component applies sizing via CSS, so icons will be constrained even if you specify a different size.
+
+## Accessibility
+
+- Rendered as a `<span>` element for semantic correctness
+- When used as a button, wrap in a `<button>` element
+- Include appropriate `aria-label` on parent button when interactive
+- Decorative icons should have `aria-hidden="true"`
+
+## Best Practices
+
+- Use consistent variant across similar elements
+- Match icon size to container size for proper proportions
+- Use `filled` variant sparingly for primary actions
+- Prefer `light` variant for most UI elements
+- Use `outline` variant for subtle emphasis
+- Choose colors that convey meaning (success = green, error = red, etc.)
+- Use `radius="full"` for profile pictures or avatars

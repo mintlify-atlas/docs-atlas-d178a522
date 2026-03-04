@@ -1,0 +1,288 @@
+---
+title: AspectRatio
+description: Constrains children to a specific aspect ratio
+---
+
+## Overview
+
+AspectRatio maintains a consistent width-to-height ratio for its children, commonly used for responsive images, videos, and embedded content. It ensures content scales proportionally without distortion.
+
+## Import
+
+```tsx
+import { AspectRatio } from '@kivora/react';
+```
+
+## Props
+
+<ResponseField name="ratio" type="number" default="1">
+  Aspect ratio as width/height. Common values:
+  - `1`: Square (1:1)
+  - `16/9`: Widescreen (16:9)
+  - `4/3`: Standard (4:3)
+  - `21/9`: Ultrawide (21:9)
+  - `3/2`: Photo (3:2)
+</ResponseField>
+
+## Usage
+
+### Basic image
+
+```tsx
+<AspectRatio ratio={16 / 9}>
+  <img 
+    src="/cover.jpg" 
+    alt="Cover image"
+    className="object-cover w-full h-full"
+  />
+</AspectRatio>
+```
+
+### Square ratio
+
+```tsx
+<AspectRatio ratio={1}>
+  <img 
+    src="/profile.jpg" 
+    alt="Profile"
+    className="object-cover w-full h-full rounded-lg"
+  />
+</AspectRatio>
+```
+
+### Video embed
+
+```tsx
+<AspectRatio ratio={16 / 9}>
+  <iframe
+    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+    title="Video"
+    className="w-full h-full"
+    allowFullScreen
+  />
+</AspectRatio>
+```
+
+### Map embed
+
+```tsx
+<AspectRatio ratio={21 / 9}>
+  <iframe
+    src="https://maps.google.com/maps?q=..."
+    title="Location map"
+    className="w-full h-full rounded-lg"
+  />
+</AspectRatio>
+```
+
+### With overlay
+
+```tsx
+<AspectRatio ratio={16 / 9}>
+  <img 
+    src="/background.jpg"
+    className="object-cover w-full h-full"
+  />
+  <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+    <Button variant="primary" size="lg">Play Video</Button>
+  </div>
+</AspectRatio>
+```
+
+## Layout Examples
+
+### Image gallery
+
+```tsx
+<SimpleGrid cols={{ base: 2, md: 3, lg: 4 }} spacing={4}>
+  {images.map(image => (
+    <AspectRatio key={image.id} ratio={1}>
+      <img
+        src={image.url}
+        alt={image.alt}
+        className="object-cover w-full h-full rounded-lg hover:opacity-90 transition-opacity cursor-pointer"
+      />
+    </AspectRatio>
+  ))}
+</SimpleGrid>
+```
+
+### Product card
+
+```tsx
+<Card>
+  <AspectRatio ratio={4 / 3}>
+    <img
+      src={product.image}
+      alt={product.name}
+      className="object-cover w-full h-full"
+    />
+    {product.onSale && (
+      <Badge className="absolute top-2 right-2">Sale</Badge>
+    )}
+  </AspectRatio>
+  
+  <Stack gap={3} className="p-4">
+    <Heading size="md">{product.name}</Heading>
+    <Text className="text-gray-600">{product.description}</Text>
+    <Group justify="between" align="center">
+      <Text className="font-bold">${product.price}</Text>
+      <Button variant="primary">Add to Cart</Button>
+    </Group>
+  </Stack>
+</Card>
+```
+
+### Blog post preview
+
+```tsx
+<Card>
+  <AspectRatio ratio={16 / 9}>
+    <img
+      src={post.coverImage}
+      alt={post.title}
+      className="object-cover w-full h-full"
+    />
+  </AspectRatio>
+  
+  <Stack gap={3} className="p-6">
+    <Group gap={2}>
+      <Badge>{post.category}</Badge>
+      <Text size="sm" className="text-gray-600">{post.date}</Text>
+    </Group>
+    
+    <Heading size="lg">{post.title}</Heading>
+    <Text className="text-gray-600">{post.excerpt}</Text>
+    
+    <Button variant="link">Read more →</Button>
+  </Stack>
+</Card>
+```
+
+### Video playlist
+
+```tsx
+<Stack gap={4}>
+  {/* Featured video */}
+  <AspectRatio ratio={16 / 9}>
+    <video
+      src={videos[0].url}
+      poster={videos[0].thumbnail}
+      controls
+      className="w-full h-full rounded-lg"
+    />
+  </AspectRatio>
+  
+  {/* Playlist */}
+  <SimpleGrid cols={{ base: 2, md: 4 }} spacing={3}>
+    {videos.slice(1).map(video => (
+      <AspectRatio key={video.id} ratio={16 / 9}>
+        <img
+          src={video.thumbnail}
+          alt={video.title}
+          className="object-cover w-full h-full rounded cursor-pointer hover:opacity-80 transition-opacity"
+        />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Icon name="play" className="text-white" size="xl" />
+        </div>
+      </AspectRatio>
+    ))}
+  </SimpleGrid>
+</Stack>
+```
+
+### Hero section
+
+```tsx
+<AspectRatio ratio={21 / 9}>
+  <img
+    src="/hero-bg.jpg"
+    alt="Hero background"
+    className="object-cover w-full h-full"
+  />
+  <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent">
+    <Container className="h-full">
+      <Stack gap={6} justify="center" className="h-full max-w-2xl">
+        <Heading size="4xl" className="text-white">
+          Welcome to Kivora
+        </Heading>
+        <Text size="xl" className="text-white/90">
+          Build beautiful applications with ease
+        </Text>
+        <Group gap={3}>
+          <Button variant="primary" size="lg">Get Started</Button>
+          <Button variant="secondary" size="lg">Learn More</Button>
+        </Group>
+      </Stack>
+    </Container>
+  </div>
+</AspectRatio>
+```
+
+### Avatar with aspect ratio
+
+```tsx
+<AspectRatio ratio={1} className="w-24">
+  <img
+    src={user.avatar}
+    alt={user.name}
+    className="object-cover w-full h-full rounded-full"
+  />
+</AspectRatio>
+```
+
+### Testimonial card
+
+```tsx
+<Card>
+  <Stack gap={4} className="p-6">
+    <Group gap={3}>
+      <AspectRatio ratio={1} className="w-16">
+        <img
+          src={testimonial.avatar}
+          alt={testimonial.name}
+          className="object-cover w-full h-full rounded-full"
+        />
+      </AspectRatio>
+      <div>
+        <Text className="font-medium">{testimonial.name}</Text>
+        <Text size="sm" className="text-gray-600">
+          {testimonial.role}
+        </Text>
+      </div>
+    </Group>
+    
+    <Text className="text-gray-700">
+      "{testimonial.quote}"
+    </Text>
+  </Stack>
+</Card>
+```
+
+### Loading placeholder
+
+```tsx
+<AspectRatio ratio={16 / 9}>
+  <div className="w-full h-full bg-gray-200 animate-pulse rounded-lg" />
+</AspectRatio>
+```
+
+## Common Aspect Ratios
+
+- **1:1** (`ratio={1}`): Square - Avatars, Instagram posts
+- **16:9** (`ratio={16/9}`): Widescreen - YouTube videos, modern displays
+- **4:3** (`ratio={4/3}`): Standard - Classic photos, presentations
+- **21:9** (`ratio={21/9}`): Ultrawide - Cinematic content, hero sections
+- **3:2** (`ratio={3/2}`): Photography - DSLR standard
+- **9:16** (`ratio={9/16}`): Vertical - Stories, mobile video
+
+## Best Practices
+
+- Always use `object-cover` or `object-contain` on images to control scaling
+- Use `rounded-lg` or similar classes on AspectRatio for rounded corners
+- Combine with `SimpleGrid` for consistent gallery layouts
+- Add loading placeholders with matching aspect ratios
+- Use absolute positioning for overlays (buttons, badges, gradients)
+- Set a max-width on the container to control the final size
+- Test with different content to ensure proper cropping
+- Consider using different ratios for mobile vs desktop with responsive classes

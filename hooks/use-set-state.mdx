@@ -1,0 +1,132 @@
+---
+title: useSetState
+description: Like useState but merges partial updates (similar to this.setState in class components)
+---
+
+## Usage
+
+```tsx
+import { useSetState } from 'kivora-react';
+
+function UserProfile() {
+  const [state, setState] = useSetState({
+    name: 'Alice',
+    age: 25,
+    email: 'alice@example.com'
+  });
+
+  return (
+    <div>
+      <input
+        value={state.name}
+        onChange={(e) => setState({ name: e.target.value })}
+      />
+      <input
+        type="number"
+        value={state.age}
+        onChange={(e) => setState({ age: Number(e.target.value) })}
+      />
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="initialState" type="T extends Record<string, unknown>">
+  Initial state object
+</ParamField>
+
+## Return Value
+
+Returns a tuple similar to `useState`:
+
+<ResponseField name="[0]" type="T">
+  Current state object
+</ResponseField>
+
+<ResponseField name="[1]" type="(patch: Partial<T> | ((current: T) => Partial<T>)) => void">
+  State setter that merges partial updates into the existing state.
+  
+  Can accept either:
+  - A partial state object to merge
+  - A function that receives the current state and returns a partial update
+</ResponseField>
+
+## Examples
+
+### Form State Management
+
+```tsx
+const [formData, setFormData] = useSetState({
+  username: '',
+  email: '',
+  password: '',
+  agreeToTerms: false
+});
+
+// Update individual fields
+setFormData({ username: 'john_doe' });
+setFormData({ agreeToTerms: true });
+
+// Multiple fields at once
+setFormData({
+  email: 'john@example.com',
+  password: 'secret123'
+});
+```
+
+### Functional Updates
+
+```tsx
+const [state, setState] = useSetState({ count: 0, multiplier: 2 });
+
+// Use current state to compute update
+setState((current) => ({
+  count: current.count + current.multiplier
+}));
+```
+
+### Settings Panel
+
+```tsx
+const [settings, setSettings] = useSetState({
+  theme: 'light',
+  language: 'en',
+  notifications: true,
+  autoSave: false
+});
+
+return (
+  <div>
+    <select
+      value={settings.theme}
+      onChange={(e) => setSettings({ theme: e.target.value })}
+    >
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+    
+    <label>
+      <input
+        type="checkbox"
+        checked={settings.notifications}
+        onChange={(e) => setSettings({ notifications: e.target.checked })}
+      />
+      Enable Notifications
+    </label>
+  </div>
+);
+```
+
+### Compared to useState
+
+```tsx
+// With useState - need to spread manually
+const [state, setState] = useState({ name: '', age: 0 });
+setState({ ...state, name: 'Alice' }); // Must spread
+
+// With useSetState - automatic merging
+const [state, setState] = useSetState({ name: '', age: 0 });
+setState({ name: 'Alice' }); // Automatically merged
+```

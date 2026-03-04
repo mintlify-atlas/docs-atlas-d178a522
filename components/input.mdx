@@ -1,0 +1,141 @@
+---
+title: Input
+description: Controlled/uncontrolled text input with label, error states, and size variants.
+---
+
+## Usage
+
+```tsx
+import { Input } from '@kivora/react';
+
+function Demo() {
+  const [value, setValue] = useState('');
+  
+  return (
+    <Input 
+      label="Email" 
+      type="email" 
+      value={value}
+      onChange={setValue}
+      placeholder="you@example.com"
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="value" type="string">
+  Controlled value of the input.
+</ParamField>
+
+<ParamField path="defaultValue" type="string" default="''">
+  Default value for uncontrolled mode.
+</ParamField>
+
+<ParamField path="onChange" type="(value: string) => void">
+  Called when the input value changes. Receives the string value directly (not the DOM event).
+</ParamField>
+
+<ParamField path="placeholder" type="string">
+  Placeholder text displayed when input is empty.
+</ParamField>
+
+<ParamField path="type" type="string" default="'text'">
+  HTML input type attribute (e.g., 'text', 'email', 'password', 'number').
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables the input and prevents user interaction.
+</ParamField>
+
+<ParamField path="readOnly" type="boolean" default="false">
+  Makes the input read-only (value visible but not editable).
+</ParamField>
+
+<ParamField path="error" type="string">
+  Error message to display below the input. When set, applies error styling.
+</ParamField>
+
+<ParamField path="label" type="string">
+  Label text displayed above the input.
+</ParamField>
+
+<ParamField path="size" type="'sm' | 'md' | 'lg'" default="'md'">
+  Size variant:
+  - `sm`: h-7, px-2.5, text-xs
+  - `md`: h-9, px-3, text-sm
+  - `lg`: h-11, px-4, text-base
+</ParamField>
+
+<ParamField path="className" type="string" default="''">
+  Additional CSS classes to apply to the input element.
+</ParamField>
+
+<ParamField path="id" type="string">
+  HTML ID attribute. Auto-generated if not provided.
+</ParamField>
+
+## Examples
+
+### Basic Input
+
+```tsx
+<Input 
+  label="Username" 
+  placeholder="Enter username" 
+/>
+```
+
+### With Error State
+
+```tsx
+<Input 
+  label="Email" 
+  type="email"
+  value={email}
+  onChange={setEmail}
+  error="Please enter a valid email address"
+/>
+```
+
+### Different Sizes
+
+```tsx
+<Input label="Small" size="sm" placeholder="Small input" />
+<Input label="Medium" size="md" placeholder="Medium input" />
+<Input label="Large" size="lg" placeholder="Large input" />
+```
+
+### Controlled Search Input
+
+```tsx
+function SearchDemo() {
+  const [query, setQuery] = useState('');
+  
+  return (
+    <Input 
+      label="Search" 
+      value={query} 
+      onChange={setQuery} 
+      size="sm"
+      placeholder="Search..."
+    />
+  );
+}
+```
+
+### Disabled and Read-Only
+
+```tsx
+<Input label="Disabled" disabled placeholder="Cannot edit" />
+<Input label="Read Only" readOnly value="Fixed value" />
+```
+
+## Notes
+
+- The `onChange` callback receives the string value directly, not the DOM event
+- Focus states include a ring effect for accessibility
+- Error state changes border color and displays error message below
+- Auto-generates ID for label association if not provided
+- Supports all standard HTML input attributes via forwarded ref

@@ -1,0 +1,219 @@
+---
+title: Chip
+description: Interactive or display-only chip/tag that supports toggle state.
+---
+
+## Usage
+
+```tsx
+import { Chip } from '@kivora/react';
+
+<Chip>React</Chip>
+```
+
+## Examples
+
+### Basic Chip
+
+```tsx
+<Chip>JavaScript</Chip>
+```
+
+### Interactive Toggle
+
+```tsx
+function ChipExample() {
+  const [selected, setSelected] = useState(false);
+
+  return (
+    <Chip 
+      checked={selected} 
+      onClick={() => setSelected(!selected)}
+    >
+      Featured
+    </Chip>
+  );
+}
+```
+
+### Multiple Selection
+
+```tsx
+function FilterChips() {
+  const [filters, setFilters] = useState({
+    react: false,
+    vue: false,
+    angular: false,
+  });
+
+  return (
+    <div className="flex gap-2">
+      <Chip 
+        checked={filters.react}
+        onClick={() => setFilters({ ...filters, react: !filters.react })}
+      >
+        React
+      </Chip>
+      <Chip 
+        checked={filters.vue}
+        onClick={() => setFilters({ ...filters, vue: !filters.vue })}
+      >
+        Vue
+      </Chip>
+      <Chip 
+        checked={filters.angular}
+        onClick={() => setFilters({ ...filters, angular: !filters.angular })}
+      >
+        Angular
+      </Chip>
+    </div>
+  );
+}
+```
+
+### Variants
+
+<CodeGroup>
+```tsx Default
+<Chip variant="default" checked={false}>Default</Chip>
+<Chip variant="default" checked={true}>Checked</Chip>
+```
+
+```tsx Success
+<Chip variant="success" checked={false}>Success</Chip>
+<Chip variant="success" checked={true}>Checked</Chip>
+```
+
+```tsx Warning
+<Chip variant="warning" checked={false}>Warning</Chip>
+<Chip variant="warning" checked={true}>Checked</Chip>
+```
+
+```tsx Error
+<Chip variant="error" checked={false}>Error</Chip>
+<Chip variant="error" checked={true}>Checked</Chip>
+```
+
+```tsx Info
+<Chip variant="info" checked={false}>Info</Chip>
+<Chip variant="info" checked={true}>Checked</Chip>
+```
+</CodeGroup>
+
+### Sizes
+
+<CodeGroup>
+```tsx Small
+<Chip size="sm">Small</Chip>
+```
+
+```tsx Medium
+<Chip size="md">Medium</Chip>
+```
+</CodeGroup>
+
+### Read-Only
+
+```tsx
+<Chip readOnly>Non-interactive</Chip>
+```
+
+Renders as a `<span>` instead of `<button>` with no hover/focus effects.
+
+### With Icons
+
+```tsx
+<Chip checked={true}>
+  <Icon name="check" size={14} />
+  Verified
+</Chip>
+```
+
+### Filter Example
+
+```tsx
+function ProductFilters() {
+  const [filters, setFilters] = useState({
+    inStock: false,
+    onSale: false,
+    featured: false,
+  });
+
+  const toggleFilter = (key: string) => {
+    setFilters({ ...filters, [key]: !filters[key] });
+  };
+
+  return (
+    <div className="space-y-2">
+      <h3>Filters</h3>
+      <div className="flex flex-wrap gap-2">
+        <Chip 
+          checked={filters.inStock}
+          onClick={() => toggleFilter('inStock')}
+          variant="success"
+        >
+          In Stock
+        </Chip>
+        <Chip 
+          checked={filters.onSale}
+          onClick={() => toggleFilter('onSale')}
+          variant="warning"
+        >
+          On Sale
+        </Chip>
+        <Chip 
+          checked={filters.featured}
+          onClick={() => toggleFilter('featured')}
+          variant="info"
+        >
+          Featured
+        </Chip>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+<ResponseField name="children" type="React.ReactNode" required>
+  Chip content
+</ResponseField>
+
+<ResponseField name="variant" type="'default' | 'success' | 'warning' | 'error' | 'info'" default="default">
+  Visual style variant
+</ResponseField>
+
+<ResponseField name="size" type="'sm' | 'md'" default="md">
+  Chip size
+</ResponseField>
+
+<ResponseField name="checked" type="boolean" default={false}>
+  Toggle state - changes background and text color when true
+</ResponseField>
+
+<ResponseField name="readOnly" type="boolean" default={false}>
+  Render as a non-interactive span (no button behavior)
+</ResponseField>
+
+<ResponseField name="onClick" type="() => void">
+  Click handler (only works when readOnly is false)
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes
+</ResponseField>
+
+## Accessibility
+
+- Interactive chips use semantic `<button>` element
+- Implements `aria-pressed` for toggle state
+- Keyboard accessible with proper focus styles
+- Read-only chips render as `<span>` for non-interactive display
+- Focus ring for keyboard navigation
+
+## Comparison with Badge and Tag
+
+- **Chip**: Interactive toggleable items, can be clicked to toggle selection
+- **Tag**: Dismissible labels with remove button
+- **Badge**: Static status indicators, non-interactive

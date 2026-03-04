@@ -1,0 +1,219 @@
+---
+title: 'useToast'
+description: 'Display toast notifications (deprecated)'
+---
+
+<Warning>
+  **Deprecated:** The `useToast` hook has been replaced by Sonner's `toast` function. Use `toast` directly instead.
+</Warning>
+
+## Migration
+
+The `useToast` hook has been deprecated in favor of importing the `toast` function directly from Sonner.
+
+### Before
+
+```tsx
+import { useToast } from '@kivora/react';
+
+function Example() {
+  const toast = useToast();
+
+  return (
+    <Button onClick={() => toast.success('Saved!')}>Save</Button>
+  );
+}
+```
+
+### After
+
+```tsx
+import { toast } from '@kivora/react';
+
+function Example() {
+  return (
+    <Button onClick={() => toast.success('Saved!')}>Save</Button>
+  );
+}
+```
+
+## Toast Function
+
+Import `toast` directly from `@kivora/react` to display notifications:
+
+```tsx
+import { toast } from '@kivora/react';
+
+// Success toast
+toast.success('Settings saved successfully!');
+
+// Error toast
+toast.error('Failed to save settings');
+
+// Info toast
+toast.info('New updates available');
+
+// Warning toast
+toast.warning('Your session will expire soon');
+
+// Default toast
+toast('This is a notification');
+```
+
+## Toast Options
+
+Customize toast behavior with options:
+
+```tsx
+import { toast } from '@kivora/react';
+
+toast.success('File uploaded', {
+  duration: 5000,
+  description: 'Your file has been successfully uploaded',
+  action: {
+    label: 'Undo',
+    onClick: () => console.log('Undo clicked'),
+  },
+});
+```
+
+### Available Options
+
+<ParamField path="duration" type="number" default="4000">
+  Duration in milliseconds before the toast automatically closes
+</ParamField>
+
+<ParamField path="description" type="string">
+  Additional description text shown below the main message
+</ParamField>
+
+<ParamField path="action" type="object">
+  Action button configuration with `label` and `onClick` properties
+</ParamField>
+
+<ParamField path="position" type="string" default="bottom-right">
+  Position of the toast. Options: `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`
+</ParamField>
+
+<ParamField path="dismissible" type="boolean" default="true">
+  Whether the toast can be manually dismissed by clicking the close button
+</ParamField>
+
+## Examples
+
+### Success Notification
+
+```tsx
+import { toast } from '@kivora/react';
+
+function SaveButton() {
+  const handleSave = async () => {
+    try {
+      await saveData();
+      toast.success('Changes saved successfully');
+    } catch (error) {
+      toast.error('Failed to save changes');
+    }
+  };
+
+  return <Button onClick={handleSave}>Save</Button>;
+}
+```
+
+### Toast with Action
+
+```tsx
+import { toast } from '@kivora/react';
+
+function DeleteButton({ itemId, onDelete }) {
+  const handleDelete = () => {
+    onDelete(itemId);
+    
+    toast.success('Item deleted', {
+      description: 'The item has been removed',
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          restoreItem(itemId);
+          toast.info('Item restored');
+        },
+      },
+    });
+  };
+
+  return <Button onClick={handleDelete}>Delete</Button>;
+}
+```
+
+### Loading Toast
+
+```tsx
+import { toast } from '@kivora/react';
+
+function UploadButton() {
+  const handleUpload = async (file) => {
+    const toastId = toast.loading('Uploading file...');
+
+    try {
+      await uploadFile(file);
+      toast.success('File uploaded', { id: toastId });
+    } catch (error) {
+      toast.error('Upload failed', { id: toastId });
+    }
+  };
+
+  return <Button onClick={handleUpload}>Upload</Button>;
+}
+```
+
+### Promise-based Toast
+
+```tsx
+import { toast } from '@kivora/react';
+
+function ProcessButton() {
+  const handleProcess = () => {
+    toast.promise(processData(), {
+      loading: 'Processing...',
+      success: 'Process completed',
+      error: 'Process failed',
+    });
+  };
+
+  return <Button onClick={handleProcess}>Process</Button>;
+}
+```
+
+## Custom Styling
+
+Toasts inherit your application's theme but can be customized:
+
+```tsx
+import { toast } from '@kivora/react';
+
+toast('Custom styled toast', {
+  style: {
+    background: '#333',
+    color: '#fff',
+    border: '1px solid #555',
+  },
+  className: 'my-custom-toast',
+});
+```
+
+## Dismissing Toasts
+
+```tsx
+import { toast } from '@kivora/react';
+
+// Dismiss a specific toast
+const toastId = toast('Message');
+toast.dismiss(toastId);
+
+// Dismiss all toasts
+toast.dismiss();
+```
+
+## Reference
+
+For complete documentation, refer to the [Sonner documentation](https://sonner.emilkowal.ski/).

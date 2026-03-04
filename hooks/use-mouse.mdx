@@ -1,0 +1,259 @@
+---
+title: useMouse
+description: Tracks the mouse cursor position relative to an element or the window
+---
+
+## Usage
+
+Tracks the mouse cursor position relative to a target element (or the window if no element is attached).
+
+```tsx
+import { useMouse } from 'kivora-react';
+
+function MouseTracker() {
+  const { ref, position } = useMouse<HTMLDivElement>();
+
+  return (
+    <div ref={ref} style={{ height: '300px', background: '#f0f0f0' }}>
+      Mouse position: {position.x}, {position.y}
+    </div>
+  );
+}
+```
+
+## Parameters
+
+This hook does not accept any parameters.
+
+## Returns
+
+<ResponseField name="ref" type="RefObject<T | null>">
+  React ref to attach to the element you want to track mouse position within. If not attached, tracks position relative to the document.
+</ResponseField>
+
+<ResponseField name="position" type="MousePosition">
+  Object containing the current mouse coordinates:
+  
+  <Expandable title="properties">
+    <ResponseField name="x" type="number">
+      Horizontal mouse position in pixels, relative to the element's left edge (or window if no ref attached)
+    </ResponseField>
+    
+    <ResponseField name="y" type="number">
+      Vertical mouse position in pixels, relative to the element's top edge (or window if no ref attached)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Examples
+
+### Spotlight effect
+
+```tsx
+import { useMouse } from 'kivora-react';
+
+function Spotlight() {
+  const { ref, position } = useMouse<HTMLDivElement>();
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '400px',
+        background: '#000',
+        overflow: 'hidden',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: position.y - 75,
+          left: position.x - 75,
+          width: '150px',
+          height: '150px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
+      <div style={{ color: 'white', padding: '20px' }}>
+        Move your mouse to reveal content
+      </div>
+    </div>
+  );
+}
+```
+
+### Parallax effect
+
+```tsx
+import { useMouse } from 'kivora-react';
+
+function ParallaxCard() {
+  const { ref, position } = useMouse<HTMLDivElement>();
+
+  const rotateX = (position.y / 10 - 15).toFixed(2);
+  const rotateY = (position.x / 10 - 15).toFixed(2);
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        width: '300px',
+        height: '400px',
+        perspective: '1000px',
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          borderRadius: '10px',
+          transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+          transition: 'transform 0.1s ease',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'white',
+        }}
+      >
+        <h2>3D Card</h2>
+      </div>
+    </div>
+  );
+}
+```
+
+### Custom cursor
+
+```tsx
+import { useMouse } from 'kivora-react';
+
+function CustomCursor() {
+  const { ref, position } = useMouse<HTMLDivElement>();
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        position: 'relative',
+        height: '500px',
+        background: '#f0f0f0',
+        cursor: 'none',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: position.y,
+          left: position.x,
+          width: '20px',
+          height: '20px',
+          borderRadius: '50%',
+          background: '#3b82f6',
+          transform: 'translate(-50%, -50%)',
+          pointerEvents: 'none',
+          zIndex: 9999,
+        }}
+      />
+      <div style={{ padding: '20px' }}>
+        <h2>Custom Cursor Area</h2>
+        <p>Move your mouse to see the custom cursor</p>
+      </div>
+    </div>
+  );
+}
+```
+
+### Mouse coordinates display
+
+```tsx
+import { useMouse } from 'kivora-react';
+
+function CoordinateDisplay() {
+  const { ref, position } = useMouse<HTMLDivElement>();
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        width: '100%',
+        height: '300px',
+        background: '#3b82f6',
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '24px',
+        fontFamily: 'monospace',
+      }}
+    >
+      X: {position.x.toFixed(0)}px, Y: {position.y.toFixed(0)}px
+    </div>
+  );
+}
+```
+
+### Interactive drawing
+
+```tsx
+import { useMouse } from 'kivora-react';
+import { useState } from 'react';
+
+function DrawingCanvas() {
+  const { ref, position } = useMouse<HTMLDivElement>();
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [points, setPoints] = useState<Array<{ x: number; y: number }>>([]);
+
+  const handleMouseDown = () => {
+    setIsDrawing(true);
+    setPoints([{ x: position.x, y: position.y }]);
+  };
+
+  const handleMouseUp = () => {
+    setIsDrawing(false);
+  };
+
+  const handleMouseMove = () => {
+    if (isDrawing) {
+      setPoints((prev) => [...prev, { x: position.x, y: position.y }]);
+    }
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseMove={handleMouseMove}
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '400px',
+        background: 'white',
+        border: '2px solid #ddd',
+        cursor: 'crosshair',
+      }}
+    >
+      {points.map((point, i) => (
+        <div
+          key={i}
+          style={{
+            position: 'absolute',
+            top: point.y,
+            left: point.x,
+            width: '4px',
+            height: '4px',
+            borderRadius: '50%',
+            background: '#3b82f6',
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+```

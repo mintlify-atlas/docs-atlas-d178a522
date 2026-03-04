@@ -1,0 +1,253 @@
+---
+title: usePagination
+description: Pagination logic with page range computation and navigation helpers
+---
+
+## Usage
+
+```tsx
+import { usePagination } from 'kivora-react';
+
+function DataTable({ items }: { items: any[] }) {
+  const { activePage, range, setPage, next, previous } = usePagination({
+    total: items.length,
+    pageSize: 10,
+    initialPage: 1
+  });
+
+  const startIndex = (activePage - 1) * 10;
+  const pageItems = items.slice(startIndex, startIndex + 10);
+
+  return (
+    <div>
+      <table>
+        {pageItems.map((item, i) => (
+          <tr key={i}><td>{item}</td></tr>
+        ))}
+      </table>
+      
+      <div>
+        <button onClick={previous}>Previous</button>
+        {range.map((page, index) =>
+          page === 'dots' ? (
+            <span key={`dots-${index}`}>...</span>
+          ) : (
+            <button
+              key={page}
+              onClick={() => setPage(page)}
+              disabled={page === activePage}
+            >
+              {page}
+            </button>
+          )
+        )}
+        <button onClick={next}>Next</button>
+      </div>
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="options" type="UsePaginationOptions" required>
+  Configuration object for pagination
+
+  <Expandable title="properties">
+    <ParamField path="total" type="number" required>
+      Total number of items
+    </ParamField>
+
+    <ParamField path="pageSize" type="number" default="10">
+      Items per page
+    </ParamField>
+
+    <ParamField path="initialPage" type="number" default="1">
+      Initial active page (1-based)
+    </ParamField>
+
+    <ParamField path="siblings" type="number" default="1">
+      Number of sibling pages shown on each side of the active page
+    </ParamField>
+
+    <ParamField path="boundaries" type="number" default="1">
+      Number of boundary pages shown at start and end
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Return Value
+
+<ResponseField name="activePage" type="number">
+  Current active page (1-based)
+</ResponseField>
+
+<ResponseField name="totalPages" type="number">
+  Total number of pages
+</ResponseField>
+
+<ResponseField name="range" type="Array<number | 'dots'>">
+  Array of page numbers and 'dots' placeholders for the pagination UI. Example: `[1, 'dots', 5, 6, 7, 'dots', 20]`
+</ResponseField>
+
+<ResponseField name="setPage" type="(page: number) => void">
+  Set the active page. Value is clamped between 1 and `totalPages`.
+</ResponseField>
+
+<ResponseField name="next" type="() => void">
+  Navigate to the next page (if not on last page)
+</ResponseField>
+
+<ResponseField name="previous" type="() => void">
+  Navigate to the previous page (if not on first page)
+</ResponseField>
+
+<ResponseField name="first" type="() => void">
+  Navigate to the first page
+</ResponseField>
+
+<ResponseField name="last" type="() => void">
+  Navigate to the last page
+</ResponseField>
+
+## Examples
+
+### Basic Pagination
+
+```tsx
+const items = Array.from({ length: 100 }, (_, i) => `Item ${i + 1}`);
+const pagination = usePagination({ total: items.length, pageSize: 10 });
+
+const startIndex = (pagination.activePage - 1) * 10;
+const currentItems = items.slice(startIndex, startIndex + 10);
+
+return (
+  <div>
+    {currentItems.map(item => <div key={item}>{item}</div>)}
+    <p>Page {pagination.activePage} of {pagination.totalPages}</p>
+  </div>
+);
+```
+
+### Custom Page Range
+
+```tsx
+const pagination = usePagination({
+  total: 1000,
+  pageSize: 20,
+  siblings: 2,      // Show 2 pages on each side
+  boundaries: 2     // Show 2 pages at start/end
+});
+
+// Range might look like: [1, 2, 'dots', 8, 9, 10, 11, 12, 'dots', 49, 50]
+```
+
+### Pagination Controls
+
+```tsx
+const { activePage, totalPages, next, previous, first, last } = usePagination({
+  total: 200,
+  pageSize: 10
+});
+
+return (
+  <div>
+    <button onClick={first} disabled={activePage === 1}>
+      First
+    </button>
+    <button onClick={previous} disabled={activePage === 1}>
+      Previous
+    </button>
+    <span>
+      Page {activePage} of {totalPages}
+    </span>
+    <button onClick={next} disabled={activePage === totalPages}>
+      Next
+    </button>
+    <button onClick={last} disabled={activePage === totalPages}>
+      Last
+    </button>
+  </div>
+);
+```
+
+### API Pagination
+
+```tsx
+const [data, setData] = useState([]);
+const [totalItems, setTotalItems] = useState(0);
+
+const pagination = usePagination({
+  total: totalItems,
+  pageSize: 20,
+  initialPage: 1
+});
+
+useEffect(() => {
+  fetch(`/api/items?page=${pagination.activePage}&size=20`)
+    .then(r => r.json())
+    .then(response => {
+      setData(response.items);
+      setTotalItems(response.total);
+    });
+}, [pagination.activePage]);
+```
+
+### Complete Pagination Component
+
+```tsx
+function Pagination() {
+  const { activePage, range, setPage, next, previous } = usePagination({
+    total: 500,
+    pageSize: 10,
+    siblings: 1,
+    boundaries: 1
+  });
+
+  return (
+    <nav>
+      <button onClick={previous} disabled={activePage === 1}>
+        ← Prev
+      </button>
+      
+      {range.map((page, index) => {
+        if (page === 'dots') {
+          return <span key={`dots-${index}`}>...</span>;
+        }
+        
+        return (
+          <button
+            key={page}
+            onClick={() => setPage(page)}
+            className={page === activePage ? 'active' : ''}
+          >
+            {page}
+          </button>
+        );
+      })}
+      
+      <button onClick={next} disabled={activePage === range[range.length - 1]}>
+        Next →
+      </button>
+    </nav>
+  );
+}
+```
+
+### With URL Sync
+
+```tsx
+const [searchParams, setSearchParams] = useSearchParams();
+const pageFromUrl = Number(searchParams.get('page')) || 1;
+
+const pagination = usePagination({
+  total: 300,
+  pageSize: 15,
+  initialPage: pageFromUrl
+});
+
+// Sync page changes to URL
+useEffect(() => {
+  setSearchParams({ page: String(pagination.activePage) });
+}, [pagination.activePage, setSearchParams]);
+```

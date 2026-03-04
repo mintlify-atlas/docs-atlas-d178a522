@@ -1,0 +1,201 @@
+---
+title: SimpleGrid
+description: Responsive grid with automatic column layout and breakpoint support
+---
+
+## Overview
+
+SimpleGrid creates responsive grid layouts with minimal configuration. Unlike Grid, it automatically handles column layout without manual spanning, making it ideal for uniform item lists and responsive galleries.
+
+## Import
+
+```tsx
+import { SimpleGrid } from '@kivora/react';
+```
+
+## Props
+
+<ResponseField name="cols" type="number | { base?: number; sm?: number; md?: number; lg?: number; xl?: number }">
+  Number of columns. Can be a single number or a breakpoint object for responsive layouts.
+  
+  Breakpoints:
+  - `base`: Default/mobile (< 640px)
+  - `sm`: Small screens (≥ 640px)
+  - `md`: Medium screens (≥ 768px)
+  - `lg`: Large screens (≥ 1024px)
+  - `xl`: Extra large screens (≥ 1280px)
+</ResponseField>
+
+<ResponseField name="spacing" type="0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12" default="4">
+  Gap between grid items in Tailwind spacing units (1 = 0.25rem).
+</ResponseField>
+
+## Usage
+
+### Basic grid
+
+```tsx
+<SimpleGrid cols={3} spacing={4}>
+  <Card>Item 1</Card>
+  <Card>Item 2</Card>
+  <Card>Item 3</Card>
+  <Card>Item 4</Card>
+  <Card>Item 5</Card>
+  <Card>Item 6</Card>
+</SimpleGrid>
+```
+
+### Responsive columns
+
+```tsx
+<SimpleGrid 
+  cols={{ base: 1, sm: 2, md: 3, lg: 4 }} 
+  spacing={4}
+>
+  {products.map(product => (
+    <ProductCard key={product.id} {...product} />
+  ))}
+</SimpleGrid>
+```
+
+### Gallery layout
+
+```tsx
+<SimpleGrid cols={{ base: 2, md: 3, xl: 4 }} spacing={2}>
+  {images.map(img => (
+    <AspectRatio key={img.id} ratio={1}>
+      <img 
+        src={img.url} 
+        alt={img.alt}
+        className="object-cover w-full h-full"
+      />
+    </AspectRatio>
+  ))}
+</SimpleGrid>
+```
+
+### Feature grid
+
+```tsx
+<SimpleGrid cols={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+  <div>
+    <Icon name="zap" />
+    <Heading size="md">Fast</Heading>
+    <Text>Lightning-fast performance</Text>
+  </div>
+  <div>
+    <Icon name="shield" />
+    <Heading size="md">Secure</Heading>
+    <Text>Enterprise-grade security</Text>
+  </div>
+  <div>
+    <Icon name="globe" />
+    <Heading size="md">Global</Heading>
+    <Text>Available worldwide</Text>
+  </div>
+</SimpleGrid>
+```
+
+### Tight spacing
+
+```tsx
+<SimpleGrid cols={4} spacing={1}>
+  {colors.map(color => (
+    <div 
+      key={color}
+      className="h-20"
+      style={{ backgroundColor: color }}
+    />
+  ))}
+</SimpleGrid>
+```
+
+## Layout Examples
+
+### Blog grid
+
+```tsx
+<SimpleGrid cols={{ base: 1, md: 2, xl: 3 }} spacing={8}>
+  {posts.map(post => (
+    <Card key={post.id}>
+      <Image src={post.coverImage} />
+      <Stack gap={3} className="p-6">
+        <Badge>{post.category}</Badge>
+        <Heading size="lg">{post.title}</Heading>
+        <Text className="text-gray-600">{post.excerpt}</Text>
+        <Group justify="between" align="center">
+          <Text size="sm">{post.date}</Text>
+          <Button variant="link">Read more →</Button>
+        </Group>
+      </Stack>
+    </Card>
+  ))}
+</SimpleGrid>
+```
+
+### Team grid
+
+```tsx
+<SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing={6}>
+  {team.map(member => (
+    <Stack key={member.id} align="center" gap={3}>
+      <Avatar src={member.photo} size="xl" />
+      <div className="text-center">
+        <Heading size="md">{member.name}</Heading>
+        <Text className="text-gray-600">{member.role}</Text>
+      </div>
+    </Stack>
+  ))}
+</SimpleGrid>
+```
+
+### Stats dashboard
+
+```tsx
+<SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing={4}>
+  <Card className="p-6">
+    <Text className="text-gray-600">Total Revenue</Text>
+    <Heading size="2xl">$45,231</Heading>
+    <Text className="text-green-600">+12.5%</Text>
+  </Card>
+  <Card className="p-6">
+    <Text className="text-gray-600">Active Users</Text>
+    <Heading size="2xl">1,234</Heading>
+    <Text className="text-green-600">+5.2%</Text>
+  </Card>
+  <Card className="p-6">
+    <Text className="text-gray-600">Conversions</Text>
+    <Heading size="2xl">89</Heading>
+    <Text className="text-red-600">-2.1%</Text>
+  </Card>
+  <Card className="p-6">
+    <Text className="text-gray-600">Avg. Session</Text>
+    <Heading size="2xl">2m 45s</Heading>
+    <Text className="text-green-600">+8.3%</Text>
+  </Card>
+</SimpleGrid>
+```
+
+### Masonry-style with varying content
+
+```tsx
+<SimpleGrid cols={{ base: 1, md: 2, lg: 3 }} spacing={4}>
+  {items.map(item => (
+    <Card key={item.id} className="p-6">
+      <Image src={item.image} />
+      <Heading size="md" className="mt-4">{item.title}</Heading>
+      <Text className="mt-2">{item.description}</Text>
+    </Card>
+  ))}
+</SimpleGrid>
+```
+
+## Best Practices
+
+- Use SimpleGrid for uniform item grids (cards, images, features)
+- Use Grid when you need manual control over column spanning
+- Start with `base: 1` for mobile-first responsive design
+- Use smaller spacing (1-3) for compact layouts like color palettes
+- Use larger spacing (6-12) for content-heavy layouts like blog grids
+- Combine with AspectRatio for consistent image galleries
+- Test breakpoints to ensure readable layouts at all screen sizes

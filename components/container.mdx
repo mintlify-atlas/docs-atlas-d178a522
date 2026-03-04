@@ -1,0 +1,126 @@
+---
+title: Container
+description: Responsive page container with max-width and horizontal padding
+---
+
+## Overview
+
+Container is a responsive layout component that constrains content width and centers it horizontally. It provides consistent horizontal padding and max-width presets for creating well-proportioned page layouts.
+
+## Import
+
+```tsx
+import { Container } from '@kivora/react';
+```
+
+## Props
+
+<ResponseField name="size" type="'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full'" default="'lg'">
+  Max-width size preset:
+  - `xs`: 320px
+  - `sm`: 384px
+  - `md`: 448px
+  - `lg`: 896px (56rem)
+  - `xl`: 1152px (72rem)
+  - `2xl`: 1280px (80rem)
+  - `full`: 100%
+</ResponseField>
+
+<ResponseField name="px" type="boolean" default="true">
+  Enables responsive horizontal padding (1rem on mobile, 1.5rem on tablet, 2rem on desktop).
+</ResponseField>
+
+<ResponseField name="centered" type="boolean" default="true">
+  Centers the container horizontally using `mx-auto`.
+</ResponseField>
+
+## Usage
+
+### Basic container
+
+```tsx
+<Container>
+  <h1>Welcome</h1>
+  <p>Content is automatically centered and constrained.</p>
+</Container>
+```
+
+### Size variants
+
+```tsx
+// Extra large container for wide layouts
+<Container size="xl">
+  <HeroSection />
+</Container>
+
+// Small container for focused content
+<Container size="sm">
+  <LoginForm />
+</Container>
+
+// Full width container
+<Container size="full">
+  <Carousel />
+</Container>
+```
+
+### Without padding
+
+```tsx
+// Useful when child components handle their own padding
+<Container px={false}>
+  <FullWidthImage />
+</Container>
+```
+
+### Custom styling
+
+```tsx
+<Container className="bg-gray-50 py-12">
+  <Article />
+</Container>
+```
+
+## Layout Examples
+
+### Page layout
+
+```tsx
+function Page() {
+  return (
+    <>
+      <Container size="xl" className="py-8">
+        <Navigation />
+      </Container>
+      
+      <Container size="lg" className="py-16">
+        <MainContent />
+      </Container>
+      
+      <Container size="2xl" className="py-12">
+        <Footer />
+      </Container>
+    </>
+  );
+}
+```
+
+### Nested containers
+
+```tsx
+<Container size="2xl">
+  <Header />
+  
+  <Container size="lg">
+    <Article />
+  </Container>
+</Container>
+```
+
+## Best Practices
+
+- Use `lg` or `xl` for general content areas
+- Use `sm` or `md` for forms and focused UI
+- Use `2xl` for wide layouts like dashboards
+- Disable `centered` when you need edge-to-edge layouts
+- Combine with other layout components like Grid or Stack for complex layouts

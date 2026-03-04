@@ -1,0 +1,250 @@
+---
+title: Dialog
+description: Confirmation or alert dialog with required user action
+---
+
+Confirmation or alert dialog that requires user action. Unlike `Modal`, the `closeOnBackdrop` prop defaults to `false` to prevent accidental dismissal of important decisions.
+
+## Import
+
+```tsx
+import { Dialog } from '@kivora/react';
+```
+
+## Usage
+
+```tsx
+import { Dialog, Button, useDisclosure } from '@kivora/react';
+
+function Example() {
+  const { isOpen, open, close } = useDisclosure();
+
+  const handleConfirm = () => {
+    // Perform action
+    close();
+  };
+
+  return (
+    <>
+      <Button label="Delete Account" variant="destructive" onClick={open} />
+      <Dialog
+        isOpen={isOpen}
+        onClose={close}
+        title="Delete account?"
+        description="This action cannot be undone. All your data will be permanently deleted."
+        footer={
+          <>
+            <Button label="Cancel" variant="ghost" onClick={close} />
+            <Button
+              label="Delete"
+              variant="destructive"
+              onClick={handleConfirm}
+            />
+          </>
+        }
+      />
+    </>
+  );
+}
+```
+
+## With Custom Content
+
+Include custom content between description and footer:
+
+```tsx
+<Dialog
+  isOpen={isOpen}
+  onClose={close}
+  title="Confirm download"
+  description="The file is 2.5GB and may take several minutes to download."
+  footer={
+    <>
+      <Button label="Cancel" variant="ghost" onClick={close} />
+      <Button label="Download" onClick={handleDownload} />
+    </>
+  }
+>
+  <div className="mt-4">
+    <label className="flex items-center gap-2">
+      <input type="checkbox" />
+      <span className="text-sm">Don't ask me again</span>
+    </label>
+  </div>
+</Dialog>
+```
+
+## Simple Alert
+
+Use without footer for simple alerts:
+
+```tsx
+<Dialog
+  isOpen={isOpen}
+  onClose={close}
+  title="Session expired"
+  description="Please log in again to continue."
+  closeOnBackdrop={true}
+/>
+```
+
+## Confirmation Dialog
+
+```tsx
+function ConfirmDialog() {
+  const { isOpen, open, close } = useDisclosure();
+  const [loading, setLoading] = useState(false);
+
+  const handleConfirm = async () => {
+    setLoading(true);
+    await performAction();
+    setLoading(false);
+    close();
+  };
+
+  return (
+    <>
+      <Button label="Save Changes" onClick={open} />
+      <Dialog
+        isOpen={isOpen}
+        onClose={close}
+        title="Save changes?"
+        description="Your changes will be saved and visible to all users."
+        footer={
+          <>
+            <Button
+              label="Cancel"
+              variant="ghost"
+              onClick={close}
+              disabled={loading}
+            />
+            <Button
+              label="Save"
+              onClick={handleConfirm}
+              loading={loading}
+            />
+          </>
+        }
+      />
+    </>
+  );
+}
+```
+
+## Destructive Action
+
+```tsx
+<Dialog
+  isOpen={isOpen}
+  onClose={close}
+  title="Delete 24 items?"
+  description="This will permanently delete 24 files from your workspace. This action cannot be undone."
+  footer={
+    <>
+      <Button label="Cancel" variant="ghost" onClick={close} />
+      <Button
+        label="Delete"
+        variant="destructive"
+        onClick={handleDelete}
+      />
+    </>
+  }
+/>
+```
+
+## Sizes
+
+Control dialog width:
+
+```tsx
+<Dialog
+  isOpen={isOpen}
+  onClose={close}
+  size="sm"
+  title="Small Dialog"
+  description="Compact dialog for simple confirmations"
+/>
+
+<Dialog
+  isOpen={isOpen}
+  onClose={close}
+  size="lg"
+  title="Large Dialog"
+  description="Wider dialog for more complex content"
+/>
+```
+
+Available sizes: `sm`, `md` (default), `lg`
+
+## Allow Backdrop Close
+
+Enable backdrop close for less critical dialogs:
+
+```tsx
+<Dialog
+  isOpen={isOpen}
+  onClose={close}
+  title="Information"
+  description="This is a non-critical message."
+  closeOnBackdrop={true}
+/>
+```
+
+## Props
+
+<ResponseField name="isOpen" type="boolean" required>
+  Whether the dialog is visible
+</ResponseField>
+
+<ResponseField name="onClose" type="() => void" required>
+  Callback to close the dialog
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  Dialog title
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Dialog description or message
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode">
+  Optional content between description and footer
+</ResponseField>
+
+<ResponseField name="footer" type="ReactNode">
+  Custom footer, typically containing action buttons
+</ResponseField>
+
+<ResponseField name="size" type="'sm' | 'md' | 'lg'" default="md">
+  Maximum width preset
+</ResponseField>
+
+<ResponseField name="closeOnBackdrop" type="boolean" default="false">
+  Whether clicking the backdrop closes the dialog. Defaults to false to prevent accidental dismissal
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes for the dialog panel
+</ResponseField>
+
+## Accessibility
+
+- Uses `role="alertdialog"` and `aria-modal="true"`
+- Links title with `aria-labelledby`
+- Links description with `aria-describedby`
+- Automatically manages focus trap
+- Locks body scroll when open
+- Escape key closes dialog
+
+## Dialog vs Modal
+
+| Feature | Dialog | Modal |
+|---------|--------|-------|
+| Use case | Confirmations, alerts | General content |
+| `closeOnBackdrop` default | `false` | `true` |
+| Role | `alertdialog` | `dialog` |
+| Footer | Custom prop | Part of children |
+| Close button | No | Optional (in header) |
+
+Use `Dialog` for critical decisions and confirmations. Use `Modal` for general overlays and forms.

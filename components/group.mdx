@@ -1,0 +1,250 @@
+---
+title: Group
+description: Horizontal flex row with gap, alignment, and justify control
+---
+
+## Overview
+
+Group arranges children horizontally in a flex row with consistent spacing and alignment. It's optimized for common horizontal layout patterns like button groups, inline text with icons, and navigation items.
+
+## Import
+
+```tsx
+import { Group } from '@kivora/react';
+```
+
+## Props
+
+<ResponseField name="gap" type="0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12" default="4">
+  Spacing between items in Tailwind units (1 = 0.25rem, 4 = 1rem).
+</ResponseField>
+
+<ResponseField name="align" type="'start' | 'center' | 'end' | 'baseline' | 'stretch'" default="'center'">
+  Vertical alignment of children (cross-axis).
+</ResponseField>
+
+<ResponseField name="justify" type="'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'" default="'start'">
+  Horizontal distribution of children along the main axis.
+</ResponseField>
+
+<ResponseField name="wrap" type="boolean" default="false">
+  Whether items should wrap onto multiple lines when they overflow.
+</ResponseField>
+
+<ResponseField name="grow" type="boolean" default="false">
+  When true, sets `w-full` to fill available width.
+</ResponseField>
+
+## Usage
+
+### Basic group
+
+```tsx
+<Group gap={3}>
+  <Button>Cancel</Button>
+  <Button variant="primary">Save</Button>
+</Group>
+```
+
+### Space between
+
+```tsx
+<Group justify="between">
+  <Text>Total</Text>
+  <Text className="font-bold">$99.00</Text>
+</Group>
+```
+
+### Centered content
+
+```tsx
+<Group justify="center" gap={2}>
+  <Icon name="info" />
+  <Text>This action cannot be undone</Text>
+</Group>
+```
+
+### Icon with text
+
+```tsx
+<Group gap={2}>
+  <Icon name="mail" size="sm" />
+  <Text>contact@example.com</Text>
+</Group>
+```
+
+### Wrapping items
+
+```tsx
+<Group wrap gap={2}>
+  {tags.map(tag => (
+    <Badge key={tag.id}>{tag.name}</Badge>
+  ))}
+</Group>
+```
+
+### Right-aligned actions
+
+```tsx
+<Group justify="end" gap={2}>
+  <Button variant="secondary">Discard</Button>
+  <Button variant="primary">Publish</Button>
+</Group>
+```
+
+## Layout Examples
+
+### Card header
+
+```tsx
+<Card>
+  <Group justify="between" align="center" className="p-6 border-b">
+    <div>
+      <Heading size="lg">Settings</Heading>
+      <Text className="text-gray-600">Manage your preferences</Text>
+    </div>
+    <Button variant="secondary">Export</Button>
+  </Group>
+  
+  <div className="p-6">
+    {/* Card content */}
+  </div>
+</Card>
+```
+
+### Navigation bar
+
+```tsx
+<nav className="border-b">
+  <Container>
+    <Group justify="between" align="center" className="py-4">
+      <Group gap={8}>
+        <Logo />
+        <Group gap={4}>
+          <Button variant="ghost">Products</Button>
+          <Button variant="ghost">Pricing</Button>
+          <Button variant="ghost">Docs</Button>
+        </Group>
+      </Group>
+      
+      <Group gap={2}>
+        <Button variant="secondary">Sign In</Button>
+        <Button variant="primary">Sign Up</Button>
+      </Group>
+    </Group>
+  </Container>
+</nav>
+```
+
+### List item
+
+```tsx
+<Group justify="between" align="center" className="p-4 border rounded-lg">
+  <Group gap={3}>
+    <Avatar src={user.avatar} />
+    <Stack gap={0}>
+      <Text className="font-medium">{user.name}</Text>
+      <Text size="sm" className="text-gray-600">{user.email}</Text>
+    </Stack>
+  </Group>
+  
+  <Group gap={2}>
+    <Button variant="secondary" size="sm">Edit</Button>
+    <Button variant="secondary" size="sm">Remove</Button>
+  </Group>
+</Group>
+```
+
+### Form field
+
+```tsx
+<div>
+  <Label>API Key</Label>
+  <Group gap={2}>
+    <Input 
+      type="text" 
+      value="sk_live_..." 
+      readOnly 
+      className="flex-1"
+    />
+    <Button variant="secondary">Copy</Button>
+    <Button variant="secondary">Regenerate</Button>
+  </Group>
+</div>
+```
+
+### Stats row
+
+```tsx
+<Group justify="around" className="border rounded-lg p-6">
+  <Stack gap={1} align="center">
+    <Text size="2xl" className="font-bold">1,234</Text>
+    <Text className="text-gray-600">Users</Text>
+  </Stack>
+  
+  <Stack gap={1} align="center">
+    <Text size="2xl" className="font-bold">89</Text>
+    <Text className="text-gray-600">Projects</Text>
+  </Stack>
+  
+  <Stack gap={1} align="center">
+    <Text size="2xl" className="font-bold">45</Text>
+    <Text className="text-gray-600">Teams</Text>
+  </Stack>
+</Group>
+```
+
+### Breadcrumbs
+
+```tsx
+<Group gap={2} align="center">
+  <Button variant="link">Home</Button>
+  <Text className="text-gray-400">/</Text>
+  <Button variant="link">Projects</Button>
+  <Text className="text-gray-400">/</Text>
+  <Text>Current Project</Text>
+</Group>
+```
+
+### Alert with icon
+
+```tsx
+<div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+  <Group gap={3}>
+    <Icon name="info" className="text-blue-600" />
+    <Stack gap={1} className="flex-1">
+      <Text className="font-medium">Update available</Text>
+      <Text size="sm" className="text-gray-600">
+        A new version is ready to install.
+      </Text>
+    </Stack>
+    <Button variant="primary" size="sm">Update Now</Button>
+  </Group>
+</div>
+```
+
+### Tag list
+
+```tsx
+<div>
+  <Label>Tags</Label>
+  <Group wrap gap={2}>
+    <Badge>react</Badge>
+    <Badge>typescript</Badge>
+    <Badge>tailwind</Badge>
+    <Badge>ui</Badge>
+    <Button variant="ghost" size="sm">+ Add tag</Button>
+  </Group>
+</div>
+```
+
+## Best Practices
+
+- Use Group as the default for horizontal layouts
+- Use `justify="between"` for distributing items across available space
+- Use `align="center"` (default) for vertically centering mixed-height items
+- Use `align="baseline"` when aligning text with different sizes
+- Enable `wrap` for tag lists and dynamic content that may overflow
+- Combine with `grow` to fill the parent container width
+- Use `gap={2}` for tight groups like button pairs
+- Use `gap={4-6}` for more distinct items

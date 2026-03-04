@@ -1,0 +1,119 @@
+---
+title: Spinner
+description: Animated loading indicator for showing loading states.
+---
+
+Animated loading indicator. Use to show that content is loading or an operation is in progress.
+
+## Import
+
+```tsx
+import { Spinner } from '@kivora/react';
+```
+
+## Usage
+
+```tsx
+<Spinner size="md" aria-label="Loading results" />
+```
+
+## Sizes
+
+Spinner comes in three sizes:
+
+```tsx
+<Spinner size="sm" />
+<Spinner size="md" />
+<Spinner size="lg" />
+```
+
+## Custom Color
+
+Override the spinner color using the `color` prop:
+
+```tsx
+<Spinner size="md" color="#3b82f6" />
+<Spinner size="md" color="var(--color-success)" />
+```
+
+## In Buttons
+
+Commonly used in buttons to show loading states:
+
+```tsx
+import { Button, Spinner } from '@kivora/react';
+
+function Example() {
+  const [loading, setLoading] = useState(false);
+  
+  return (
+    <Button disabled={loading}>
+      {loading && <Spinner size="sm" />}
+      {loading ? 'Saving...' : 'Save'}
+    </Button>
+  );
+}
+```
+
+## Centered Loading
+
+Center the spinner in a container:
+
+```tsx
+<div className="flex items-center justify-center h-64">
+  <Spinner size="lg" aria-label="Loading content" />
+</div>
+```
+
+## With Text
+
+Combine with text for context:
+
+```tsx
+<div className="flex items-center gap-2">
+  <Spinner size="sm" />
+  <span>Loading data...</span>
+</div>
+```
+
+## Props
+
+<ResponseField name="size" type="'sm' | 'md' | 'lg'" default="'md'">
+  Size of the spinner:
+  - `sm`: 16px (1rem)
+  - `md`: 24px (1.5rem)
+  - `lg`: 32px (2rem)
+</ResponseField>
+
+<ResponseField name="color" type="string">
+  Custom color for the spinner. Accepts any CSS color value or CSS variable.
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes to apply to the spinner.
+</ResponseField>
+
+<ResponseField name="aria-label" type="string" default="'Loading'">
+  Accessible label for screen readers.
+</ResponseField>
+
+## Accessibility
+
+- Uses `role="status"` for screen reader announcements
+- Includes default `aria-label="Loading"` which can be customized
+- Ensure to provide descriptive labels when multiple spinners are present
+
+## Styling
+
+The Spinner component:
+- Uses CSS border animation for smooth rotation
+- Inherits text color by default (can be overridden with `color` prop)
+- Automatically applies appropriate border width for each size
+- Includes `animate-spin` utility for continuous rotation
+
+## Best Practices
+
+- Use `sm` size for inline elements like buttons
+- Use `md` or `lg` for standalone loading indicators
+- Always provide descriptive `aria-label` for context
+- Consider showing fallback content for users who have reduced motion enabled

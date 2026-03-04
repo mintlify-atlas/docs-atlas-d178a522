@@ -1,0 +1,217 @@
+---
+title: Stepper
+description: Multi-step progress indicator for guided workflows
+---
+
+## Overview
+
+The Stepper component displays progress through a multi-step process. It supports horizontal and vertical orientations, custom icons, and optional step selection.
+
+## Import
+
+```tsx
+import { Stepper } from 'kivora-react';
+```
+
+## Basic Usage
+
+```tsx
+const steps = [
+  { label: 'Account', description: 'Create your account' },
+  { label: 'Profile', description: 'Fill profile details' },
+  { label: 'Done', description: 'Review and confirm' },
+];
+
+<Stepper steps={steps} active={1} />
+```
+
+## Vertical Orientation
+
+```tsx
+<Stepper 
+  steps={steps} 
+  active={1} 
+  orientation="vertical"
+/>
+```
+
+## With Icons
+
+```tsx
+const stepsWithIcons = [
+  { 
+    label: 'Account', 
+    description: 'Create account',
+    icon: <UserIcon className="size-4" />
+  },
+  { 
+    label: 'Payment', 
+    description: 'Billing info',
+    icon: <CreditCardIcon className="size-4" />
+  },
+  { 
+    label: 'Complete',
+    icon: <CheckIcon className="size-4" />
+  },
+];
+
+<Stepper steps={stepsWithIcons} active={0} />
+```
+
+## Sizes
+
+```tsx
+{/* Small */}
+<Stepper steps={steps} active={1} size="sm" />
+
+{/* Medium (default) */}
+<Stepper steps={steps} active={1} size="md" />
+
+{/* Large */}
+<Stepper steps={steps} active={1} size="lg" />
+```
+
+## Clickable Steps
+
+```tsx
+const [activeStep, setActiveStep] = useState(0);
+
+<Stepper 
+  steps={steps} 
+  active={activeStep}
+  allowStepSelect
+  onStepClick={setActiveStep}
+/>
+```
+
+## Complete Example
+
+```tsx
+import { useState } from 'react';
+import { Stepper, Button } from 'kivora-react';
+
+function OnboardingFlow() {
+  const [activeStep, setActiveStep] = useState(0);
+
+  const steps = [
+    { label: 'Welcome', description: 'Getting started' },
+    { label: 'Profile', description: 'Basic information' },
+    { label: 'Preferences', description: 'Customize your experience' },
+    { label: 'Complete', description: 'Ready to go!' },
+  ];
+
+  const next = () => setActiveStep((s) => Math.min(s + 1, steps.length - 1));
+  const prev = () => setActiveStep((s) => Math.max(s - 1, 0));
+
+  return (
+    <div className="max-w-2xl mx-auto p-6">
+      <Stepper 
+        steps={steps} 
+        active={activeStep}
+        allowStepSelect
+        onStepClick={setActiveStep}
+      />
+      
+      <div className="mt-8">
+        {/* Step content here */}
+        <div className="min-h-48 p-6 bg-muted rounded-lg">
+          {steps[activeStep].description}
+        </div>
+      </div>
+
+      <div className="mt-6 flex gap-3 justify-between">
+        <Button onClick={prev} disabled={activeStep === 0}>
+          Previous
+        </Button>
+        <Button onClick={next} disabled={activeStep === steps.length - 1}>
+          Next
+        </Button>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+### StepperProps
+
+Extends `React.ComponentPropsWithoutRef<'div'>`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `steps` | `StepperStep[]` | **required** | Array of step definitions |
+| `active` | `number` | **required** | Index of the currently active step (0-based) |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Layout direction |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size variant |
+| `allowStepSelect` | `boolean` | `false` | Allow clicking on completed/current steps |
+| `onStepClick` | `(step: number) => void` | `undefined` | Called when a step is clicked (if allowed) |
+| `className` | `string` | `''` | Additional CSS classes |
+
+### StepperStep
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `label` | `string` | Primary step label |
+| `description` | `string` | Optional secondary description |
+| `icon` | `ReactNode` | Optional custom icon (shown instead of step number) |
+
+## Size Specifications
+
+| Size | Circle Size | Label Size | Description Size |
+|------|-------------|------------|------------------|
+| `sm` | 28px | 14px | 12px |
+| `md` | 36px | 14px | 12px |
+| `lg` | 40px | 16px | 14px |
+
+## Step States
+
+### Completed Steps (index < active)
+- Primary colored circle with checkmark icon
+- Primary colored connector line
+- Normal text color for label
+- Clickable if `allowStepSelect={true}`
+
+### Current Step (index === active)
+- Outlined circle in primary color
+- Primary colored label text
+- Shows step number or custom icon
+- Clickable if `allowStepSelect={true}`
+
+### Future Steps (index > active)
+- Gray outlined circle
+- Muted text colors
+- Not clickable
+- Gray connector line
+
+## Orientation Differences
+
+### Horizontal
+- Steps arranged in a row
+- Connector lines between steps (horizontal)
+- Labels centered below circles
+- Better for 3-5 steps
+
+### Vertical
+- Steps stacked vertically
+- Connector lines below each circle (vertical)
+- Labels aligned to the right of circles
+- Better for many steps or detailed descriptions
+
+## Accessibility
+
+- Container has `aria-label="Progress steps"`
+- Current step has `aria-current="step"`
+- Checkmark icon uses inline SVG with proper `viewBox`
+- Clickable steps are focusable with visible ring
+- Non-clickable steps have `cursor-default`
+- Connector lines are decorative (no ARIA labels needed)
+
+## Visual Design
+
+- Completed steps show a checkmark icon
+- Current step is highlighted with primary color
+- Smooth color transitions on all elements
+- Connector lines change color based on completion
+- Circles use 2px borders for clarity
+- Text truncation prevents layout breaks

@@ -1,0 +1,320 @@
+---
+title: Dark Mode
+description: Implement dark mode in your Kivora React application with automatic color scheme detection.
+---
+
+Kivora React has built-in support for dark mode through CSS design tokens. All components automatically adapt to light and dark themes without any configuration.
+
+## How Dark Mode Works
+
+Kivora uses a **class-based** dark mode system. When the `.dark` class is applied to the `<html>` or `<body>` element, all components switch to their dark variants.
+
+```tsx
+<!-- Light mode -->
+<html>
+  <body>...</body>
+</html>
+
+<!-- Dark mode -->
+<html class="dark">
+  <body>...</body>
+</html>
+```
+
+## Automatic Dark Mode Detection
+
+Use the `useColorScheme` hook to detect the user's system preference:
+
+```tsx
+import { useColorScheme } from '@kivora/react';
+import { useEffect } from 'react';
+
+export default function App() {
+  const systemScheme = useColorScheme();
+
+  useEffect(() => {
+    // Apply dark mode based on system preference
+    if (systemScheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [systemScheme]);
+
+  return <div>Your app content</div>;
+}
+```
+
+The `useColorScheme` hook listens to the `prefers-color-scheme` media query and returns `'light'` or `'dark'`.
+
+<Note>
+  The hook automatically updates when the user changes their system preference, triggering a re-render.
+</Note>
+
+## Manual Theme Switching
+
+Give users control over the theme with a toggle button:
+
+```tsx
+import { Button } from '@kivora/react';
+import { useState, useEffect } from 'react';
+
+export default function ThemeToggle() {
+  const [isDark, setIsDark] = useState(false);
+
+  // Load saved preference on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('theme');
+    const dark = saved === 'dark';
+    setIsDark(dark);
+    document.documentElement.classList.toggle('dark', dark);
+  }, []);
+
+  const toggleTheme = () => {
+    const newDark = !isDark;
+    setIsDark(newDark);
+    localStorage.setItem('theme', newDark ? 'dark' : 'light');
+    document.documentElement.classList.toggle('dark', newDark);
+  };
+
+  return (
+    <Button
+      label={isDark ? 'Light Mode' : 'Dark Mode'}
+      variant="secondary"
+      onClick={toggleTheme}
+    />
+  );
+}
+```
+
+## Complete Theme Provider
+
+For a production-ready solution, create a theme context:
+
+```tsx ThemeProvider.tsx
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useColorScheme } from '@kivora/react';
+
+type Theme = 'light' | 'dark' | 'system';
+
+interface ThemeContextValue {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+  resolvedTheme: 'light' | 'dark';
+}
+
+const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState<Theme>('system');
+  const systemScheme = useColorScheme();
+
+  const resolvedTheme = theme === 'system' ? systemScheme : theme;
+
+  useEffect(() => {
+    // Load saved theme preference
+    const saved = localStorage.getItem('theme') as Theme | null;
+    if (saved) setTheme(saved);
+  }, []);
+
+  useEffect(() => {
+    // Apply theme to document
+    const root = document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(resolvedTheme);
+  }, [resolvedTheme]);
+
+  const handleSetTheme = (newTheme: Theme) => {
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
+
+  return (
+    <ThemeContext.Provider
+      value={{ theme, setTheme: handleSetTheme, resolvedTheme }}
+    >
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+export function useTheme() {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within ThemeProvider');
+  }
+  return context;
+}
+```
+
+Wrap your app with the provider:
+
+```tsx app/layout.tsx
+import { ThemeProvider } from './ThemeProvider';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+## Theme Switcher Component
+
+Create a dropdown to let users choose between light, dark, and system themes:
+
+```tsx ThemeSwitcher.tsx
+import { Button } from '@kivora/react';
+import { useTheme } from './ThemeProvider';
+
+export function ThemeSwitcher() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <div style={{ display: 'flex', gap: '0.5rem' }}>
+      <Button
+        label="Light"
+        variant={theme === 'light' ? 'primary' : 'ghost'}
+        size="sm"
+        onClick={() => setTheme('light')}
+      />
+      <Button
+        label="Dark"
+        variant={theme === 'dark' ? 'primary' : 'ghost'}
+        size="sm"
+        onClick={() => setTheme('dark')}
+      />
+      <Button
+        label="System"
+        variant={theme === 'system' ? 'primary' : 'ghost'}
+        size="sm"
+        onClick={() => setTheme('system')}
+      />
+    </div>
+  );
+}
+```
+
+## Customizing Dark Mode Colors
+
+Define dark mode color overrides in your CSS:
+
+```css theme.css
+:root {
+  /* Light mode colors */
+  --background: 0 0% 100%;
+  --foreground: 240 10% 4%;
+  --primary: 220 90% 56%;
+  --primary-foreground: 0 0% 100%;
+  --border: 240 6% 90%;
+  --ring: 220 90% 56%;
+}
+
+.dark {
+  /* Dark mode colors */
+  --background: 240 10% 4%;
+  --foreground: 0 0% 98%;
+  --primary: 220 90% 56%;
+  --primary-foreground: 0 0% 100%;
+  --border: 240 4% 16%;
+  --ring: 220 90% 56%;
+  
+  /* Adjust other colors for dark mode */
+  --secondary: 240 4% 16%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 4% 46%;
+  --muted-foreground: 240 5% 65%;
+  --accent: 240 4% 16%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 63% 31%;
+  --destructive-foreground: 0 0% 98%;
+}
+```
+
+<Tip>
+  Use lighter shades for dark mode backgrounds and darker shades for text to ensure proper contrast and readability.
+</Tip>
+
+## Avoiding Flash of Unstyled Content
+
+To prevent a flash when the page loads, set the theme class before React hydrates:
+
+<Steps>
+
+<Step title="Create an inline script">
+  Add this script to your HTML `<head>` before any stylesheets:
+
+  ```html
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') || 'system';
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = theme === 'dark' || (theme === 'system' && systemDark);
+      if (isDark) document.documentElement.classList.add('dark');
+    })();
+  </script>
+  ```
+</Step>
+
+<Step title="In Next.js App Router">
+  Add the script to `app/layout.tsx`:
+
+  ```tsx app/layout.tsx
+  export default function RootLayout({ children }) {
+    return (
+      <html suppressHydrationWarning>
+        <head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function() {
+                  const theme = localStorage.getItem('theme') || 'system';
+                  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  const isDark = theme === 'dark' || (theme === 'system' && systemDark);
+                  if (isDark) document.documentElement.classList.add('dark');
+                })();
+              `,
+            }}
+          />
+        </head>
+        <body>{children}</body>
+      </html>
+    );
+  }
+  ```
+</Step>
+
+</Steps>
+
+<Warning>
+  Don't forget `suppressHydrationWarning` on the `<html>` tag to prevent React warnings about server/client mismatches.
+</Warning>
+
+## Testing Dark Mode
+
+Test dark mode by toggling your system preference or adding the `.dark` class manually in DevTools:
+
+1. Open Chrome DevTools
+2. Press `Cmd/Ctrl + Shift + P`
+3. Type "Emulate CSS prefers-color-scheme: dark"
+4. Press Enter
+
+Now all components will render in dark mode.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Theming" icon="palette" href="/guides/theming">
+    Customize color tokens and design system
+  </Card>
+  
+  <Card title="useColorScheme Hook" icon="link" href="/hooks/use-color-scheme">
+    Learn more about the color scheme hook
+  </Card>
+</CardGroup>

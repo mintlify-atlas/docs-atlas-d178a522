@@ -1,0 +1,170 @@
+---
+title: Modal
+description: Accessible modal dialog rendered into document.body via a portal
+---
+
+Accessible modal dialog rendered into `document.body` via a portal. Uses `useFocusTrap` and `useScrollLock` internally.
+
+## Import
+
+```tsx
+import { Modal } from '@kivora/react';
+```
+
+## Usage
+
+```tsx
+import { Modal, Button, useDisclosure } from '@kivora/react';
+
+function Example() {
+  const { isOpen, open, close } = useDisclosure();
+
+  return (
+    <>
+      <Button label="Open Modal" onClick={open} />
+      <Modal isOpen={isOpen} onClose={close} title="Confirm Action">
+        <p>Are you sure you want to continue?</p>
+        <div className="flex gap-2 mt-4">
+          <Button label="Cancel" variant="ghost" onClick={close} />
+          <Button label="Confirm" onClick={close} />
+        </div>
+      </Modal>
+    </>
+  );
+}
+```
+
+## Sizes
+
+Control modal width with the `size` prop:
+
+```tsx
+<Modal isOpen={isOpen} onClose={close} size="sm" title="Small">
+  <p>Compact modal content</p>
+</Modal>
+
+<Modal isOpen={isOpen} onClose={close} size="lg" title="Large">
+  <p>Wider modal with more content</p>
+</Modal>
+
+<Modal isOpen={isOpen} onClose={close} size="full" title="Full Width">
+  <p>Uses full viewport width with margin</p>
+</Modal>
+```
+
+Available sizes: `sm`, `md` (default), `lg`, `xl`, `full`
+
+## No Padding
+
+Remove default body padding for custom layouts:
+
+```tsx
+<Modal isOpen={isOpen} onClose={close} noPadding>
+  <img src="/banner.jpg" alt="Banner" className="w-full" />
+  <div className="p-6">
+    <p>Custom padded content</p>
+  </div>
+</Modal>
+```
+
+## Without Title
+
+Omit the `title` prop to render without a header:
+
+```tsx
+<Modal isOpen={isOpen} onClose={close}>
+  <div className="text-center p-4">
+    <h3 className="text-xl font-bold mb-2">Custom Header</h3>
+    <p>Full control over the content</p>
+  </div>
+</Modal>
+```
+
+## Disable Backdrop Close
+
+Prevent closing when clicking outside:
+
+```tsx
+<Modal
+  isOpen={isOpen}
+  onClose={close}
+  title="Required Action"
+  closeOnBackdrop={false}
+>
+  <p>You must complete this action</p>
+  <Button label="Complete" onClick={close} />
+</Modal>
+```
+
+## Disable Escape Key
+
+Prevent closing with the Escape key:
+
+```tsx
+<Modal
+  isOpen={isOpen}
+  onClose={close}
+  title="Critical Dialog"
+  closeOnEscape={false}
+>
+  <p>This dialog requires explicit confirmation</p>
+</Modal>
+```
+
+## Props
+
+<ResponseField name="isOpen" type="boolean" required>
+  Whether the modal is visible
+</ResponseField>
+
+<ResponseField name="onClose" type="() => void" required>
+  Callback to close the modal
+</ResponseField>
+
+<ResponseField name="children" type="ReactNode" required>
+  Modal body content
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  Optional title rendered in the modal header with close button
+</ResponseField>
+
+<ResponseField name="size" type="'sm' | 'md' | 'lg' | 'xl' | 'full'" default="md">
+  Maximum width preset
+</ResponseField>
+
+<ResponseField name="closeOnBackdrop" type="boolean" default="true">
+  Close when clicking the backdrop
+</ResponseField>
+
+<ResponseField name="closeOnEscape" type="boolean" default="true">
+  Close when pressing Escape key
+</ResponseField>
+
+<ResponseField name="noPadding" type="boolean" default="false">
+  Remove default body padding
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes for the modal panel
+</ResponseField>
+
+## Accessibility
+
+- Uses `role="dialog"` and `aria-modal="true"`
+- Automatically manages focus trap within the modal
+- Locks body scroll when open
+- Links title with `aria-labelledby`
+- Close button has `aria-label`
+- Escape key support (configurable)
+
+## Features
+
+- Portal rendering into `document.body`
+- Smooth fade and scale animations
+- Focus trap using `useFocusTrap` hook
+- Scroll lock using `useScrollLock` hook
+- Backdrop blur effect
+- Configurable sizes
+- Optional header with close button
+- Flexible padding control

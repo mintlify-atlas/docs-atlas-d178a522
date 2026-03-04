@@ -1,0 +1,118 @@
+---
+title: useForceUpdate
+description: Force a component to re-render
+---
+
+`useForceUpdate` returns a function that forces a component to re-render by incrementing an internal counter.
+
+## Usage
+
+```tsx
+import { useForceUpdate } from '@kivora/react';
+
+function MyComponent() {
+  const forceUpdate = useForceUpdate();
+
+  return (
+    <div>
+      <button onClick={forceUpdate}>
+        Force Re-render
+      </button>
+      <p>Random: {Math.random()}</p>
+    </div>
+  );
+}
+```
+
+## Returns
+
+`() => void` - A memoized function that triggers a re-render when called.
+
+## Examples
+
+### Manual Cache Invalidation
+
+```tsx
+function DataDisplay() {
+  const forceUpdate = useForceUpdate();
+  const cache = useRef(new Map());
+
+  const clearCache = () => {
+    cache.current.clear();
+    forceUpdate(); // Re-render to reflect cleared cache
+  };
+
+  return (
+    <div>
+      <button onClick={clearCache}>Clear Cache</button>
+      <DisplayCachedData cache={cache.current} />
+    </div>
+  );
+}
+```
+
+### Refreshing External State
+
+```tsx
+function ExternalStateComponent() {
+  const forceUpdate = useForceUpdate();
+  const store = useRef(externalStore);
+
+  useEffect(() => {
+    const unsubscribe = store.current.subscribe(() => {
+      forceUpdate(); // Re-render when external store updates
+    });
+    return unsubscribe;
+  }, [forceUpdate]);
+
+  return <div>{store.current.getState()}</div>;
+}
+```
+
+### Debugging Component Updates
+
+```tsx
+function DebugComponent() {
+  const forceUpdate = useForceUpdate();
+  const renderCount = useRef(0);
+
+  useEffect(() => {
+    renderCount.current++;
+  });
+
+  return (
+    <div>
+      <p>Render count: {renderCount.current}</p>
+      <button onClick={forceUpdate}>Force Update</button>
+    </div>
+  );
+}
+```
+
+### Working with Mutable Refs
+
+```tsx
+function MutableRefExample() {
+  const forceUpdate = useForceUpdate();
+  const data = useRef({ count: 0 });
+
+  const increment = () => {
+    data.current.count++;
+    forceUpdate(); // Re-render to show new count
+  };
+
+  return (
+    <div>
+      <p>Count: {data.current.count}</p>
+      <button onClick={increment}>Increment</button>
+    </div>
+  );
+}
+```
+
+## Notes
+
+- The returned function is memoized and stable across re-renders
+- Use sparingly - most cases should use state or props instead
+- Useful for integrating with non-React state management or imperative APIs
+- The re-render is triggered by incrementing an internal state counter

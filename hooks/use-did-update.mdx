@@ -1,0 +1,146 @@
+---
+title: useDidUpdate
+description: Run effects only on updates, skipping the initial mount
+---
+
+`useDidUpdate` works like `useEffect` but skips the first render, only running on subsequent updates.
+
+## Usage
+
+```tsx
+import { useDidUpdate } from '@kivora/react';
+
+function MyComponent({ count }: { count: number }) {
+  useDidUpdate(() => {
+    console.log('count changed:', count);
+  }, [count]);
+
+  return <div>Count: {count}</div>;
+}
+```
+
+## Parameters
+
+<ParamField path="fn" type="() => void | (() => void)" required>
+  The effect function to run on updates. Can optionally return a cleanup function.
+</ParamField>
+
+<ParamField path="deps" type="React.DependencyList">
+  Optional dependency array. The effect runs when dependencies change (after the first render).
+</ParamField>
+
+## Returns
+
+`void`
+
+## Examples
+
+### Logging State Changes
+
+```tsx
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  useDidUpdate(() => {
+    console.log('Count updated to:', count);
+    // This won't log on initial render (count = 0)
+    // Only logs when count changes
+  }, [count]);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+
+### API Calls on Updates Only
+
+```tsx
+function SearchResults({ query }: { query: string }) {
+  const [results, setResults] = useState([]);
+
+  useDidUpdate(() => {
+    // Don't fetch on initial mount with empty query
+    // Only fetch when query actually changes
+    if (query) {
+      fetch(`/api/search?q=${query}`)
+        .then(res => res.json())
+        .then(setResults);
+    }
+  }, [query]);
+
+  return <ResultsList results={results} />;
+}
+```
+
+### Syncing with External Storage
+
+```tsx
+function Settings() {
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'light';
+  });
+
+  useDidUpdate(() => {
+    // Save to localStorage only when theme changes
+    // Don't save on initial mount (already loaded from localStorage)
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  return (
+    <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+      Toggle theme
+    </button>
+  );
+}
+```
+
+### With Cleanup Function
+
+```tsx
+function LiveData({ userId }: { userId: string }) {
+  const [data, setData] = useState(null);
+
+  useDidUpdate(() => {
+    // Only subscribe to updates when userId changes
+    // Skip initial subscription on mount
+    const subscription = subscribeToUser(userId, setData);
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [userId]);
+
+  return <div>{data}</div>;
+}
+```
+
+### Comparing Previous and Current Values
+
+```tsx
+function ProductPrice({ productId }: { productId: string }) {
+  const [price, setPrice] = useState(0);
+  const prevPrice = useRef(0);
+
+  useDidUpdate(() => {
+    if (price > prevPrice.current) {
+      toast.success('Price increased!');
+    } else if (price < prevPrice.current) {
+      toast.error('Price decreased!');
+    }
+    prevPrice.current = price;
+  }, [price]);
+
+  return <div>${price}</div>;
+}
+```
+
+## Notes
+
+- The effect function is skipped on the initial render (mount)
+- The cleanup function (if returned) runs before the next effect and on unmount
+- Useful for avoiding duplicate API calls or side effects on mount
+- Dependencies work the same way as `useEffect`

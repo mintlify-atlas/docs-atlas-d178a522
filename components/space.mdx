@@ -1,0 +1,259 @@
+---
+title: Space
+description: Invisible spacer element for adding horizontal or vertical spacing
+---
+
+## Overview
+
+Space is an invisible spacer component that creates fixed horizontal or vertical spacing. Unlike gap properties on flex/grid containers, Space is a standalone element you can place anywhere in your layout.
+
+## Import
+
+```tsx
+import { Space } from '@kivora/react';
+```
+
+## Props
+
+<ResponseField name="w" type="number">
+  Horizontal space width in Tailwind units (1 = 0.25rem, 4 = 1rem, etc.).
+</ResponseField>
+
+<ResponseField name="h" type="number">
+  Vertical space height in Tailwind units (1 = 0.25rem, 4 = 1rem, etc.).
+</ResponseField>
+
+<ResponseField name="className" type="string">
+  Additional CSS classes.
+</ResponseField>
+
+## Usage
+
+### Vertical spacing
+
+```tsx
+<div>
+  <Heading>Title</Heading>
+  <Space h={8} />
+  <Text>Content starts here...</Text>
+</div>
+```
+
+### Horizontal spacing
+
+```tsx
+<div className="flex">
+  <Button>First</Button>
+  <Space w={4} />
+  <Button>Second</Button>
+</div>
+```
+
+### Between sections
+
+```tsx
+<div>
+  <Header />
+  <Space h={12} />
+  <MainContent />
+  <Space h={16} />
+  <Footer />
+</div>
+```
+
+### In forms
+
+```tsx
+<form>
+  <Label>Email</Label>
+  <Input type="email" />
+  <Space h={4} />
+  
+  <Label>Password</Label>
+  <Input type="password" />
+  <Space h={6} />
+  
+  <Button variant="primary">Sign In</Button>
+</form>
+```
+
+### Inline spacing
+
+```tsx
+<div className="flex items-center">
+  <Icon name="star" />
+  <Space w={2} />
+  <Text>4.5 rating</Text>
+  <Space w={4} />
+  <Text className="text-gray-600">(128 reviews)</Text>
+</div>
+```
+
+## Layout Examples
+
+### Article layout
+
+```tsx
+<article>
+  <Badge>Tutorial</Badge>
+  <Space h={3} />
+  
+  <Heading size="3xl">Getting Started with Kivora</Heading>
+  <Space h={4} />
+  
+  <Group gap={4}>
+    <Avatar src={author.avatar} size="sm" />
+    <Text>{author.name}</Text>
+    <Text className="text-gray-600">{publishDate}</Text>
+  </Group>
+  
+  <Space h={8} />
+  
+  <Image src="/hero.jpg" alt="Hero image" />
+  
+  <Space h={8} />
+  
+  <Text>{content}</Text>
+</article>
+```
+
+### Toolbar
+
+```tsx
+<div className="flex items-center border-b p-4">
+  <Button variant="ghost" size="sm">Bold</Button>
+  <Space w={1} />
+  <Button variant="ghost" size="sm">Italic</Button>
+  <Space w={1} />
+  <Button variant="ghost" size="sm">Underline</Button>
+  
+  <Space w={4} />
+  <div className="border-l h-6" />
+  <Space w={4} />
+  
+  <Button variant="ghost" size="sm">Link</Button>
+  <Space w={1} />
+  <Button variant="ghost" size="sm">Image</Button>
+</div>
+```
+
+### Stat card
+
+```tsx
+<Card className="p-6">
+  <Text className="text-gray-600">Total Revenue</Text>
+  <Space h={2} />
+  
+  <Heading size="3xl">$45,231.89</Heading>
+  <Space h={1} />
+  
+  <Group gap={2}>
+    <Icon name="trending-up" className="text-green-600" size="sm" />
+    <Text className="text-green-600">+12.5%</Text>
+    <Text className="text-gray-600">from last month</Text>
+  </Group>
+</Card>
+```
+
+### Breadcrumbs with custom spacing
+
+```tsx
+<div className="flex items-center">
+  <Button variant="link">Home</Button>
+  <Space w={2} />
+  <Text className="text-gray-400">/</Text>
+  <Space w={2} />
+  <Button variant="link">Products</Button>
+  <Space w={2} />
+  <Text className="text-gray-400">/</Text>
+  <Space w={2} />
+  <Text>Item Details</Text>
+</div>
+```
+
+### List with dividers
+
+```tsx
+<div>
+  <Text>First item</Text>
+  <Space h={4} />
+  <div className="border-t" />
+  <Space h={4} />
+  
+  <Text>Second item</Text>
+  <Space h={4} />
+  <div className="border-t" />
+  <Space h={4} />
+  
+  <Text>Third item</Text>
+</div>
+```
+
+### Notification
+
+```tsx
+<div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+  <div className="flex">
+    <Icon name="info" className="text-blue-600 flex-shrink-0" />
+    <Space w={3} />
+    <div>
+      <Text className="font-medium">New feature available</Text>
+      <Space h={1} />
+      <Text className="text-gray-600">Check out our latest updates.</Text>
+      <Space h={3} />
+      <Button variant="link">Learn more →</Button>
+    </div>
+  </div>
+</div>
+```
+
+### Profile header
+
+```tsx
+<div>
+  <div className="flex items-start">
+    <Avatar src={user.avatar} size="xl" />
+    <Space w={4} />
+    <div>
+      <Heading size="xl">{user.name}</Heading>
+      <Space h={1} />
+      <Text className="text-gray-600">@{user.username}</Text>
+      <Space h={3} />
+      <Text>{user.bio}</Text>
+    </div>
+  </div>
+  
+  <Space h={6} />
+  
+  <Group gap={6}>
+    <div>
+      <Text className="font-bold">{user.followers}</Text>
+      <Text className="text-gray-600">Followers</Text>
+    </div>
+    <div>
+      <Text className="font-bold">{user.following}</Text>
+      <Text className="text-gray-600">Following</Text>
+    </div>
+  </Group>
+</div>
+```
+
+## Common Spacing Values
+
+- `h={1}` or `w={1}`: 0.25rem (4px) - Minimal spacing
+- `h={2}` or `w={2}`: 0.5rem (8px) - Tight spacing
+- `h={4}` or `w={4}`: 1rem (16px) - Standard spacing
+- `h={6}` or `w={6}`: 1.5rem (24px) - Comfortable spacing
+- `h={8}` or `w={8}`: 2rem (32px) - Section spacing
+- `h={12}` or `w={12}`: 3rem (48px) - Large section spacing
+- `h={16}` or `w={16}`: 4rem (64px) - Major section spacing
+
+## Best Practices
+
+- Use Space for one-off spacing needs
+- Prefer `gap` props on Stack, Group, Flex, or Grid for consistent spacing
+- Use `h` for vertical spacing, `w` for horizontal spacing
+- Match spacing scale to other components (use multiples of 4 when possible)
+- Space is flex-shrink-0 by default, so it won't collapse in flex layouts
+- Useful when gap properties aren't flexible enough for your layout
+- Combine with dividers (`<div className="border-t" />`) for visual separation

@@ -1,0 +1,406 @@
+---
+title: TypeScript
+description: TypeScript support, type definitions, and best practices for using Kivora React.
+---
+
+Kivora React is built with TypeScript from the ground up. Every component and hook includes comprehensive type definitions with JSDoc comments for inline documentation.
+
+## Type Definitions Included
+
+Kivora React ships with built-in TypeScript declarations. No need to install separate `@types` packages:
+
+```tsx
+import { Button, Input, Badge } from '@kivora/react';
+// ✅ Types are included automatically
+```
+
+All component props, hook return types, and utility types are fully typed.
+
+## Inline Documentation
+
+Hover over any component or prop in your editor to see inline documentation:
+
+```tsx
+import { Button } from '@kivora/react';
+
+<Button
+  label="Save" // 👈 Hover to see: "Text content of the button"
+  variant="primary" // 👈 Hover to see: "Semantic variant" and all valid values
+  size="md" // 👈 Hover to see size options
+  loading={false} // 👈 Hover to see: "Show loading spinner"
+/>
+```
+
+Every prop includes a JSDoc comment explaining its purpose.
+
+## Component Prop Types
+
+All component prop interfaces are exported from `@kivora/core` and re-exported from `@kivora/react` for convenience:
+
+```tsx
+import type { ButtonProps, InputProps, BadgeProps } from '@kivora/react';
+
+// Extend or compose prop types
+interface MyButtonProps extends ButtonProps {
+  customProp?: string;
+}
+
+function MyButton({ customProp, ...buttonProps }: MyButtonProps) {
+  return <Button {...buttonProps} />;
+}
+```
+
+## Available Type Exports
+
+Kivora exports all component prop types:
+
+```tsx
+import type {
+  // Button types
+  ButtonProps,
+  ButtonVariant,
+  
+  // Input types
+  InputProps,
+  CheckboxProps,
+  RadioGroupProps,
+  RadioOption,
+  SwitchProps,
+  
+  // Display types
+  BadgeProps,
+  BadgeVariant,
+  AvatarProps,
+  TagProps,
+  
+  // Typography types
+  TextProps,
+  TextSize,
+  TextVariant,
+  
+  // Feedback types
+  SpinnerProps,
+  
+  // Misc types
+  IconProps,
+  IconName,
+  DividerProps,
+  Size,
+  
+  // Complex component types
+  ModalProps,
+  TabsProps,
+  TabItem,
+  TooltipProps,
+  AccordionProps,
+  AccordionItem,
+  CardProps,
+} from '@kivora/react';
+```
+
+## Hook Return Types
+
+All hooks export their return types for convenience:
+
+```tsx
+import type { UseDisclosureReturn } from '@kivora/react';
+
+function useModal(): UseDisclosureReturn {
+  const disclosure = useDisclosure();
+  // ... additional logic
+  return disclosure;
+}
+```
+
+```tsx
+import type { UseClipboardReturn } from '@kivora/react';
+
+const clipboard: UseClipboardReturn = useClipboard();
+```
+
+## Generic Hook Types
+
+Some hooks are generic and infer types from your usage:
+
+```tsx
+import { useDebounce, useLocalStorage } from '@kivora/react';
+
+// Type inferred as string
+const debouncedText = useDebounce('hello', 300);
+
+// Type inferred as number
+const debouncedCount = useDebounce(42, 300);
+
+// Type inferred as { name: string; email: string }
+const debouncedUser = useDebounce({ name: 'John', email: 'john@example.com' }, 300);
+
+// Explicit type annotation
+interface User {
+  id: number;
+  name: string;
+}
+
+const [user, setUser] = useLocalStorage<User>('user', { id: 1, name: 'John' });
+```
+
+## Controlled vs Uncontrolled Components
+
+Many input components support both controlled and uncontrolled usage. TypeScript helps catch mistakes:
+
+```tsx
+import { Input } from '@kivora/react';
+import { useState } from 'react';
+
+// ✅ Controlled
+function Controlled() {
+  const [value, setValue] = useState('');
+  return <Input value={value} onChange={setValue} />;
+}
+
+// ✅ Uncontrolled
+function Uncontrolled() {
+  return <Input defaultValue="" />;
+}
+
+// ❌ TypeScript error: missing onChange
+function Invalid() {
+  const [value] = useState('');
+  return <Input value={value} />; // Error: value requires onChange
+}
+```
+
+<Note>
+  The `onChange` prop on input components receives the **value** directly (not the event). This is different from native React inputs.
+</Note>
+
+```tsx
+// Kivora Input
+<Input 
+  value={email} 
+  onChange={(value: string) => setEmail(value)} // ✅ string value
+/>
+
+// Native input
+<input 
+  value={email} 
+  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} 
+/>
+```
+
+## Component Refs
+
+All components support React refs with the correct element type:
+
+```tsx
+import { Button, Input } from '@kivora/react';
+import { useRef } from 'react';
+
+function MyForm() {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const focusInput = () => {
+    inputRef.current?.focus(); // ✅ Typed as HTMLInputElement
+  };
+
+  return (
+    <>
+      <Input ref={inputRef} />
+      <Button ref={buttonRef} label="Submit" onClick={focusInput} />
+    </>
+  );
+}
+```
+
+## Type-Safe Variants
+
+Variant props are typed as union types, giving you autocomplete:
+
+```tsx
+import { Button, Badge } from '@kivora/react';
+
+// ✅ Valid variants
+<Button variant="primary" />
+<Button variant="secondary" />
+<Button variant="ghost" />
+<Button variant="destructive" />
+<Button variant="outline" />
+
+// ❌ TypeScript error
+<Button variant="invalid" /> // Type error: "invalid" is not assignable
+
+// Badge variants
+<Badge variant="success" />   // ✅
+<Badge variant="warning" />   // ✅
+<Badge variant="error" />     // ✅
+<Badge variant="info" />      // ✅
+<Badge variant="default" />   // ✅
+```
+
+## Extending Component Types
+
+Create wrapper components with additional props:
+
+```tsx
+import { Button, type ButtonProps } from '@kivora/react';
+
+interface SubmitButtonProps extends Omit<ButtonProps, 'variant' | 'type'> {
+  loading?: boolean;
+}
+
+function SubmitButton({ loading, ...props }: SubmitButtonProps) {
+  return (
+    <Button
+      {...props}
+      variant="primary"
+      loading={loading}
+    />
+  );
+}
+```
+
+## Working with Icons
+
+The `Icon` component uses the `IconName` type from Lucide React:
+
+```tsx
+import { Icon, type IconName } from '@kivora/react';
+
+const iconName: IconName = 'heart';
+
+<Icon name={iconName} size={20} />
+
+// ❌ TypeScript error
+<Icon name="invalid-icon" /> // Type error: not a valid icon name
+```
+
+## Type Inference with Hooks
+
+Most hooks infer types automatically:
+
+```tsx
+import { useToggle, useCounter, useListState } from '@kivora/react';
+
+// Inferred as boolean
+const [isOpen, toggle] = useToggle(false);
+
+// Inferred as number
+const { count, increment, decrement } = useCounter(0);
+
+// Inferred as string[]
+const [items, handlers] = useListState(['apple', 'banana']);
+```
+
+For complex types, add explicit annotations:
+
+```tsx
+interface Todo {
+  id: number;
+  text: string;
+  completed: boolean;
+}
+
+const [todos, handlers] = useListState<Todo>([
+  { id: 1, text: 'Learn TypeScript', completed: false },
+]);
+```
+
+## TypeScript Configuration
+
+Recommended `tsconfig.json` settings for using Kivora React:
+
+```json tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  }
+}
+```
+
+<Tip>
+  Enable `strict: true` to catch potential issues with null/undefined values and improve type safety.
+</Tip>
+
+## Common Patterns
+
+### Render Props with Types
+
+```tsx
+import { type ReactNode } from 'react';
+import { Button } from '@kivora/react';
+
+interface RenderButtonProps {
+  children: (props: { onClick: () => void }) => ReactNode;
+}
+
+function RenderButton({ children }: RenderButtonProps) {
+  const handleClick = () => console.log('clicked');
+  return <>{children({ onClick: handleClick })}</>;
+}
+
+// Usage
+<RenderButton>
+  {({ onClick }) => <Button label="Click" onClick={onClick} />}
+</RenderButton>
+```
+
+### Form with Type-Safe State
+
+```tsx
+import { Input, Button } from '@kivora/react';
+import { useState } from 'react';
+
+interface FormData {
+  name: string;
+  email: string;
+}
+
+function TypeSafeForm() {
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    email: '',
+  });
+
+  const updateField = <K extends keyof FormData>(key: K, value: FormData[K]) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
+  };
+
+  return (
+    <>
+      <Input
+        label="Name"
+        value={formData.name}
+        onChange={(value) => updateField('name', value)}
+      />
+      <Input
+        label="Email"
+        type="email"
+        value={formData.email}
+        onChange={(value) => updateField('email', value)}
+      />
+    </>
+  );
+}
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Components" icon="square" href="/components/button">
+    Explore all components with TypeScript examples
+  </Card>
+  
+  <Card title="Hooks" icon="link" href="/hooks/use-disclosure">
+    Discover type-safe React hooks
+  </Card>
+</CardGroup>

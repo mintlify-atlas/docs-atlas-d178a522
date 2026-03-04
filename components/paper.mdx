@@ -1,0 +1,138 @@
+---
+title: Paper
+description: Elevated surface container with shadow and border options
+---
+
+## Usage
+
+Paper is a container component that creates an elevated surface effect using shadows, borders, and background colors. It's commonly used for cards, panels, and other elevated UI elements.
+
+```tsx
+import { Paper } from '@kivora/react';
+
+<Paper>
+  Content
+</Paper>
+```
+
+## Examples
+
+### Basic Paper
+
+```tsx
+<Paper>
+  <h3>Card Title</h3>
+  <p>Card content goes here</p>
+</Paper>
+```
+
+### Custom Shadow
+
+```tsx
+<Paper shadow="lg">
+  <h3>Elevated Card</h3>
+  <p>This card has a larger shadow</p>
+</Paper>
+```
+
+### With Border
+
+```tsx
+<Paper withBorder>
+  <h3>Bordered Card</h3>
+  <p>This card has a subtle border</p>
+</Paper>
+```
+
+### Custom Padding and Radius
+
+```tsx
+<Paper padding="lg" radius="xl">
+  <h3>Spacious Card</h3>
+  <p>With large padding and border radius</p>
+</Paper>
+```
+
+### No Shadow or Padding
+
+```tsx
+<Paper shadow="none" padding="none" withBorder>
+  <img src="/image.jpg" alt="Card image" />
+  <div className="p-4">
+    <h3>Image Card</h3>
+    <p>Custom padding inside</p>
+  </div>
+</Paper>
+```
+
+### Combination Example
+
+```tsx
+<Paper 
+  shadow="md" 
+  radius="lg" 
+  padding="xl" 
+  withBorder
+  className="max-w-md"
+>
+  <h2 className="text-xl font-bold mb-4">Welcome</h2>
+  <p className="text-gray-600">This is a fully customized paper component.</p>
+</Paper>
+```
+
+## Props
+
+<ParamField path="shadow" type="'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'" default="'sm'">
+  The shadow depth of the paper. Controls the elevation effect.
+  - `none`: No shadow
+  - `xs`: Extra small shadow
+  - `sm`: Small shadow (default)
+  - `md`: Medium shadow
+  - `lg`: Large shadow
+  - `xl`: Extra large shadow
+</ParamField>
+
+<ParamField path="radius" type="'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full'" default="'md'">
+  The border radius of the paper.
+  - `none`: No border radius (square corners)
+  - `sm`: Small radius
+  - `md`: Medium radius (default)
+  - `lg`: Large radius
+  - `xl`: Extra large radius
+  - `full`: Fully rounded (pill shape)
+</ParamField>
+
+<ParamField path="withBorder" type="boolean" default="false">
+  Whether to display a subtle border around the paper.
+</ParamField>
+
+<ParamField path="padding" type="'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'" default="'md'">
+  The internal padding of the paper.
+  - `none`: No padding
+  - `xs`: 0.5rem (8px)
+  - `sm`: 0.75rem (12px)
+  - `md`: 1rem (16px, default)
+  - `lg`: 1.5rem (24px)
+  - `xl`: 2rem (32px)
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes to apply to the paper.
+</ParamField>
+
+<ParamField path="ref" type="Ref<HTMLDivElement>">
+  Ref forwarding is supported for the underlying div element.
+</ParamField>
+
+<ParamField path="...rest" type="HTMLAttributes<HTMLDivElement>">
+  All other standard HTML div attributes are supported (onClick, onMouseEnter, etc.).
+</ParamField>
+
+## Styling
+
+Paper uses CSS custom properties for theming:
+- Background: `bg-card`
+- Text color: `text-card-foreground`
+- Border color: `border-border`
+
+These can be customized via your theme configuration.

@@ -1,0 +1,136 @@
+---
+title: Checkbox
+description: Accessible checkbox supporting controlled, uncontrolled, and indeterminate states.
+---
+
+## Usage
+
+```tsx
+import { Checkbox } from '@kivora/react';
+
+function Demo() {
+  const [agreed, setAgreed] = useState(false);
+  
+  return (
+    <Checkbox 
+      label="Accept terms and conditions" 
+      checked={agreed}
+      onChange={setAgreed}
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="checked" type="boolean">
+  Controlled checked state of the checkbox.
+</ParamField>
+
+<ParamField path="defaultChecked" type="boolean" default="false">
+  Default checked state for uncontrolled mode.
+</ParamField>
+
+<ParamField path="onChange" type="(checked: boolean) => void">
+  Called when the checkbox is toggled. Receives the new boolean state.
+</ParamField>
+
+<ParamField path="label" type="string">
+  Label text displayed next to the checkbox.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables the checkbox and prevents user interaction.
+</ParamField>
+
+<ParamField path="indeterminate" type="boolean" default="false">
+  Shows an indeterminate state (dash icon) instead of checked/unchecked.
+</ParamField>
+
+<ParamField path="className" type="string" default="''">
+  Additional CSS classes to apply to the checkbox wrapper.
+</ParamField>
+
+<ParamField path="id" type="string">
+  HTML ID attribute. Auto-generated if not provided.
+</ParamField>
+
+## Examples
+
+### Basic Checkbox
+
+```tsx
+<Checkbox label="Subscribe to newsletter" />
+```
+
+### Controlled Checkbox
+
+```tsx
+function ControlledDemo() {
+  const [isChecked, setIsChecked] = useState(false);
+  
+  return (
+    <Checkbox 
+      label="Enable notifications"
+      checked={isChecked}
+      onChange={setIsChecked}
+    />
+  );
+}
+```
+
+### Indeterminate State
+
+```tsx
+function SelectAllDemo() {
+  const [items, setItems] = useState([false, false, false]);
+  
+  const allChecked = items.every(Boolean);
+  const someChecked = items.some(Boolean) && !allChecked;
+  
+  return (
+    <div className="flex flex-col gap-2">
+      <Checkbox 
+        label="Select all"
+        checked={allChecked}
+        indeterminate={someChecked}
+        onChange={(checked) => setItems(items.map(() => checked))}
+      />
+      {items.map((checked, i) => (
+        <Checkbox 
+          key={i}
+          label={`Item ${i + 1}`}
+          checked={checked}
+          onChange={(val) => {
+            const next = [...items];
+            next[i] = val;
+            setItems(next);
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+```
+
+### Disabled State
+
+```tsx
+<Checkbox label="Disabled unchecked" disabled />
+<Checkbox label="Disabled checked" disabled defaultChecked />
+```
+
+### Without Label
+
+```tsx
+<Checkbox />
+```
+
+## Notes
+
+- Uses a visually hidden native checkbox for accessibility
+- Custom visual indicator with smooth transitions and animations
+- Indeterminate state is set via DOM property (not an HTML attribute)
+- Keyboard navigation fully supported (Space to toggle)
+- Focus ring visible for accessibility
+- Label is clickable and properly associated with input

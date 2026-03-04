@@ -1,0 +1,195 @@
+---
+title: useElementSize
+description: Returns a ref and tracks the element's dimensions automatically
+---
+
+## Usage
+
+Convenience wrapper around `useResizeObserver` that creates the ref for you and returns both the ref and the element's current dimensions.
+
+```tsx
+import { useElementSize } from 'kivora-react';
+
+function MeasuredBox() {
+  const [ref, { width, height }] = useElementSize<HTMLDivElement>();
+
+  return (
+    <div ref={ref} style={{ padding: '20px', background: '#f0f0f0' }}>
+      Box size: {width} x {height}
+    </div>
+  );
+}
+```
+
+## Parameters
+
+This hook does not accept any parameters.
+
+## Returns
+
+Returns a tuple `[ref, size]`:
+
+<ResponseField name="[0]" type="RefObject<T | null>">
+  React ref to attach to the element you want to measure
+</ResponseField>
+
+<ResponseField name="[1]" type="ElementSize">
+  Object containing the element's dimensions:
+  
+  <Expandable title="properties">
+    <ResponseField name="width" type="number">
+      Current element width in pixels
+    </ResponseField>
+    
+    <ResponseField name="height" type="number">
+      Current element height in pixels
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Examples
+
+### Simple dimension tracking
+
+```tsx
+import { useElementSize } from 'kivora-react';
+
+function DimensionTracker() {
+  const [ref, { width, height }] = useElementSize<HTMLDivElement>();
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        width: '50%',
+        height: '200px',
+        background: '#3b82f6',
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      {width}px × {height}px
+    </div>
+  );
+}
+```
+
+### Responsive image overlay
+
+```tsx
+import { useElementSize } from 'kivora-react';
+
+function ImageWithOverlay({ src }: { src: string }) {
+  const [ref, { width, height }] = useElementSize<HTMLDivElement>();
+
+  const showOverlay = width > 400 && height > 300;
+
+  return (
+    <div ref={ref} style={{ position: 'relative' }}>
+      <img src={src} alt="" style={{ width: '100%', height: 'auto' }} />
+      {showOverlay && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0,0,0,0.5)',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          Image Overlay
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Dynamic grid items
+
+```tsx
+import { useElementSize } from 'kivora-react';
+
+function GridItem({ children }: { children: React.ReactNode }) {
+  const [ref, { width }] = useElementSize<HTMLDivElement>();
+
+  const compact = width < 200;
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        padding: compact ? '8px' : '16px',
+        fontSize: compact ? '12px' : '16px',
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+```
+
+### Adaptive card layout
+
+```tsx
+import { useElementSize } from 'kivora-react';
+
+function AdaptiveCard({ title, image, description }: any) {
+  const [ref, { width }] = useElementSize<HTMLDivElement>();
+
+  const isHorizontal = width > 500;
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        display: 'flex',
+        flexDirection: isHorizontal ? 'row' : 'column',
+        gap: '1rem',
+        border: '1px solid #ddd',
+        padding: '1rem',
+      }}
+    >
+      <img
+        src={image}
+        alt={title}
+        style={{
+          width: isHorizontal ? '200px' : '100%',
+          height: isHorizontal ? 'auto' : '200px',
+          objectFit: 'cover',
+        }}
+      />
+      <div style={{ flex: 1 }}>
+        <h3>{title}</h3>
+        <p>{description}</p>
+      </div>
+    </div>
+  );
+}
+```
+
+### Text truncation based on width
+
+```tsx
+import { useElementSize } from 'kivora-react';
+
+function TruncatedText({ text }: { text: string }) {
+  const [ref, { width }] = useElementSize<HTMLDivElement>();
+
+  const maxChars = Math.floor(width / 8);
+  const truncated = text.length > maxChars ? text.slice(0, maxChars) + '...' : text;
+
+  return (
+    <div ref={ref} style={{ width: '100%' }}>
+      {truncated}
+    </div>
+  );
+}
+```

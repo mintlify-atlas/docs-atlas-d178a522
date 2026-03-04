@@ -1,0 +1,189 @@
+---
+title: useQueue
+description: FIFO queue state with enqueue/dequeue/peek helpers
+---
+
+## Usage
+
+```tsx
+import { useQueue } from 'kivora-react';
+
+function NotificationQueue() {
+  const { queue, enqueue, dequeue, peek, clear } = useQueue<string>();
+
+  const addNotification = (message: string) => {
+    enqueue(message);
+  };
+
+  const showNext = () => {
+    const message = dequeue();
+    if (message) {
+      alert(message);
+    }
+  };
+
+  return (
+    <div>
+      <p>Queue size: {queue.length}</p>
+      <p>Next: {peek()}</p>
+      <button onClick={() => addNotification('New notification')}>Add</button>
+      <button onClick={showNext}>Show Next</button>
+      <button onClick={clear}>Clear All</button>
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="initialValue" type="T[]" default="[]">
+  Initial queue items (first item is at the front of the queue)
+</ParamField>
+
+## Return Value
+
+Returns an object with the queue and helper methods:
+
+<ResponseField name="queue" type="T[]">
+  Current queue items (first item is at index 0)
+</ResponseField>
+
+<ResponseField name="enqueue" type="(item: T) => void">
+  Add an item to the end of the queue
+</ResponseField>
+
+<ResponseField name="dequeue" type="() => T | undefined">
+  Remove and return the item at the front of the queue. Returns `undefined` if the queue is empty.
+</ResponseField>
+
+<ResponseField name="peek" type="() => T | undefined">
+  Return the item at the front of the queue without removing it. Returns `undefined` if the queue is empty.
+</ResponseField>
+
+<ResponseField name="clear" type="() => void">
+  Remove all items from the queue
+</ResponseField>
+
+## Examples
+
+### Task Queue
+
+```tsx
+const { queue, enqueue, dequeue } = useQueue<Task>();
+const [isProcessing, setIsProcessing] = useState(false);
+
+const addTask = (task: Task) => {
+  enqueue(task);
+};
+
+const processNext = async () => {
+  const task = dequeue();
+  if (!task) return;
+  
+  setIsProcessing(true);
+  await executeTask(task);
+  setIsProcessing(false);
+};
+
+return (
+  <div>
+    <p>{queue.length} tasks pending</p>
+    <button onClick={processNext} disabled={isProcessing || queue.length === 0}>
+      Process Next Task
+    </button>
+  </div>
+);
+```
+
+### Toast Notifications
+
+```tsx
+const { queue, enqueue, dequeue } = useQueue<Notification>();
+const [currentToast, setCurrentToast] = useState<Notification | null>(null);
+
+const showToast = (message: string, type: 'info' | 'error' | 'success') => {
+  enqueue({ message, type, id: Date.now() });
+};
+
+useEffect(() => {
+  if (!currentToast && queue.length > 0) {
+    const next = dequeue();
+    setCurrentToast(next || null);
+    
+    setTimeout(() => {
+      setCurrentToast(null);
+    }, 3000);
+  }
+}, [currentToast, queue, dequeue]);
+
+return (
+  <>
+    {currentToast && (
+      <Toast message={currentToast.message} type={currentToast.type} />
+    )}
+  </>
+);
+```
+
+### Print Job Queue
+
+```tsx
+const { queue, enqueue, dequeue, peek, clear } = useQueue<PrintJob>(
+  [{ id: 1, document: 'report.pdf', pages: 10 }]
+);
+
+return (
+  <div>
+    <h3>Print Queue ({queue.length} jobs)</h3>
+    
+    {peek() && (
+      <div>
+        <strong>Now printing:</strong> {peek()?.document}
+      </div>
+    )}
+    
+    <ul>
+      {queue.slice(1).map((job, index) => (
+        <li key={job.id}>
+          #{index + 1}: {job.document} ({job.pages} pages)
+        </li>
+      ))}
+    </ul>
+    
+    <button onClick={() => dequeue()}>Complete Current Job</button>
+    <button onClick={clear}>Cancel All</button>
+  </div>
+);
+```
+
+### Command History
+
+```tsx
+const { queue, enqueue } = useQueue<string>();
+const [input, setInput] = useState('');
+
+const executeCommand = () => {
+  if (input.trim()) {
+    enqueue(input);
+    // Execute command logic
+    setInput('');
+  }
+};
+
+return (
+  <div>
+    <input
+      value={input}
+      onChange={(e) => setInput(e.target.value)}
+      onKeyPress={(e) => e.key === 'Enter' && executeCommand()}
+    />
+    
+    <div>
+      <h4>Command History:</h4>
+      {queue.map((cmd, i) => (
+        <div key={i}>&gt; {cmd}</div>
+      ))}
+    </div>
+  </div>
+);
+```
